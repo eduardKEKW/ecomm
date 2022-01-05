@@ -1,0 +1,39 @@
+@use '../_index.scss' as *;
+
+.tooltip {
+    position: absolute;
+    border-radius: .2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 100%;
+    background-color: transparent;
+    z-index: 99999;
+    opacity: 0;
+    pointer-events: none;
+
+    &__content {
+        display: block;
+        padding: .5rem;
+        border-radius: .2rem;
+        background-color: $white;
+        box-shadow: $shadowMain;
+        margin-top: 1rem;
+
+        &__wrap {
+            position: absolute;
+            top: 0%;
+            left: 50%;
+            transform: translateX(-50%) translateY(15%);
+            filter: drop-shadow(-1px -1.5px 1.5px rgba(36, 35, 35, 0.1));
+    
+            &_arrow {
+                width: 1.2rem;
+                height: .9rem;    
+                font-size: 2rem;
+                background: $white;
+                clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            }
+        }
+    }
+
+}

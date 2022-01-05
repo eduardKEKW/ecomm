@@ -1,0 +1,65 @@
+@use '../_index.scss' as *;
+
+.price {
+    padding-top: .35rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding-right: .3rem;
+    font-weight: 400;
+    font-size: inherit;
+    color: $colorMain;
+    -webkit-text-stroke: 0.45px;
+
+    &__last {
+        align-self: flex-end;
+        margin-bottom: .5em;
+        line-height: .6em;
+        display: flex;
+        color: $colorMain;
+        font-size: .95em;
+
+        
+        span {
+            font-weight: 100;
+        }
+    }
+
+    &__round {
+        position: relative;
+        padding-right: 1em;
+
+        &:after {
+            content: attr(data-after-content);
+            position: absolute;
+            top: -.1em;
+            padding-left: .1em;
+            line-height: .4em;
+            font-size: .55em;
+        }
+    }
+
+    &__old {
+        text-decoration: line-through;
+        font-size: .7em;
+        color: $colorMainLow;
+
+        span {
+            font-weight: 100;
+        }
+
+        .price__round {
+            &:after {
+                text-decoration: line-through;
+            }
+        }
+    }
+
+    &__tva {
+        text-align: end;
+        font-size: .35em;
+        font-weight: 200;
+        color: #9698a6;
+    }
+
+}

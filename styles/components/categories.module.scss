@@ -1,0 +1,53 @@
+@use '../_index.scss' as *;
+
+.categories {
+
+    &__container {
+        display: flex;
+        position: absolute;
+        color: $colorGrey;
+        top: calc(100% + .52rem);
+        left: 0;
+        width: 70%;
+        background-color: $white;
+        min-width: 75rem;
+        min-height: 25rem;
+
+        &__all {
+            flex: 1;
+            padding: .5rem;
+            box-shadow: $shadowMain;
+
+            div {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-height: 1.7rem;
+                
+                & > span:first-child {
+
+                }
+
+                & > span:last-child {
+                    @include flex-center;
+            
+                    i {
+                        @include flex-center;
+                        border-radius: 50%;
+                        height: 1.3rem;
+                        font-size: .65rem;
+                        box-shadow: $shadowLower;
+                        width: 1.3rem;
+                        background: $colorMain;
+                        color: $white;
+                    }
+                }
+            }
+        }   
+
+        &__view {
+            flex: 5;
+            // border: solid 1px blue;
+        }
+    }
+}

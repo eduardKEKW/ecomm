@@ -1,0 +1,36 @@
+$font-sm: 0.875rem; // 14px
+$font-med: 1rem; // 16px
+$font-lg: 1.25rem;
+$font-xlg: 3.25rem;
+
+// Colors
+$darkBlue: hsl(233, 26%, 24%);
+$limeGreen: hsl(136, 65%, 51%);
+$brightCyan: hsl(192, 70%, 51%);
+$grayishBlue: hsl(233, 8%, 62%);
+$lightGrayishBlue: hsl(220, 16%, 96%);
+$veryLightGray: hsl(0, 0%, 98%);
+$white: hsl(0, 0%, 100%);
+$colorMain: #70cadf;
+$colorMainHover: #699fac;
+$colorMainLow: #5ea3b3;
+$colorBlack: hsl(240, 4%, 17%);
+$colorGrey: grey;
+$colorLowGrey: rgba(161, 155, 155, 0.116);
+$colorRed: rgb(255, 89, 89);
+$colorBlue: rgb(75, 93, 255);
+$colorBtnMain: #3c8fa2;
+$primaryBackground: #f2f2f7;
+
+// shadows
+$inputDefault: rgba(99, 99, 99, 0.123) 0px 2px 8px 0px;
+$inputDefaultHover:rgba(0, 0, 0, 0.24) 0px 3px 8px;
+$shadowLower: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+$shadowSuggestions: rgba(0, 0, 0, 0.432) 0px 1px 2px 0px;
+$shadowInputMain: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+$shadowRibbone: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+$shadowMain: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+$shadowLowerWhite: rgb(255, 255, 255) 1.95px 1.95px 2.6px;
+
+$mainGradient: linear-gradient(to right, #24849c, #73c8db);
+$mainGradientLow:linear-gradient(to right, #2193b0, #6dd5ed);

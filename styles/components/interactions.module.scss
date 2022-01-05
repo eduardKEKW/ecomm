@@ -1,0 +1,214 @@
+@use '../_index.scss' as *;
+
+.interactions {
+    @include flex-center;
+
+    &__item {
+        @include flex-center;
+        flex: 5;
+        justify-content: center;
+        position: relative;
+        font-weight: 200;
+
+        &:nth-child(2) {
+            flex: 6;
+        }
+        
+        &_title {
+            cursor: pointer;
+        }
+
+        &_icon {
+            @include flex-center;
+            position: relative;
+            margin-right: .6rem;
+            border-radius: 50%;
+            padding: .65rem;
+            box-shadow: $shadowLower;
+            background: $colorMain;
+            cursor: pointer;    
+
+            &_content {
+                @include flex-center;
+                font-size: 1.2rem;
+                color: $white;
+            }
+
+            &_arrow {
+                font-size: 1rem;
+                margin-left: .4rem;
+                transform: translateY(-.1rem);
+            }
+
+            &:after {
+                @include flex-center;
+                content: attr(data-after-content);
+                position: absolute;
+                background: $white;
+                border-radius: 50%;
+                color: $colorRed;
+                font-size: .6rem;
+                top: -8%;
+                box-shadow: $shadowLower;
+                line-height: 1rem;
+                border: solid 2px $colorMain;
+                left: calc(100% - .7rem);
+                width: 1rem;
+                height: 1rem;
+            }
+        }
+    }
+}
+
+.account {
+    @include flex-center;
+    flex-direction: column;
+
+    &__empty {
+        width: 15rem;
+        flex-direction: column;
+        text-align: center;
+        font-size: .8rem;
+
+        &_text {
+            margin: .5rem 0rem;
+
+            a {
+                color: $colorBlue;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
+        }
+    }
+
+    &__navigation {
+        width: 10rem;
+
+        &_item {
+            padding: .5rem .3rem .3rem 0rem;
+            font-size: .9rem;
+            
+            &:first-child {
+                font-size: 1rem;
+                border-bottom: solid 1px $colorLowGrey;
+                margin-bottom: .5rem;
+            }
+
+            &:last-child {
+                border-top: solid 1px $colorLowGrey;
+                font-size: .8rem;
+                margin-top: .5rem;
+            }
+
+            &:not(:first-child):hover {
+                text-decoration: underline;
+            }
+        }
+    }
+}
+
+
+.items {
+    min-width: 15rem;
+    padding: .3rem 0rem; 
+
+    &__container {
+        position: relative;
+        max-height: 25rem;
+        overflow-y: auto;
+        overflow-x: hidden;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    &__total {
+        @include flex-center;
+        justify-content: space-between;
+        border-bottom: 1px solid $colorLowGrey;
+        padding: .3rem 0rem;
+
+        span {
+            display: inline-block;
+            font-size: .9rem;
+        }
+    }
+
+    &__item {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        padding: .725rem 0rem;
+        border-top: 1px solid $colorLowGrey;
+        min-width: 20rem;
+        height: 4rem;
+
+        &:nth-last-child(1) {
+            border-bottom: 1px solid $colorLowGrey;
+        }
+
+        &__qty {
+            flex: 1;
+            font-size: .7rem;
+            text-align: center;
+        }
+        
+        &__image {
+            flex: 1;
+        }
+
+        &__name {
+            flex: 4;
+            font-size: .75rem;
+            padding-left: .8rem;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+        
+        &__price {
+            flex: 2;
+            font-size: .8rem;
+        }
+
+        &__buttons {
+            display: flex;
+            position: absolute;
+            top: 100%;
+            left: 100%;
+            opacity: 0;
+            padding: .3rem;
+            transform: translateY(-105%) translateX(-80%);
+        }
+
+        &__button {
+            position: relative;
+            color: $colorMain;
+            font-size: .75rem;
+            margin-right: .7rem;
+            cursor: pointer;
+
+            &:hover {
+                filter: brightness(75%);
+            }
+
+            &:last-child {
+                color: $colorRed;
+            }
+        }
+    }
+
+    &__btn {
+        margin-top: .7rem;
+    }
+
+    P {
+        text-align: center;
+        font-size: .8rem;
+    }
+}

@@ -1,0 +1,51 @@
+@use './_index.scss' as *;
+
+.main {     
+    position: relative;
+    display: flex;
+    margin: 0 auto;
+    box-shadow: $shadowMain;
+    font-size: 1rem;
+    cursor: pointer;
+    background: $colorMain;
+    color: $white;
+    border: solid 1px $colorMain;
+    border-radius: .2rem;
+
+    &__btn {
+        flex: 6;
+        cursor: pointer;
+        display: block;
+        outline: none;
+        border: none;
+        width: 100%;
+        min-height: 2em;
+        font-size: 1.2em;
+        text-align: center;
+        transition: background .2s ease;
+        margin-left: -15%;
+        color: inherit;
+        background: transparent;
+        border-radius: .2rem;
+        
+        &:disabled {
+            pointer-events: none;
+        }
+    }
+
+    &__icon {
+        @include flex-center;
+        background: transparent;
+        flex: 1;
+        z-index: 9; 
+
+        &_content {
+            @include flex-center;
+            justify-content: flex-end;
+            width: 100%;
+            height: 100%;
+            font-size: 1.4em;
+            color: inherit;
+        }
+    }
+}

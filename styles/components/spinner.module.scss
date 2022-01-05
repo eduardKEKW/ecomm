@@ -1,0 +1,27 @@
+@use '../_index.scss' as *;
+
+.spinner {
+    &__content {
+        @include flex-center;
+        position: absolute;
+        top: 0%;
+        left: 0%;
+        width: 100%;
+        min-width: 100%;
+        min-height: 100%;
+        background: rgba(255, 255, 255, 0.603);
+        z-index: 9999;
+
+        &__animation {
+            content: " ";
+            display: block;
+            width: 2rem;
+            height: 2rem;
+            margin: .2rem;  
+            border-radius: 50%;
+            border: .2rem solid $colorMain;
+            border-color: $colorMain transparent $colorMain transparent;
+            animation: lds-dual-ring 1.2s linear infinite;
+        }
+    }
+}

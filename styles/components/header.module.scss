@@ -1,0 +1,120 @@
+@use '../_index.scss' as *;
+
+.header {
+    grid-area: header;
+    background: white;
+
+    &__content {
+        width: 70%;
+        min-width: 85rem;
+        margin: 0 auto;
+    }
+
+    &__top {
+        height: 3.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+    }
+
+    &__all {
+        @include flex-center;
+        flex: 1;
+        height: 2.4rem;
+        border-radius: .3rem;
+        margin-right: .5rem;
+        margin-left: .1rem;
+        background: $colorRed;
+        color: $white;
+        box-shadow: $shadowInputMain;
+
+        &__icon {
+            font-size: 1.2rem;
+            margin-right: .5rem;
+        }
+
+        span {
+            font-size: 1rem;
+            // font-weight: 600;
+        }
+    }
+
+    &__logo {
+        @include flex-center;
+        justify-content: flex-start;
+        flex: 2;
+
+        &_unset {
+            width: 80%;
+
+            div {
+                position: unset !important;
+            }
+        }
+
+        &_img {
+            object-fit: contain;
+            width: 100% !important;
+            position: relative !important;
+            height: unset !important;
+        }
+    }
+
+    &__interactions {
+        flex: 6;
+    }
+}
+
+.menu {
+    width: 100%;
+    min-width: 100%;
+    height: 2.3rem;
+    background: $mainGradient;
+    box-shadow: $shadowLower;
+    z-index: 9999;
+
+    &__items {
+        display: flex;
+        position: relative;
+        width: 70%;
+        min-width: 85rem;
+        margin: 0 auto;
+        display: flex;
+        height: 100%;
+
+        &__icon {
+            font-size: 1.1rem;
+            margin-right: .4rem;            
+        }
+
+        &__item {
+            @include flex-center;
+            color: $white;
+            
+            &:first-child {
+                height: 100%;
+            }
+
+            div {
+                @include flex-center;
+                height: 100%;
+                margin-right: .5rem;
+                font-size: .9rem;
+                padding: .1rem .6rem;
+                min-width: 4rem;
+            }
+
+            &:not(:first-child):hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &_selected {
+        z-index: 99999;
+        &:first-child {
+            color: $colorGrey;
+            background: $white;
+        }
+    }
+}

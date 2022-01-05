@@ -1,0 +1,91 @@
+@use './_index.scss' as *;
+
+.text {
+    grid-area: text;
+}
+
+.text_2 {
+    grid-area: text-2;
+}
+
+.text_3 {
+    grid-area: text-3;
+}
+
+.text_4 {
+    grid-area: text-4;
+}
+
+.text_5 {
+    grid-area: text-5;
+}
+
+.image_square {
+    grid-area: image_square;
+}
+
+.image_square_2 {
+    grid-area: image_square-2;
+}
+
+.image_round {
+    grid-area: image_round;
+    border-radius: 50%;
+}
+
+
+.skeleton {
+    width: 100%;
+    gap: .6rem;
+    padding: .5rem;
+    
+    div[class*="text_"] {
+        div {  
+            opacity: .7;
+            animation: skeleton-loading 1s linear infinite alternate;
+            height: .7rem;
+            margin-bottom: .25rem;
+            border-radius: .125rem;
+    
+            &:last-child {
+                margin-bottom: 0;
+                width: 80%;
+            }   
+        }
+    }
+
+    div[class*="image_"] {
+        opacity: .7;
+        animation: skeleton-loading 1s linear infinite alternate;
+    }
+    
+}
+
+.suggestion {
+    min-width: 100%;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: 
+    "image_square text text text text text text text-2"
+    "image_square text text text text text text text-2"
+    "image_square .    .    .    .    .    .    text-2";
+    min-height: 5rem;
+}
+
+.card {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    grid-template-areas: 
+    "image_square image_square image_square   image_square  "
+    "image_square image_square image_square   image_square  "
+    "image_square image_square image_square   image_square  "
+    "text         text         text           text          "
+    "text-2       .            .              .             "
+    "text-3       text-3       text-3         .             "
+    "text-4       .            image_square-2 image_square-2"
+    "text-4       .            image_square-2 image_square-2"
+    "text-4       .            .              .             ";
+}
+  

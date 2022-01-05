@@ -1,0 +1,110 @@
+@keyframes fadeDown {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+    100% {
+        top: 99%;
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+@keyframes fadeUp {
+    0% {
+        top: 150%;
+        opacity: 0;
+    }
+    100% {
+        top: 100%;
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+@keyframes fadeLeft {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(-140%);
+        opacity: 1;
+        height: 100%;
+        pointer-events: all;
+    }
+}
+
+@keyframes toolTipLeft {
+    0% {
+        left: -200%;
+        top: -80%;
+        opacity: 0;
+    }
+    100% {
+        left: -20%;
+        top: -80%;
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+@keyframes skeleton-loading {
+    0% {
+      background-color: hsl(200, 20%, 70%);
+    }
+  
+    100% {
+      background-color: hsl(200, 20%, 95%);
+    }
+}
+
+@keyframes lds-dual-ring {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes pulsating {
+    0% {
+        transform: scale(1.1);
+    }
+    100% {
+        transform: scale(0.9);
+    }
+}
+
+.animation_pulsating {
+    animation-name: pulsating;
+    animation-fill-mode: both;
+    animation-duration: .4s;
+}
+
+.animation_fadeUp {
+    animation-name: fadeUp;
+    animation-fill-mode: both;
+    animation-duration: .2s;
+}
+
+.animation_tooltip_left {
+    animation-name: toolTipLeft;
+    animation-fill-mode: both;
+    animation-duration: .4s;
+}
+
+.animation_tooltip {
+    animation-name: fadeUp;
+    animation-fill-mode: both;
+    animation-duration: .4s;
+}
+
+.animation_fadeLeft {
+    animation-name: fadeLeft;
+    animation-fill-mode: both;
+    animation-duration: .2s;
+}
+
+

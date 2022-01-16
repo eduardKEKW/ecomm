@@ -9,7 +9,7 @@ export const theme = {
         lightGrayishBlue:   'hsl(220, 16%, 96%)',
         veryLightGray:      'hsl(0, 0%, 98%)',
         white:              'white',
-        main:          '#70cadf',
+        main:          '#73c8db',
         mainHover:     '#699fac',
         mainLow:       '#5ea3b3',
         black:         '#554f4f',
@@ -19,6 +19,7 @@ export const theme = {
         blue:          'rgb(142 151 230)',
         btnMain:       '#3c8fa2',
         background:    '#f2f2f7;',
+
     },  
     shadows: {
         inputDefault:       'rgba(99, 99, 99, 0.123) 0px 2px 8px 0px',
@@ -30,7 +31,8 @@ export const theme = {
         main:         'rgba(0, 0, 0, 0.1) 0px 4px 12px',
         lowerWhite:   'rgb(255, 255, 255) 1.95px 1.95px 2.6px',
         container:    'rgba(0, 0, 0, 0.15) 0px 0px 2.6px',
-        containerInner:    'rgba(0, 0, 0, 0.15) 0px 0px 2.6px inset'
+        containerInner:    'rgba(0, 0, 0, 0.15) 0px 0px 2.6px inset',
+        btn:            '3px 3px 0px -1px rgba(0,0,0,1.0)'
     },
     gradient: {
         main:       'linear-gradient(to right, #24849c, #73c8db)',

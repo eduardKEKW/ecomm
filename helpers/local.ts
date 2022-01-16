@@ -4,6 +4,8 @@ import banner1 from '/public/banner1.jpg';
 import banner2 from '/public/banner2.jpg';
 import banner3 from '/public/banner3.jpg';
 
+const APOLLO_CACHE_ONLY = "cache-only";
+const APOLLO_NO_CACHE = "no-cache"
 const APOLLO_NETWORK_ONLY = 'network-only';
 const APOLLO_SSR = typeof window == 'undefined';
 const SEARCH_DELAY = 150; // ms
@@ -90,5 +92,7 @@ export {
     APOLLO_ERROR_IGNORE,
     USER_NAVIGATION,
     SUBSCRIBE_TEXT,
-    FOOTER_LINKS
+    FOOTER_LINKS,
+    APOLLO_CACHE_ONLY,
+    APOLLO_NO_CACHE
 }

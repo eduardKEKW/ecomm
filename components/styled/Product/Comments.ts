@@ -1,8 +1,10 @@
 import styled from 'styled-components'
+import { card } from '../Animations'
 
 export const SComments = styled.section`
   grid-area: ${({ gridArea }) => gridArea};
   background: white;
+  min-height: 10rem;
   padding: 0rem 1rem;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -19,6 +21,10 @@ export const SComment = styled.div`
   align-items: center;
   padding: 1rem 0rem;
   border-bottom: 1px solid ${({ theme }) => theme.colors.lowGrey};
+  animation-name: ${card};
+  animation-fill-mode: both;
+  animation-duration: .2s;
+  animation-delay: ${props => `${props.animationDelay * 100}ms`};
 `
 
 export const SAbout = styled.div`

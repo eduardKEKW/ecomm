@@ -10,7 +10,7 @@ import Breadcrumbs from 'components/Product/Breadcrumbs';
 import Title from 'components/Title';
 import Info from 'components/Product/Info';
 import Skeleton from 'components/helpers/Skeleton';
-import { Grid, SActions, SAttributes, SDescription, SProduct, SReview } from 'components/styled/Page/Product';
+import { Grid, SActions, SAttributes, SDescription, SProduct } from 'components/styled/Page/Product';
 import ButtonMain from 'components/buttons/Main';
 import { faHistory, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import useCart from 'hooks/useCart.hook';
@@ -27,7 +27,6 @@ export default function Product ({}: Props) {
     const [product, setProduct]                                 = useState<ProductInterface | null>(null)
     const [loadProducts, { loading, products, called }]         = useProduct()
     const [{ loading: cartLoading }, addToCart]                 = useCart()
-
     const [{ loading: favoriteLoading, items }, addToFavorite]  = useFavorite()
 
     useEffect(() => {
@@ -125,8 +124,8 @@ export default function Product ({}: Props) {
                             </ButtonMain>
 
                             <section>
-                                <span><i><FontAwesomeIcon icon={faHistory} />   </i>   <p>Retur gratuit in 30 de zile</p>  </span>
-                                <span><i><FontAwesomeIcon icon={faFile} />      </i>   <p>Garantie inclusa</p>             </span>
+                                <span><i><FontAwesomeIcon icon={faHistory} /></i><p>30 days refund</p> </span>
+                                <span><i><FontAwesomeIcon icon={faFile} /></i> <p>Guarantee include</p> </span>
                             </section>
                         </section>
                     </SActions>
@@ -149,12 +148,12 @@ export default function Product ({}: Props) {
 
                 <SDescription gridArea="description">
                     <Title name="Description" />
-                    {product.description}
+                    {product?.description}
                 </SDescription>
 
-                <ProductSlider title="More Like" gridArea="recommended" category={product.category} size={5} />
-
                 <Comments gridArea="comments" productId={product.id} />
+
+                <ProductSlider title="More Like" gridArea="recommended" category={product.category} size={5} />
             </Grid>
         </Skeleton>
     )

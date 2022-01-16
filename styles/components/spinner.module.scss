@@ -1,6 +1,8 @@
 @use '../_index.scss' as *;
 
 .spinner {
+    pointer-events: none;
+
     &__content {
         @include flex-center;
         position: absolute;
@@ -9,8 +11,8 @@
         width: 100%;
         min-width: 100%;
         min-height: 100%;
-        background: rgba(255, 255, 255, 0.603);
         z-index: 9999;
+        pointer-events: none;
 
         &__animation {
             content: " ";
@@ -22,6 +24,17 @@
             border: .2rem solid $colorMain;
             border-color: $colorMain transparent $colorMain transparent;
             animation: lds-dual-ring 1.2s linear infinite;
+            pointer-events: none;
+        }
+
+        &__pulse {
+            border-radius: 1rem;
+            box-shadow: $colorMain 0px 0px 4px 0px;
+            pointer-events: none;
+
+            & > div {
+                animation: pulsating .4s infinite ease-out alternate;
+            }
         }
     }
 }

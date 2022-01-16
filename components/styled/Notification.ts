@@ -8,7 +8,7 @@ export const SNotification = styled.div`
     left: 100%;
     overflow: hidden;
     transform: translateX(-100%);
-    padding: 0rem 1.5rem;
+    padding: .5rem 1.5rem;
     display: flex;
     flex-direction: column;
     max-height: 50vw;
@@ -35,7 +35,7 @@ export const SItem = styled.div`
 
     & > i {
         color: ${({ theme }) => theme.colors.main};
-        font-size: 1.5rem;
+        font-size: 2rem;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -58,6 +58,7 @@ export const SItemBody = styled.div`
         margin: 0;
         flex: 4;
         font-size: .8rem;   
+        font-weight: 400;
     }
 `
 
@@ -65,7 +66,7 @@ export const SItemClose = styled.aside`
     position: absolute;
     top: 0%;
     left: 100%;
-    padding: .1rem;
+    padding: .2rem;
     transform: translateX(-140%);
     cursor: pointer;
     color: ${({ theme }) => theme.colors.main};

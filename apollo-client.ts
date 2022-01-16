@@ -47,6 +47,13 @@ function createApolloClient() {
     })),
     cache: new InMemoryCache({
       typePolicies: {
+        Query: {
+          fields: {
+            comments: {
+              keyArgs: ['productId'],
+            }
+          }
+        },
         Comment: {
           fields: {
             userLike: (_, { variables, readField, args }) => {

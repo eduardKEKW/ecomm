@@ -190,10 +190,10 @@ export const SProductCardBody = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: ${({ theme }) => theme.shadows.btn};
     }
 
     & > #add {
         flex: 2;
-        /* border: solid 1px red; */
     }
 `;

@@ -11,6 +11,9 @@ import { ThemeProvider } from 'styled-components';
 import { theme } from 'components/styled/Theme';
 
 import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import Loading from 'components/helpers/Loading';
 
 function MyApp({ Component, pageProps: { apolloCache, ...props } }) {
   const apolloClient = useApollo(apolloCache);
@@ -19,13 +22,52 @@ function MyApp({ Component, pageProps: { apolloCache, ...props } }) {
     <ApolloProvider client={apolloClient}>
       <ThemeProvider theme={theme}>
         <GlobalProvider>
-          <DefaultLayout title={props.title}> 
-            <Component {...props} />
-          </DefaultLayout>
+          <LoadingPageChange>
+            <DefaultLayout title={props.title}> 
+              <Component {...props} />
+            </DefaultLayout>
+          </LoadingPageChange>
         </GlobalProvider>
       </ThemeProvider>
     </ApolloProvider>
   )
+}
+
+const LoadingPageChange = ({ children }): JSX.Element => {
+  const [pageChanging, setPageChanging] = useState<boolean>(false);
+  const router = useRouter();
+
+  useEffect(() => {
+
+    const onRouteChangeStart = (_, { shallow }) => {
+      setPageChanging(! shallow)
+      window.scrollTo(0, 0);
+      document.body.style.overflow = 'hidden';
+    }
+
+    const onRouteChangeEnd = (_, { shallow }) => {
+      setPageChanging(false)
+      document.body.style.overflow = 'visible';
+    }
+
+    router.events.on('routeChangeStart', onRouteChangeStart)
+    router.events.on('routeChangeComplete', onRouteChangeEnd)
+
+    return () => {  
+      router.events.off('routeChangeStart', onRouteChangeStart)
+      router.events.off('routeChangeComplete', onRouteChangeEnd)
+    }
+  }, [])
+
+  return(
+      <>
+        <Loading loading={pageChanging} pulsating={true} size="big">
+          {
+            pageChanging ? <div style={{ height: '100vh' }}></div> : children
+          }
+        </Loading>
+      </>
+    )
 }
 
 const DefaultLayout = ({ children, title }) => {

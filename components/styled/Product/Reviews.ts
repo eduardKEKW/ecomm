@@ -11,7 +11,7 @@ export const SReviews = styled.div`
 `;
 
 export const STotal = styled.div`
-    flex: 1;
+    flex: 2;
     display: flex;
     align-items: flex-start;
     
@@ -24,6 +24,20 @@ export const STotal = styled.div`
 
         & > span:nth-child(1) {
             font-size: 4rem;
+            font-weight: 400;
+            position: relative;
+            
+            &::after {
+                content: "/ 5.00";
+                transform: translateY(-100%);
+                width: 3rem;
+                padding: .8rem 0rem;
+                position: absolute;
+                top: 100%;
+                left: 100%;
+                font-size: 1rem;
+                font-weight: 200;
+            }
         }
 
         & > span:nth-child(3) {
@@ -41,7 +55,7 @@ export const SDetails = styled.div`
     align-items: center;
     padding: 2rem 0rem;
     gap: .5rem;
-    color: ${({ theme }) => theme.colors.main};;
+    color: ${({ theme }) => theme.colors.main};
 `
 
 export const SDetailsItem = styled.div`
@@ -71,20 +85,17 @@ export const SProgress = styled.div`
     position: relative;
     background: ${({ theme }) => '#e9ecef'};
     font-size: .65rem;
-    border-radius: 1rem;
     font-weight: 200;
 
     &:after {
         content: "${({ count, progress }) => !! progress && `${count} R`}";
         width: ${({ progress }) => `${! progress ? 0 : Math.max(progress || 0, 5)}%`};
+        box-shadow: ${({ theme }) => theme.shadows.btn};
         background: ${({ color }) => color};
         display: flex;
         justify-content: center;
         align-items: center;
         height: 100%;
-        border-top-left-radius: 1rem;
-        border-bottom-left-radius: 1rem;
-        box-shadow: ${({ theme }) => theme.shadows.container};
         position: absolute;
         color: white;
     }

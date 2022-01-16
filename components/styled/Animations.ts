@@ -35,3 +35,14 @@ export const popUp = keyframes`
         transform: translateX(-80%) translateY(-20%) scale(1);
     }
 `;
+
+export const card = keyframes`
+    0% {
+        transform: scaleX(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+`

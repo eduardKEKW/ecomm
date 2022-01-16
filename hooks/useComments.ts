@@ -20,10 +20,12 @@ interface LocalCommentInterface extends CommentInterface {
     userOwned?: boolean
 }
 
+export type LikeMutator = MutatorFunc<LikeDataMutationInterface, LikeMutationVarsInterface>
+
 interface DataInterface extends Omit<QueryResult<CommentQueryInteraface, CommnetQueryVarsInterface>, 'data'> {
     comments: CommentInterface[]
     pageInfo: PaginationInterface
-    like: MutatorFunc<LikeDataMutationInterface, LikeMutationVarsInterface>
+    like: LikeMutator
     metaData: CommentsMetaInterface
 }
 

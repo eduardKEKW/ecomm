@@ -1,8 +1,6 @@
-import { QueryLazyOptions, useLazyQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { LazyQueryHookOptions } from "@apollo/react-hooks";
-import { PRODUCT_QUERY } from "apollo/querys/Product.query";
-import { ProductInterface } from "Interfaces/Product.interface";
-import { ProductQueryInterface, ProductQueryVarsInterface } from "Interfaces/queries/Product.query.interface";
+import { ProductInterface, ProductQueryInterface, ProductQueryVarsInterface, PRODUCT_QUERY } from "apollo/querys/Product.query";
 import { useEffect } from "react";
 
 interface Props {

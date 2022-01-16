@@ -38,7 +38,10 @@ const ButtonMain = ({
     
     const click = (e) => {
         e.preventDefault();
-        onClick();
+        
+        if(!loading) {
+            onClick();
+        }
 
         if(type == "submit" && context) {
             setContext({ name: type })

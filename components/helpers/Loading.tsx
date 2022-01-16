@@ -1,6 +1,13 @@
 import style from 'styles/components/spinner.module.scss';
 import img from '/public/logosimple.png';
 import Image from 'next/image';
+import { CSSProperties } from 'react';
+
+enum sizes {
+    small = 50,
+    medium = 70,
+    big = 100
+}
 
 interface Props {
     children: JSX.Element
@@ -9,6 +16,8 @@ interface Props {
     minWidth?: string
     showChildren?: boolean,
     pulsating?: boolean
+    contentStyle?: CSSProperties
+    size?: "small" | "medium" | "big"
 }
 
 const Loading = ({ 
@@ -17,9 +26,11 @@ const Loading = ({
         minHeight = "",
         minWidth = "",
         showChildren = true,
-        pulsating = false
+        pulsating = false,
+        contentStyle = {},
+        size = "small"
     }: Props) => {
-    
+
     if(! loading) return <>{ children }</>
 
     return (
@@ -31,18 +42,18 @@ const Loading = ({
                     minWidth: minWidth,
                  }}
             >
-                <div className={style.spinner__content}>
+                <div className={style.spinner__content} style={{ background: pulsating ? 'white' : 'rgba(255, 255, 255, 0.616)' }}>
                     {
                         pulsating 
                         ? 
-                            <Image
-                                src={img}
-                                alt="Ecomm Logo"
-                                quality={100}
-                                width={100}
-                                height={100}
-                                className={style.animation_pulsating}
-                            /> 
+                            <div className={[style.spinner__content__pulse].join(' ')}>
+                                <Image
+                                    src={img}
+                                    alt="ecomm logo"
+                                    width={sizes[size]}
+                                    height={sizes[size]}
+                                /> 
+                            </div>
                         : 
                             <div className={style.spinner__content__animation} />
                     }

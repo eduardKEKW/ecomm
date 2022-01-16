@@ -48,7 +48,7 @@ const Header = () => {
                         </Categories>
                     <div className={styles.menu__items__item}>
                         <Link href="/">     
-                            <div>
+                            <div> 
                                 New
                             </div>
                         </Link>

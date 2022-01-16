@@ -5,6 +5,7 @@ export const Grid = styled.main`
   min-width: 75rem;
   margin: 0 auto; */
   /* width: 100%; */
+  min-height: 100vh;
   min-width: 100rem;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -12,14 +13,15 @@ export const Grid = styled.main`
     "product product product product product product"
     ". attributes  attributes  attributes  attributes   ."
     ". description description description description  ."
-    ". recommended recommended recommended recommended  ."
     ". review      review      review      review       ."
-    "comments comments comments comments comments comments";
+    "comments comments comments comments comments comments"
+    ". recommended recommended recommended recommended  .";
 `;
 
 export const SProduct = styled.section`
   background: white;
   grid-area: ${({ gridArea }) => gridArea};   
+  min-height: 15rem;
   padding-bottom: 15%;
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -84,6 +86,7 @@ export const SDescription = styled.section`
   line-height: 1.5rem;
   font-size: 1rem;
   padding: 2.5rem 0rem;
+  min-height: 5rem;
 `
 
 export const SAttributes = styled.section`
@@ -115,5 +118,4 @@ export const SAttributes = styled.section`
 
 export const SReview = styled.section`
   grid-area: ${({ gridArea }) => gridArea};
-  border: solid 1px red;
 `

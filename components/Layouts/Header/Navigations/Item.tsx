@@ -6,10 +6,10 @@ import Image from 'next/image';
 import Link from 'components/helpers/LinkCustom';
 import Loading from 'components/helpers/Loading';
 import Price from 'components/Product/Price';
-import { ProductInterface } from 'Interfaces/Product.interface';
 import { shortenString } from 'helpers/helpers';
 import style from 'styles/components/interactions.module.scss';
-import { CartItemInterface } from 'Interfaces/Cart.interface';
+import { CartItemInterface } from 'apollo/fragments/Cart.fragment';
+import { ProductInterface } from 'apollo/querys/Product.query';
 
 interface Props {
     item: CartItemInterface & ProductInterface;
@@ -47,7 +47,7 @@ const Item = ({
         <div 
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
-            className={[style.items__item, true && style.items__loading].join(' ')} 
+            className={[style.items__item, style.items__loading].join(' ')} 
         >
             <Loading loading={loading} >
                 <>

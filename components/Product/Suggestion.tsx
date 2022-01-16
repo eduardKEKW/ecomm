@@ -1,4 +1,3 @@
-import { SkeletonProductInterface } from 'Interfaces/Product.interface'
 
 import Image from 'next/image';
 import Link from 'components/helpers/LinkCustom';
@@ -7,6 +6,7 @@ import React from 'react'
 import Skeleton from 'components/helpers/Skeleton';
 import { shortenString } from 'helpers/helpers';
 import styles from 'styles/components/search.module.scss';
+import { SkeletonProductInterface } from 'apollo/querys/Product.query';
 
 interface Props {
     product: SkeletonProductInterface
@@ -32,7 +32,7 @@ function Suggestion({ product, parents }: Props) {
                 (<div className={styles.search__suggestions_item_category}>
                     <Link href="/cat">
                         <>
-                            In | <span>{category}</span>
+                            <span>{category} category</span>
                         </>
                     </Link>
                 </div>)

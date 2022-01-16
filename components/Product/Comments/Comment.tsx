@@ -8,13 +8,15 @@ import Stars from '../Stars';
 import Like from './Like';
 import { CommentInterface } from 'apollo/fragments/Comment.fragment';
 import { LikeMutationInterface, LikeMutationVarsInterface } from 'apollo/mutations/Like.mutator';
+import { ACTIVITY_QUERY } from 'apollo/querys/Activity.query';
 
 interface Props {
     comment: CommentInterface,
     like: MutatorFunc<LikeMutationInterface, LikeMutationVarsInterface>
+    index: number
 }
 
-const Comment = ({ comment, like }: Props) => {
+const Comment = ({ comment, like, index }: Props) => {
     const avatarColor = useMemo<string>(() => randomColor(), []);
 
     const onLike = () => {
@@ -26,11 +28,11 @@ const Comment = ({ comment, like }: Props) => {
     }
 
     return (
-        <SComment>
+        <SComment animationDelay={index}>
             <SAbout>
-                <SAvatar color={avatarColor}>
+                <SAvatar style={{ color: avatarColor }} >
                     <Image src={defaultAvatar} layout="responsive" objectFit="cover" />
-                    <div>
+                    <div style={{ background: avatarColor }} >
                         <span>{getInitials(comment.user.name)}</span>
                     </div>
                 </SAvatar>

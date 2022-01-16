@@ -1,5 +1,6 @@
 import { CommentsMetaInterface, RatingsInterface } from "apollo/querys/Comments.query";
 import { SDetails, SDetailsItem, SProgress, SReviews, STotal } from "components/styled/Product/Reviews";
+import React from "react";
 import { useMemo } from "react";
 import Stars from "../Stars";
 
@@ -8,11 +9,11 @@ interface Props extends CommentsMetaInterface {
 }
 
 const Reviews = ({
-    avgRating,
-    ratingsCount,
-    reviewCount,
+    avgRating = 0,
+    ratingsCount = [],
+    reviewCount = 0,
 }: Props): JSX.Element => {
-    const ratingsMap = useMemo(() => getRatingsMap(ratingsCount), []);
+    const ratingsMap = useMemo(() => getRatingsMap(ratingsCount), [ratingsCount]);
 
     return (
         <SReviews>
@@ -55,4 +56,6 @@ const getRatingsMap = (data: RatingsInterface[]): {[key: number]: number} => {
     }, {});
 }
 
-export default Reviews;
+export default React.memo(Reviews, (prev, curr) => {
+    return prev.avgRating == curr.avgRating
+});

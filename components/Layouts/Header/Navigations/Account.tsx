@@ -1,8 +1,7 @@
 
-import { UserQueryInterface, UserQueryVarsInterface } from 'Interfaces/queries/User.query.interface';
 
 import ButtonMain from 'components/buttons/Main';
-import { GET_USER_QUERY } from 'apollo/querys/User.query';
+import { GET_USER_QUERY, UserQueryInterface, UserQueryVarsInterface } from 'apollo/querys/User.query';
 import Link from 'components/helpers/LinkCustom';
 import Loading from 'components/helpers/Loading';
 import React from 'react'

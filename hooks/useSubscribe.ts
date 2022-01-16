@@ -1,10 +1,9 @@
 import { ApolloCache, DefaultContext, MutationFunctionOptions, useMutation } from "@apollo/client";
 import { ApolloError } from "@apollo/react-hooks";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
-import { responseBodyInterface, SubscribeInterface, SubscribeVarsInterface } from "Interfaces/mutations/Subscribe.mutator.interface";
 import { addNotificationAction } from "Providers/Actions";
 import { useGlobalDispatch } from "Providers/GlobalProvider.provider";
-import { SUBSCRIBE_MUTATION } from "../apollo/mutations/Subscribe.mutator";
+import { responseBodyInterface, SubscribeInterface, SubscribeVarsInterface, SUBSCRIBE_MUTATION } from "../apollo/mutations/Subscribe.mutator";
 
 export type mutator = (option?: MutationFunctionOptions<SubscribeInterface, SubscribeVarsInterface, DefaultContext, ApolloCache<any>>) => void
 

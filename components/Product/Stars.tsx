@@ -1,7 +1,7 @@
 import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface Props {
     rating?: number
@@ -13,6 +13,8 @@ function Stars({
     onChange    = null
 }: Props) {
     const [selected, setSelected] = useState<number>(rating);
+
+    useEffect(() => setSelected(rating), [rating]);
 
     const onHover = (index: number) => {
         if(onChange) {
@@ -50,4 +52,4 @@ function Stars({
     )
 }
 
-export default Stars
+export default React.memo(Stars)

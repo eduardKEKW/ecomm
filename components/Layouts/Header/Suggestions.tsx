@@ -1,10 +1,9 @@
 import ButtonMain from 'components/buttons/Main';
 import React from 'react'
-import { SkeletonProductInterface } from 'Interfaces/Product.interface';
 import Suggestion from '../../Product/Suggestion';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { groupSuggestedProducts } from 'helpers/helpers';
 import styles from 'styles/components/search.module.scss';
+import { SkeletonProductInterface } from 'apollo/querys/Product.query';
 
 interface Props {
     loading: boolean

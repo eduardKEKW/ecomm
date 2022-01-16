@@ -15,6 +15,7 @@ export const SMain = styled.div`
     transition: .2s background ease, .2s color ease;
     border-radius: ${({ rounded }) => rounded && '.4rem'};
     padding: .2rem;
+    box-shadow: ${({ theme }) => theme.shadows.btn};
 
     &:hover {
         background: ${({ reverse, theme }) => reverse ? theme.colors.main : theme.colors.white};

@@ -13,10 +13,7 @@ const Create = ({ productId, border }: Props): JSX.Element => {
 
     return (    
         <SCreate border={border} >
-            <ButtonMain 
-                onClick={() => router.push(`/create/comment/${productId}`)} 
-                rounded={true}
-            >
+            <ButtonMain onClick={() => router.push(`/create/comment/${productId}`)}>
                 Leave a Review
             </ButtonMain>
             <div>

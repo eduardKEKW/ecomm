@@ -48,7 +48,6 @@ function Notification() {
 
     return (
         <SNotification>
-
             {
                 notifications.map(({
                     icon,
@@ -58,8 +57,8 @@ function Notification() {
                     id,
                     time
                 }) => (
-                    <SItem close={closeItem == id} status={status} key={id}>
-                        <i style={{ color }}><FontAwesomeIcon icon={icon} /></i>
+                    <SItem color={color} close={closeItem == id} status={status} key={id}>
+                        <i><FontAwesomeIcon icon={icon} /></i>
                         <SItemBody>
                             <p>{status ? 'SUCCESS!' : 'FAILED!'}</p>
                             <p>{description}</p>

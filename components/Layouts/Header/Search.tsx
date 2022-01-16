@@ -1,13 +1,10 @@
 
 import { APOLLO_NETWORK_ONLY, SEARCH_DELAY, SEARCH_INPUT_PLACEHODER } from 'helpers/local';
-import { ProductQueryInterface, ProductQueryVarsInterface } from 'Interfaces/queries/Product.query.interface';
 import React, { useEffect, useRef, useState } from 'react'
 import { faBackspace, faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PRODUCT_QUERY } from 'apollo/querys/Product.query';
-import { ProductFiltersInterface } from 'Interfaces/ProductFilters.interface';
-import { SkeletonProductInterface } from 'Interfaces/Product.interface';
+import { ProductFiltersInterface, ProductQueryInterface, ProductQueryVarsInterface, PRODUCT_QUERY, SkeletonProductInterface } from 'apollo/querys/Product.query';
 import Suggestions from './Suggestions';
 import styles from 'styles/components/search.module.scss';
 import { useInitialRender } from 'hooks/useInitialRender.hook';

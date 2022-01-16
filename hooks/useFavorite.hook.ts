@@ -1,17 +1,15 @@
 
 import { ApolloCache, DefaultContext, MutationFunctionOptions, useMutation, useQuery } from "@apollo/react-hooks";
-import { FavoriteMutatorInterface, FavoriteMutatorVarsInterface } from "Interfaces/mutations/AddToFavorite.mutator.interface";
 import { useEffect, useState } from "react";
 
-import { FAVORITE_MUTATION } from "apollo/mutations/Favorites.mutator";
-import { FAVORITE_QUERY } from 'apollo/querys/Favorite.query';
-import { ProductInterface } from "Interfaces/Product.interface";
-import { UserInterface } from '../Interfaces/User.interface';
-import { FavoriteQueryInterface, FavoriteQueryVarsInterface } from "Interfaces/queries/Favorite.query.interface";
+import { FavoriteMutatorInterface, FavoriteMutatorVarsInterface, FAVORITE_MUTATION } from "apollo/mutations/Favorites.mutator";
+import { FavoriteQueryInterface, FavoriteQueryVarsInterface, FAVORITE_QUERY } from 'apollo/querys/Favorite.query';
 import { useGlobalDispatch } from "Providers/GlobalProvider.provider";
 import { addNotificationAction } from "Providers/Actions";
 import { faHeart as regularFaHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as solidFaHeart } from "@fortawesome/free-solid-svg-icons";
+import { UserInterface } from "apollo/fragments/User.fragment";
+import { ProductInterface } from "apollo/querys/Product.query";
 
 
 export type options = MutationFunctionOptions<FavoriteMutatorInterface, FavoriteMutatorVarsInterface, DefaultContext, ApolloCache<any>>;

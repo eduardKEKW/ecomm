@@ -1,11 +1,8 @@
 import { ApolloCache, DefaultContext, MutationFunctionOptions, useMutation, useQuery } from '@apollo/client';
-import { MUTATE_CART_ITEMS } from 'apollo/mutations/Cart.mutator';
-import { GET_USER_QUERY } from 'apollo/querys/User.query';
-import { CartInterface } from 'Interfaces/Cart.interface';
-import { CartQueryInterface, CartQueryVarsInterface } from 'Interfaces/mutations/CartItems.mutator.interface';
+import { CartQueryInterface, CartQueryVarsInterface, MUTATE_CART_ITEMS } from 'apollo/mutations/Cart.mutator';
+import { GET_USER_QUERY, UserQueryInterface, UserQueryVarsInterface } from 'apollo/querys/User.query';
 import { useEffect, useState } from 'react'
-import {GET_GUEST_CART} from 'apollo/querys/Cart.query';
-import { UserQueryInterface, UserQueryVarsInterface } from 'Interfaces/queries/User.query.interface';
+import {CartInterface, GET_GUEST_CART} from 'apollo/querys/Cart.query';
 import { useGlobalDispatch } from 'Providers/GlobalProvider.provider';
 import { addNotificationAction } from 'Providers/Actions';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';

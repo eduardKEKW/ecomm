@@ -3,6 +3,7 @@ import { ApolloClient, gql, HttpLink, InMemoryCache } from "@apollo/client/core"
 import { setContext } from '@apollo/client/link/context';
 import { makeVar } from "@apollo/react-hooks";
 import { ACTIVITY_QUERY } from "apollo/querys/Activity.query";
+import { userLikesVar } from "apollo/Reactives";
 import { useMemo } from "react";
 
 let apolloClient;
@@ -48,17 +49,8 @@ function createApolloClient() {
       typePolicies: {
         Comment: {
           fields: {
-            userLike: { 
-              read: asyncRead(async (_, { variables, readField }) => {
-                  const data = await apolloClient.query({
-                      query: ACTIVITY_QUERY,
-                      variables: {
-                        productId: variables.productId
-                      }
-                  });
-
-                  return !! data.data.activity.likes.find(({ comment_id }) => +comment_id == +readField('id'));
-              }, false)
+            userLike: (_, { variables, readField, args }) => {
+              return !! userLikesVar().find(({ comment_id }) => +comment_id == +readField('id'));
             },
             userOwned: asyncRead(async (_, { variables, readField }) => {
               const data = await apolloClient.query({

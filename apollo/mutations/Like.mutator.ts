@@ -12,6 +12,10 @@ export interface LikeMutationInterface {
   user: UserInterface
 }
 
+export interface LikeDataMutationInterface {
+  LikeComment: LikeMutationInterface
+}
+
 export interface LikeMutationVarsInterface {
   commentId: number
 }

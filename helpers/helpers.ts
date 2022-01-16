@@ -1,5 +1,6 @@
 
 import { ProductInterface } from 'apollo/querys/Product.query';
+import { ListInterface } from 'components/helpers/Resource';
 
 import { USER_FAVORITE_ITEMS, USER_TOKEN } from './local';
 
@@ -112,6 +113,39 @@ const randomColor = (max = 255) => {
     return `rgb(255, ${Math.floor(Math.random() * max)}, ${Math.floor(Math.random() * max)})`
 }
 
+const changeSelectedValue = (list: ListInterface[], value: any, cb: (newFilters: ListInterface[]) => void): void => {
+    for(let i = 0; i < list.length; i++) {
+        list[i].selected = list[i].value == value;
+    }
+
+    return cb(list);
+}
+
+interface toggleArrayValueProps<T> {
+    arr: any[]
+    key: keyof T
+    value: any
+    rest?: object
+}
+
+const toggleArrayValue = <T>({
+    arr,
+    key,
+    value,
+    rest = {}
+}: toggleArrayValueProps<T>): T[] => {
+    if(!! arr.find(like => like[key] == value)) {
+        arr = [...arr.filter(like => like[key] !== value)]
+    } else {
+        arr = [...arr, {
+            ...rest,
+            [key]: value
+        }]
+    }
+
+    return [...arr];
+}
+
 export {
     shortenString,
     groupSuggestedProducts,
@@ -120,5 +154,7 @@ export {
     slug,
     getInitials,
     getStarTitle,
-    randomColor
+    randomColor,
+    changeSelectedValue,
+    toggleArrayValue
 }

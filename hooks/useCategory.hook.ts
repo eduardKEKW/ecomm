@@ -1,9 +1,6 @@
 import { useQuery } from "@apollo/client";
 import { QueryHookOptions, useLazyQuery } from "@apollo/react-hooks";
-import { CATEGORY_QUERY } from 'apollo/querys/Category.query';
-import { CategoryInterface } from "Interfaces/Category.interface";
-import { CategoryQueryInterface, CategoryQueryVarsInterface } from "Interfaces/queries/Category.query.interface";
-import { useEffect } from "react";
+import { CategoryInterface, CategoryQueryInterface, CategoryQueryVarsInterface, CATEGORY_QUERY } from 'apollo/querys/Category.query';
 
 interface Props {
     lazy?: boolean

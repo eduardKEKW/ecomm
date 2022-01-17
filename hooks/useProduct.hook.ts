@@ -1,4 +1,4 @@
-import { useLazyQuery } from "@apollo/client";
+import { LazyQueryResult, QueryLazyOptions, QueryTuple, useLazyQuery } from "@apollo/client";
 import { LazyQueryHookOptions } from "@apollo/react-hooks";
 import { ProductInterface, ProductQueryInterface, ProductQueryVarsInterface, PRODUCT_QUERY } from "apollo/querys/Product.query";
 import { useEffect } from "react";
@@ -8,16 +8,12 @@ interface Props {
     lazy?: boolean
 }
 
-type loadProductsFun = (options?: LazyQueryHookOptions<ProductQueryVarsInterface, ProductQueryVarsInterface>) => void;
-
-interface returnValueInterface {
-    loading: boolean
+interface returnValueInterface extends Omit<LazyQueryResult<ProductQueryInterface, ProductQueryVarsInterface>, 'data'> {
     products: ProductInterface[] | undefined
-    called?: boolean
 }
 
-const useProduct = ({ variables, lazy = true }: Props = {}): [loadProductsFun, returnValueInterface] => {
-    const [loadProducts, { called, loading, data }] = useLazyQuery<ProductQueryInterface, ProductQueryVarsInterface>(PRODUCT_QUERY, {
+const useProduct = ({ variables, lazy = true }: Props = {}): [typeof loadProducts, returnValueInterface] => {
+    const [loadProducts, { data, ...rest }] = useLazyQuery<ProductQueryInterface, ProductQueryVarsInterface>(PRODUCT_QUERY, {
         variables: variables
     });
     
@@ -32,9 +28,8 @@ const useProduct = ({ variables, lazy = true }: Props = {}): [loadProductsFun, r
     return [
         loadProducts, 
         {
-            loading,
             products: data?.products?.hits ?? null,
-            called
+            ...rest
         }
     ];
 } 

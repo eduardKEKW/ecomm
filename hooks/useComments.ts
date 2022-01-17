@@ -13,23 +13,18 @@ interface Props {
     options?: QueryHookOptions<CommentQueryInteraface, CommnetQueryVarsInterface>
 }
 
-export type MutatorFunc<MutationInterface, VarsInterface> = (options?: MutationFunctionOptions<MutationInterface, VarsInterface, DefaultContext, ApolloCache<any>>) => any;
-
 interface LocalCommentInterface extends CommentInterface {
     userLike?: boolean
     userOwned?: boolean
 }
 
-export type LikeMutator = MutatorFunc<LikeDataMutationInterface, LikeMutationVarsInterface>
-
 interface DataInterface extends Omit<QueryResult<CommentQueryInteraface, CommnetQueryVarsInterface>, 'data'> {
     comments: CommentInterface[]
     pageInfo: PaginationInterface
-    like: LikeMutator
     metaData: CommentsMetaInterface
 }
 
-const useComments = ({ options }: Props = {}): [MutatorFunc<CommentMutationInteraface, CommnetMutationVarsInterface>, DataInterface] => {
+const useComments = ({ options }: Props = {}): [typeof mutateComments, DataInterface & { like: typeof likeComment }] => {
     const { } = useActivity({ 
         options: {
             variables: { productId: options?.variables?.productId },

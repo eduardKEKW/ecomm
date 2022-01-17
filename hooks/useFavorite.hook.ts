@@ -14,7 +14,7 @@ import { ProductInterface } from "apollo/querys/Product.query";
 
 export type options = MutationFunctionOptions<FavoriteMutatorInterface, FavoriteMutatorVarsInterface, DefaultContext, ApolloCache<any>>;
 
-interface returnData { 
+interface ReturnInterface { 
     items?: ProductInterface[],
     loading?: boolean,
     user?: UserInterface | null
@@ -24,7 +24,7 @@ interface Props {
     notify?: boolean
 }
 
-const useFavorite = ({ notify: useNotifications = true }: Props = {}): [ returnData, (options?: options) => any ] => {
+const useFavorite = ({ notify: useNotifications = true }: Props = {}): [ReturnInterface, typeof setFavoriteItems ] => {
     const [loading, setLoading]             = useState<boolean>(false);
     const [favorites, setFavorites]         = useState<ProductInterface[]>([]);
     const [notifications, setNotifications] = useState<{ [key: number]: boolean }>([]);

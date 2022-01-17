@@ -5,8 +5,6 @@ import { addNotificationAction } from "Providers/Actions";
 import { useGlobalDispatch } from "Providers/GlobalProvider.provider";
 import { responseBodyInterface, SubscribeInterface, SubscribeVarsInterface, SUBSCRIBE_MUTATION } from "../apollo/mutations/Subscribe.mutator";
 
-export type mutator = (option?: MutationFunctionOptions<SubscribeInterface, SubscribeVarsInterface, DefaultContext, ApolloCache<any>>) => void
-
 interface Props {
     variables?: SubscribeVarsInterface   
 }
@@ -18,7 +16,7 @@ interface useSubscriptionReturn {
     error: ApolloError
 }
 
-const useSubscription = ({ variables }: Props): [useSubscriptionReturn, mutator] => {
+const useSubscription = ({ variables }: Props): [useSubscriptionReturn, typeof mutatateSubscription] => {
     const dispatchGlobalState = useGlobalDispatch();
     
     const [mutatateSubscription, { data, loading, called, error }] = useMutation<SubscribeInterface, SubscribeVarsInterface>(SUBSCRIBE_MUTATION, {

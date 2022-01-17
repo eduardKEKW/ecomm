@@ -7,8 +7,6 @@ import { useGlobalDispatch } from 'Providers/GlobalProvider.provider';
 import { addNotificationAction } from 'Providers/Actions';
 import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 
-type mutateCartItems = (options?: MutationFunctionOptions<CartQueryInterface, CartQueryVarsInterface, DefaultContext, ApolloCache<any>>) => any
-
 interface guestCartInterface {
     cartItems: CartInterface
 }
@@ -22,7 +20,7 @@ interface Props {
     notify?: boolean
 }
 
-function useCart({ notify = true }: Props = {}): [guestCartInterfaceReturn, mutateCartItems] {
+function useCart({ notify = true }: Props = {}): [guestCartInterfaceReturn, typeof mutateCartItems] {
     const [loading, setLoading] = useState<boolean>(true);
     const [cart, setCart]       = useState<CartInterface>({ items: [] });
     const dispatchGlobalState   = useGlobalDispatch();

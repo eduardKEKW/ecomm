@@ -1,5 +1,5 @@
 import { initializeApollo } from '../apollo-client';
-import { ProductInterface, PRODUCT_QUERY } from 'apollo/querys/Product.query';
+import { ProductInterface, ProductQueryInterface, ProductQueryVarsInterface, PRODUCT_QUERY } from 'apollo/querys/Product.query';
 import useProduct from 'hooks/useProduct.hook';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import React, { useEffect, useState } from 'react'
@@ -10,7 +10,7 @@ import Breadcrumbs from 'components/Product/Breadcrumbs';
 import Title from 'components/Title';
 import Info from 'components/Product/Info';
 import Skeleton from 'components/helpers/Skeleton';
-import { Grid, SActions, SAttributes, SDescription, SProduct } from 'components/styled/Page/Product';
+import { SActions, SAttributes, SDescription, SProduct, SProductGrid } from 'components/styled/Page/Product';
 import ButtonMain from 'components/buttons/Main';
 import { faHistory, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
 import useCart from 'hooks/useCart.hook';
@@ -23,50 +23,55 @@ import Comments from 'components/Product/Comments/Comments';
 interface Props {}
 
 export default function Product ({}: Props) {
+    const [loading, setLoading]                                 = useState<boolean>(true);
     const router                                                = useRouter()
     const [product, setProduct]                                 = useState<ProductInterface | null>(null)
-    const [loadProducts, { loading, products, called }]         = useProduct()
+    const [loadProducts, { 
+        loading: loadingProducts,
+        products,
+        called
+    }]                                                          = useProduct()
     const [{ loading: cartLoading }, addToCart]                 = useCart()
     const [{ loading: favoriteLoading, items }, addToFavorite]  = useFavorite()
 
     useEffect(() => {
-        if(router?.query?.product) {
-            loadProducts({
-                variables: {
-                    data: {
-                        filters: {
-                            slug: (router.query.product as string)
-                        }
-                    },
-                    includeBreadcrumbs: true,
-                    includeGallery: true
-                }
-            })
-        }
-    }, [router.query])
+        loadProducts({
+            variables: {
+                data: {
+                    filters: {
+                        slug: (router?.query?.product as string)
+                    }
+                },
+                includeBreadcrumbs: true,
+                includeGallery: true
+            }
+        })
+    }, [])
 
     useEffect(() => {
-        if(called && ! loading && products) {
-            setProduct(products[0] ?? null)
+        if(! loadingProducts && ! router.isFallback && called) {
+            setProduct(products?.length ? products[0] : null)
         }
-    }, [called, loading, router.isFallback])
+    }, [loadingProducts, router.isFallback, called])
 
-    if(! product) return <></>;
+    useEffect(() => {
+        setLoading(! product || router.isFallback || loadingProducts);
+    }, [router.isFallback, loadingProducts, product])
 
     return (
-        <Skeleton loading={loading} name="product">
-            <Grid>
+        <SProductGrid>
+            <Skeleton loading={loading} name="product" gridArea="product">
                 <SProduct gridArea="product">
                     <Breadcrumbs gridArea="breadcrumbs" paths={['Home', 'something', 'something2']} />
 
-                    <Title gridArea="title" description={`Product CODE: ${product.id}`} name={product?.name} style={{ 
-                            fontSize: "1.5rem"
+                    <Title gridArea="title" description={`Product CODE: ${product?.id}`} name={product?.name} style={{ 
+                        fontSize: "1.5rem"
                     }} />
 
                     <Carousel gridArea="slider" perPage={1} slidesCount={product?.gallery?.length ?? 5}>
                         <>
                             { 
-                                product?.gallery.map((path) => {
+                                product?.gallery?.map((path) => {
                                     return (
                                         <div key={path} style={{ height: "100%" }}>
                                             <Image
@@ -130,32 +135,37 @@ export default function Product ({}: Props) {
                         </section>
                     </SActions>
                 </SProduct>
+            </Skeleton>
 
-                <SAttributes gridArea="attributes">
+            {
+                ! loading && <>      
+                    <SAttributes gridArea="attributes">
+                    
                     <Title name="Product Attributes" />
-                    <ul>
-                        <li>
-                            <span>Brand: </span><p>{product?.brand}</p>
-                        </li>
-                        <li>
-                            <span>Manufacturer: </span><p>{product?.manufacturer}</p>
-                        </li>
-                        <li>
-                            <span>Colors: </span><p>{product?.color?.join(' or ')}</p>
-                        </li>
-                    </ul>
-                </SAttributes>
+                        <ul>
+                            <li>
+                                <span>Brand: </span><p>{product?.brand}</p>
+                            </li>
+                            <li>
+                                <span>Manufacturer: </span><p>{product?.manufacturer}</p>
+                            </li>
+                            <li>
+                                <span>Colors: </span><p>{product?.color?.join(' or ')}</p>
+                            </li>
+                        </ul>
+                    </SAttributes>
 
-                <SDescription gridArea="description">
-                    <Title name="Description" />
-                    {product?.description}
-                </SDescription>
+                    <SDescription gridArea="description">
+                        <Title name="Description" />
+                        {product?.description}
+                    </SDescription>
 
-                <Comments gridArea="comments" productId={product.id} />
+                    <Comments gridArea="comments" productId={product.id} />
 
-                <ProductSlider title="More Like" gridArea="recommended" category={product.category} size={5} />
-            </Grid>
-        </Skeleton>
+                    <ProductSlider title="More Like" gridArea="recommended" category={product.category} size={5} />
+                </>
+            }
+        </SProductGrid>
     )
 }
 
@@ -171,24 +181,23 @@ export const getStaticPaths: GetStaticPaths = async (product) => {
 export const getStaticProps: GetStaticProps = async (context)  => {
     const apolloClient = initializeApollo();
 
-    const { data } = await apolloClient.query({
+    const { data } = await apolloClient.query<ProductQueryInterface, ProductQueryVarsInterface>({
         query: PRODUCT_QUERY,
         variables: {
             data: {
                 filters: {
-                    slug: context.params.product
+                    slug: context.params.product as string
                 }
             },
             includeBreadcrumbs: true,
             includeGallery: true,
-            includeComments: true
         }
     });
-
+    
     return {
         props: {
             apolloCache: apolloClient.cache.extract(),
-            title: 'Ecomm | Product'
+            title: `Product | ${data?.products?.hits[0]?.name}`
         }
     };
 }

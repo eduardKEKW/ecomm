@@ -1,12 +1,12 @@
 import { ApolloClient, gql, HttpLink, InMemoryCache } from "@apollo/client/core";
 
 import { setContext } from '@apollo/client/link/context';
-import { makeVar } from "@apollo/react-hooks";
+import { makeVar, NormalizedCacheObject } from "@apollo/react-hooks";
 import { ACTIVITY_QUERY } from "apollo/querys/Activity.query";
 import { userLikesVar } from "apollo/Reactives";
 import { useMemo } from "react";
 
-let apolloClient;
+let apolloClient: ApolloClient<NormalizedCacheObject>;
 
 const authLink = setContext((_, { headers }) => {
   // get the authentication token from local storage if it exists

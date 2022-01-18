@@ -4,7 +4,6 @@ export const SBreadcrumbs = styled.div`
     grid-area: ${({ gridArea }) => gridArea};
     display: flex;
     align-items: center;
-    height: 6rem;
 `
 
 export const SItem = styled.div`

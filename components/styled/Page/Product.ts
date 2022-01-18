@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const Grid = styled.main`
+export const SProductGrid = styled.main`
   /* width: 70%;
   min-width: 75rem;
   margin: 0 auto; */
@@ -21,7 +21,7 @@ export const Grid = styled.main`
 export const SProduct = styled.section`
   background: white;
   grid-area: ${({ gridArea }) => gridArea};   
-  min-height: 15rem;
+  min-height: 100vh;
   padding-bottom: 15%;
   display: grid;
   grid-template-columns: repeat(6, 1fr);

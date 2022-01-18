@@ -48,8 +48,8 @@ interface PageInfo {
 export interface ProductQueryInterface {
     products: { 
         hits: ProductInterface[]
+        pageInfo: PageInfo
     }
-    pageInfo: PageInfo
 }
 
 export interface ProductQueryVarsInterface {

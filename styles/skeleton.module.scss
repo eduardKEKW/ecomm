@@ -1,45 +1,19 @@
 @use './_index.scss' as *;
 
-.text {
-    grid-area: text;
-}
+.text { }
 
-.text_2 {
-    grid-area: text-2;
-}
-
-.text_3 {
-    grid-area: text-3;
-}
-
-.text_4 {
-    grid-area: text-4;
-}
-
-.text_5 {
-    grid-area: text-5;
-}
-
-.image_square {
-    grid-area: image_square;
-}
-
-.image_square_2 {
-    grid-area: image_square-2;
-}
+.image_square { }
 
 .image_round {
-    grid-area: image_round;
     border-radius: 50%;
 }
-
 
 .skeleton {
     width: 100%;
     gap: .6rem;
     padding: .5rem;
     
-    div[class*="text_"] {
+    div[class*="text"] {
         div {  
             opacity: .7;
             animation: skeleton-loading 1s linear infinite alternate;
@@ -54,7 +28,7 @@
         }
     }
 
-    div[class*="image_"] {
+    div[class*="image"] {
         opacity: .7;
         animation: skeleton-loading 1s linear infinite alternate;
     }
@@ -67,9 +41,9 @@
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: auto;
     grid-template-areas: 
-    "image_square text text text text text text text-2"
-    "image_square text text text text text text text-2"
-    "image_square .    .    .    .    .    .    text-2";
+    "product-image name name name name name name price"
+    "product-image name name name name name name price"
+    "product-image .    .    .    .    .    .    price";
     min-height: 5rem;
 }
 
@@ -78,14 +52,29 @@
     grid-template-columns: repeat(4, 1fr);
     grid-template-rows: repeat(9, 1fr);
     grid-template-areas: 
-    "image_square image_square image_square   image_square  "
-    "image_square image_square image_square   image_square  "
-    "image_square image_square image_square   image_square  "
-    "text         text         text           text          "
-    "text-2       .            .              .             "
-    "text-3       text-3       text-3         .             "
-    "text-4       .            image_square-2 image_square-2"
-    "text-4       .            image_square-2 image_square-2"
-    "text-4       .            .              .             ";
+    "product-image product-image product-image   product-image  "
+    "product-image product-image product-image   product-image  "
+    "product-image product-image product-image   product-image  "
+    "name          name          name            name           "
+    "category      .             .              .               "
+    "reviews      reviews        reviews        .               "
+    "colors       .              price          price           "
+    "colors       .              price          price           "
+    "colors       .              .              .               ";
 }
-  
+
+.product {
+    padding-top: 2rem;
+    min-height: 100vh;      
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: 
+    ". breadcrumbs breadcrumbs  .           .               ."
+    ". title       title        title       title           ."
+    ". carousel    .            text-price  text-actions    ."
+    ". carousel    .            text-price  text-actions    ."
+    ". .           .            .           text-offer      ."
+    ". .           .            .           .               ." 
+    ". .           .            .           .               ."; 
+}

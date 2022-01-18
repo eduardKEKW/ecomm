@@ -1,4 +1,4 @@
-import { ListInterface } from "components/helpers/Pagination"
+import { ListInterface } from "components/helpers/Resource";
 import { SSelect, SSelectItem } from "components/styled/Buttons/Select";
 import { useState } from "react";
 

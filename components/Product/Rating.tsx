@@ -1,5 +1,3 @@
-import { faStar } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { ProductInterface } from 'apollo/querys/Product.query'
 import { SRating } from 'components/styled/Product/Rating'
 import React from 'react'

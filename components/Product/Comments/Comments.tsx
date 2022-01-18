@@ -1,11 +1,8 @@
 import { QueryHookOptions } from '@apollo/react-hooks';
-import { useApollo } from 'apollo-client';
 import { CommentInterface } from 'apollo/fragments/Comment.fragment';
-import { ACTIVITY_QUERY } from 'apollo/querys/Activity.query';
 import { CommentQueryInteraface, commentsFiltersOptions, commentsPerPageOptions, commentsSortingOptions, CommnetQueryVarsInterface } from 'apollo/querys/Comments.query';
 import Resource from 'components/helpers/Resource';
-import Pagination, { ListInterface } from 'components/helpers/Resource';
-import { SEmpty } from 'components/styled/Resource';
+import { ListInterface } from 'components/helpers/Resource';
 import { SComments } from 'components/styled/Product/Comments';
 import Title from 'components/Title';
 import { changeSelectedValue } from 'helpers/helpers';

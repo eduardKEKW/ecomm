@@ -1,4 +1,4 @@
-import { ApolloCache, DefaultContext, MutationFunctionOptions, QueryResult, useMutation, useQuery } from "@apollo/client";
+import { QueryResult, useMutation, useQuery } from "@apollo/client";
 import { QueryHookOptions } from "@apollo/react-hooks";
 import { CommentInterface } from "apollo/fragments/Comment.fragment";
 import { CommentQueryInteraface, CommentsMetaInterface, COMMENTS_QUERY, CommnetQueryVarsInterface, PaginationInterface } from 'apollo/querys/Comments.query';

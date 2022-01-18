@@ -2,12 +2,12 @@ import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartFull } from '@fortawesome/free-solid-svg-icons';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ProductInterface } from 'apollo/querys/Product.query';
 import Link from 'components/helpers/LinkCustom';
 import Skeleton from 'components/helpers/Skeleton';
 import { SProductCard, SProductCardBody, SProductCardHeader } from 'components/styled/Product/Card'
 import { shortenString } from 'helpers/helpers';
 import { options } from 'hooks/useFavorite.hook';
-import { ProductInterface } from 'Interfaces/Product.interface';
 import Image from "next/image";
 import React, { useEffect, useState } from 'react'
 import Price from './Price';

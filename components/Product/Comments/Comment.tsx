@@ -1,5 +1,4 @@
 import { SAbout, SAvatar, SBody, SComment, SDate, SInfo, SName, SRating, SText, STitle } from 'components/styled/Product/Comments';
-import { LikeMutator, MutatorFunc } from 'hooks/useComments'
 import Image from 'next/image';
 import defaultAvatar from '/public/avatar.png';
 import React, { useMemo } from 'react'
@@ -7,10 +6,12 @@ import { getInitials, getStarTitle, randomColor } from 'helpers/helpers';
 import Stars from '../Stars';
 import Like from './Like';
 import { CommentInterface } from 'apollo/fragments/Comment.fragment';
+import { MutationFunctionOptions, DefaultContext, ApolloCache } from '@apollo/react-hooks';
+import { LikeDataMutationInterface, LikeMutationVarsInterface } from 'apollo/mutations/Like.mutator';
 
 interface Props {
     comment: CommentInterface,
-    like: LikeMutator
+    like:  (options?: MutationFunctionOptions<LikeDataMutationInterface, LikeMutationVarsInterface, DefaultContext, ApolloCache<any>>) => Promise<any>
     index: number
 }
 

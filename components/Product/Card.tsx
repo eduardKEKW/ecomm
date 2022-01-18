@@ -32,7 +32,7 @@ function Card({ product, loading, setFavoriteItems, isFavorited }: Props) {
                     <SProductCardHeader animate={favorited}>
                         <div>
                             <Link href={`/${product.slug}`}>
-                                <Image src={product.thumb} layout="fill" objectFit="contain" />
+                                <Image src={product.thumb} layout="fill" objectFit="contain" alt={product.thumb} />
                             </Link>
                         </div>
 

@@ -27,7 +27,7 @@ function Carousel({ gridArea, children, slidesCount, perPage = 1, height, showDo
     const [width, pages]                = useMemo(() => [
         `${(100 / perPage) - (gap - (gap / perPage))}%`,
         Math.ceil(slidesCount / perPage)
-    ], [slidesCount, perPage]);
+    ], [slidesCount, perPage, gap]);
     
     return (
         <SCarousel gridArea={gridArea} >

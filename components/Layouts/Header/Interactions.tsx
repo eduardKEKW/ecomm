@@ -1,5 +1,5 @@
 
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { faHeart, faUser } from '@fortawesome/free-regular-svg-icons';
 
 import Account from './Navigations/Account';
@@ -9,23 +9,56 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Tooltip from 'components/helpers/Tooltip';
 import cart from '/public/cart.svg';
-import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faSortDown, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import styles from 'styles/components/interactions.module.scss';
 
-interface Props {}
+interface ButtonInterface {
+    name: string,
+    icon?: IconDefinition,
+    showCount?: boolean,
+    IconElem?: React.FC
+    Content: React.FC<{ setCount?: (count: number) => void }>
+    count?: number
+}
 
-const buttons = {
-    profile: { name: "My Profile", icon: faUser, Content: (props = {}) => <Account {...props} />, count: 0 },
-    favorites: { name: "My Favorites", icon: faHeart, Content: (props = {}) => <Favorites {...props} />, count: 0 },
-    cart: { name: "My Cart", IconElem: () => <Image width="18" height="18" src={cart} />, Content: (props = {}) => <Cart {...props} />, count: 0 }
+const buttons: { [key: string]: ButtonInterface } = {
+    profile: { 
+        name: "My Profile",
+        icon: faUser,
+        showCount: false,
+        count: 0,
+        Content: function Content (props = {}) { 
+            return <Account {...props} />
+        }
+    },
+    favorites: {
+        name: "My Favorites",
+        icon: faHeart,
+        count: 0,
+        Content: function Content (props = {}) {
+            return <Favorites {...props} />
+        }
+    },
+    cart: { 
+        name: "My Cart",
+        count: 0,
+        IconElem: function IconElem () {
+            return <Image width="18" height="18" alt="add_to_card" src={cart} />
+        },
+        Content: function Content (props = {}) {
+            return <Cart {...props} /> 
+        } 
+    }
 };
 
 const Interactions = () => {
     const countRef = useRef<HTMLDivElement[]>([]);
-
-    const setCount = (count, index) => {
-        countRef.current[index]?.setAttribute("data-after-content", count)
-    }
+    
+    const setCount = useCallback(
+        (count, index) => {
+            countRef.current[index]?.setAttribute("data-after-content", count)
+        }, []
+    );
 
     return (
         <div className={styles.interactions}>

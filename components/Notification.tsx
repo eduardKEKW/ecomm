@@ -2,7 +2,7 @@ import { faTimes, IconDefinition } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { cancelNotificationAction } from 'Providers/Actions'
 import { useGlobal } from 'Providers/GlobalProvider.provider'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SItem, SItemBody, SItemClose, SNotification } from './styled/Notification'
 
 export interface NotificationInterface {
@@ -19,6 +19,16 @@ function Notification() {
     const [closeItem, setCloseItem]         = useState<number | null>(null);
     const [state, dispatchGlobalState]      = useGlobal();
 
+    const onCloseItem = useCallback((id) => {
+        setCloseItem(id);
+
+        setTimeout(() => {
+            dispatchGlobalState(
+                cancelNotificationAction(id)
+            )
+        }, 400);
+    }, [])
+
     useEffect(() => {
         const items = state?.notifications || [];
 
@@ -34,17 +44,7 @@ function Notification() {
             }, time || 5000)
         })
 
-    }, [state?.notifications])
-
-    const onCloseItem = (id) => {
-        setCloseItem(id);
-
-        setTimeout(() => {
-            dispatchGlobalState(
-                cancelNotificationAction(id)
-            )
-        }, 400);
-    }
+    }, [state?.notifications, onCloseItem, notifications])
 
     return (
         <SNotification>

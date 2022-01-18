@@ -20,7 +20,7 @@ interface TextProps {
     height?: keyof typeof Heights
 }
 
-const Text = ({ gridArea, size = 1, className = 'text', height = 'small' }: TextProps) => {
+function Text ({ gridArea, size = 1, className = 'text', height = 'small' }: TextProps) {
     return (
         <div className={className} style={{ gridArea: gridArea }}>
             {
@@ -30,14 +30,14 @@ const Text = ({ gridArea, size = 1, className = 'text', height = 'small' }: Text
     )
 }
 
-const ImageSquare = ({ gridArea, className = 'image_square'}) => {
+function ImageSquare ({ gridArea, className = 'image_square'}) {
     return (
         <div className={className} style = {{ gridArea: gridArea }} />
     )
 }
 
 export const SKELETONS = {
-    suggestion: (name) => {
+    suggestion: function Suggestion (name) {
         return (
             <div className={[styles.skeleton, styles[name]].join(' ')}> 
                 <ImageSquare gridArea="product-image" />
@@ -46,7 +46,7 @@ export const SKELETONS = {
             </div> 
         )
     },
-    card: (name) => {
+    card: function Card (name) {
         return (
             <div className={[styles.skeleton, styles[name]].join(' ')}> 
                 <ImageSquare gridArea="product-image" />
@@ -58,7 +58,7 @@ export const SKELETONS = {
             </div> 
         )
     },
-    product: (name, gridArea = '') => {
+    product: function Product (name, gridArea = '') {
         return (
             <div className={[styles.skeleton, styles[name]].join(' ')} style={{ gridArea: gridArea }}> 
                 <Text gridArea="breadcrumbs" size={1} height='medium' />

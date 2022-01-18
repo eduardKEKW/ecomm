@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import ButtonMain from "components/buttons/Main";
 import Link from "components/helpers/LinkCustom";
 import Loading from "components/helpers/Loading";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import style from 'styles/components/interactions.module.scss';
 import Item from "./Item";
 import Price from "components/Product/Price";

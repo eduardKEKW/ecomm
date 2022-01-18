@@ -58,4 +58,6 @@ const LinkCustomContent = React.forwardRef<HTMLAnchorElement, LinkCustomContentP
     )
 })
 
+LinkCustomContent.displayName = 'LinkCustomContent';
+
 export default Link;

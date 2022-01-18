@@ -30,7 +30,7 @@ const Comment = ({ comment, like, index }: Props) => {
         <SComment animationDelay={index}>
             <SAbout>
                 <SAvatar style={{ color: avatarColor }} >
-                    <Image src={defaultAvatar} layout="responsive" objectFit="cover" />
+                    <Image src={defaultAvatar} layout="responsive" objectFit="cover" alt='avatar_default' />
                     <div style={{ background: avatarColor }} >
                         <span>{getInitials(comment.user.name)}</span>
                     </div>

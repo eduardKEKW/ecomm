@@ -30,106 +30,53 @@ function Subscribe({ gridArea }: Props) {
     
     useEffect(() => {
         setEmail(email || user?.email || '')
-    }, [loading])
+    }, [loading, setEmail])
     
     return (
-
         <>
+            <SSubscribe gridArea={gridArea}>
 
-    <SSubscribe gridArea={gridArea}>
+                <Form initialState={formState} onSubmit={(state) => mutateSubscription({
+                    variables: { email: (state as any).email.value }
+                })} >
+                    <>
+                        <div>
+                            <Input name="email" type="email" placeholder="Your Email Address" style={{ 
+                                borderRadius: "0rem",
+                                height: "3rem",
+                            }} />
+                            
+                            <ButtonMain 
+                                disable={subscribed} 
+                                loading={subscribeLoading} 
+                                icon={faEnvelope}
+                                type="submit"
+                                style={{ 
+                                    width: "100%",
+                                    height: "3rem"
+                                }}
+                            >
+                                {subscribed ? <FontAwesomeIcon icon={faCheck} /> : "Subscribe"}
+                            </ButtonMain>
+                        </div>
 
-        <Form initialState={formState} onSubmit={(state) => mutateSubscription({
-            variables: { email: (state as any).email.value }
-        })} >
-            <>
-                <div>
-                    <Input name="email" type="email" placeholder="Your Email Address" style={{ 
-                        borderRadius: "0rem",
-                        height: "3rem",
-                    }} />
-                    
-                    <ButtonMain 
-                        disable={subscribed} 
-                        loading={subscribeLoading} 
-                        icon={faEnvelope}
-                        type="submit"
-                        style={{ 
-                            width: "100%",
-                            height: "3rem"
-                        }}
-                    >
-                        {subscribed ? <FontAwesomeIcon icon={faCheck} /> : "Subscribe"}
-                    </ButtonMain>
-                </div>
+                        <div>
+                            <Input name="terms" type="checkbox" style={{ 
+                                height: "1rem",
+                                width: "1rem"
+                            }}>
+                                <span>
+                                    I accept the <Link href="#">terms and conditions.</Link>
+                                </span>
+                            </Input>
+                        </div>
+                    </>
+                </Form>
 
-                <div>
-                    <Input name="terms" type="checkbox" style={{ 
-                        height: "1rem",
-                        width: "1rem"
-                    }}>
-                        <span>
-                            I accept the <Link href="#">terms and conditions.</Link>
-                        </span>
-                    </Input>
-                </div>
-            </>
-        </Form>
-
-        <h3>
-            <Title name="Subscribe" description={SUBSCRIBE_TEXT} />
-        </h3>
-    </SSubscribe>
-
-    
-
-
-
-        {/* <SSubscribe style={{ 
-            width: "50vw"
-         }}>
-            <section>
-            <Form initialState={{
-                        name: 'test2'
-                    }}>
-                        <>
-                <div>
-                    <Input onChange={setEmail} value={email} type="email" placeholder="Your Email Address" style={{ 
-                        borderRadius: "0rem",
-                        height: "3rem",
-                    }} />
-                    
-                    <ButtonMain 
-                        disable={subscribed} 
-                        onClick={subscribe} 
-                        loading={subscribeLoading} 
-                        icon={faEnvelope} 
-                        style={{ 
-                            width: "100%",
-                            height: "3rem"
-                        }}
-                    >
-                        {subscribed ? <FontAwesomeIcon icon={faCheck} /> : "Subscribe"}
-                    </ButtonMain>
-                </div>
-
-                <div>
-                    <Input onChange={(v) => setTermsChecked(!! v as boolean)} type="checkbox" style={{ 
-                        height: "1rem",
-                        width: "1rem"
-                    }}>
-                        <span>
-                            I accept the <Link href="#">terms and conditions.</Link>
-                        </span>
-                    </Input>
-                </div>
-                </>
-                    </Form>
-            </section>
-
-            <h3>
-                <Title name="Subscribe" description={SUBSCRIBE_TEXT} />
-            </h3>
-        </SSubscribe> */}
+                <h3>
+                    <Title name="Subscribe" description={SUBSCRIBE_TEXT} />
+                </h3>
+            </SSubscribe>
         </>
     )
 }

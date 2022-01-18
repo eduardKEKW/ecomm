@@ -44,7 +44,7 @@ const Favorites = ({
             setCount(items.length);
             setChildLoading([]);
         }
-    }, [loading, items, loadingCart]);
+    }, [loading, items, loadingCart, setCount]);
 
     return (
         <div className={style.items}>

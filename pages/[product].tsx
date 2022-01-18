@@ -46,13 +46,13 @@ export default function Product ({}: Props) {
                 includeGallery: true
             }
         })
-    }, [])
+    }, [router?.query?.product])
 
     useEffect(() => {
         if(! loadingProducts && ! router.isFallback && called) {
             setProduct(products?.length ? products[0] : null)
         }
-    }, [loadingProducts, router.isFallback, called])
+    }, [loadingProducts, router.isFallback, called, products])
 
     useEffect(() => {
         setLoading(! product || router.isFallback || loadingProducts);
@@ -81,6 +81,7 @@ export default function Product ({}: Props) {
                                                 width={500}
                                                 height={500}
                                                 objectFit="cover"
+                                                alt={path}
                                             />
                                         </div>
                                     )

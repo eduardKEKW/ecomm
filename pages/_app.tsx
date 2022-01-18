@@ -51,7 +51,7 @@ const LoadingPageChange = ({ children }): JSX.Element => {
         setPageChanging(false)
         document.body.style.overflow = 'visible';
       } 
-      }
+    }
 
     router.events.on('routeChangeStart', onRouteChangeStart)
     router.events.on('routeChangeComplete', onRouteChangeEnd)
@@ -60,7 +60,7 @@ const LoadingPageChange = ({ children }): JSX.Element => {
       router.events.off('routeChangeStart', onRouteChangeStart)
       router.events.off('routeChangeComplete', onRouteChangeEnd)
     }
-  }, [])
+  }, [router.isFallback, router.events])
 
   return(
       <>

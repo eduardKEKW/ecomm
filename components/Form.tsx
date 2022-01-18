@@ -34,7 +34,7 @@ function Form({ initialState, children, onSubmit }: Props) {
         }
     }
 
-    const value = useMemo(() => [state, changeForm], [initialState, state]);
+    const value = useMemo(() => [state, changeForm], [initialState, state, changeForm]);
 
     return (
         <FormContext.Provider value={ value as any }>

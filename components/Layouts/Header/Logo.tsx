@@ -9,7 +9,7 @@ interface Props {
     href?: string
 }
 
-const LinkContent = React.forwardRef<HTMLAnchorElement, Props>(({ onClick, href }: Props, ref) => {
+const LinkContent = React.forwardRef<HTMLAnchorElement, Props>(function LinkContent({ onClick, href }: Props, ref) {
     return (
         <div className={styles.header__logo_unset}>
             <a href={href} onClick={onClick} ref={ref}>

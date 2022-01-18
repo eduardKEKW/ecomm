@@ -1,4 +1,3 @@
-import { faHeadset, faTruck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { BENEFITS } from 'helpers/local'
 import React from 'react'

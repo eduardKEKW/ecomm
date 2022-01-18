@@ -52,7 +52,7 @@ function Search(props: Props) {
             }, SEARCH_DELAY));
             
         }
-    }, [filters])
+    }, [filters, isInitialRender])
 
     useEffect(() => {
         setLoading(loadingData);

@@ -12,7 +12,7 @@ export const theme = {
         main:          '#73c8db',
         mainHover:     '#699fac',
         mainLow:       '#5ea3b3',
-        black:         '#554f4f',
+        black:         'black',
         grey:          'grey',
         lowGrey:       'rgba(161, 155, 155, 0.116)',
         red:           'rgb(255, 89, 89)',

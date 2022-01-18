@@ -19,7 +19,7 @@ export const SCategories = styled.div`
     left: 0;
     animation: ${fadeLeft} .3s both;
     min-height: 25rem;
-    border-right: solid 1rem transparent;
+    box-shadow: ${({ theme }) => theme.shadows.btn};
     z-index: 9999;
 
     & > ul {
@@ -78,12 +78,11 @@ export const SCategories = styled.div`
 export const SMenu = styled.div`
     position: absolute;
     top: 0%;
-    left: 14rem;
+    left: 13rem;
     min-width: 60rem;
     width: 57.8vw;
     height: 25rem;
     background: white;
-    box-shadow: ${({ theme }) => theme.shadows.container};
     animation: ${fadeLeft} .3s both;
     z-index: 999999;
 
@@ -98,6 +97,7 @@ export const SMenu = styled.div`
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-width: none;
+        box-shadow: ${({ theme }) => theme.shadows.btn};
 
         & > li {
 

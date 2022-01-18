@@ -38,17 +38,20 @@ const LoadingPageChange = ({ children }): JSX.Element => {
   const router = useRouter();
 
   useEffect(() => {
-
     const onRouteChangeStart = (_, { shallow }) => {
-      setPageChanging(! shallow)
-      window.scrollTo(0, 0);
-      document.body.style.overflow = 'hidden';
+      if(! router.isFallback) {
+        setPageChanging(! shallow)
+        window.scrollTo(0, 0);
+        document.body.style.overflow = 'hidden';
+      }
     }
 
     const onRouteChangeEnd = (_, { shallow }) => {
-      setPageChanging(false)
-      document.body.style.overflow = 'visible';
-    }
+      if(! router.isFallback) {
+        setPageChanging(false)
+        document.body.style.overflow = 'visible';
+      } 
+      }
 
     router.events.on('routeChangeStart', onRouteChangeStart)
     router.events.on('routeChangeComplete', onRouteChangeEnd)

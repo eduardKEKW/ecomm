@@ -64,16 +64,19 @@ export const SActions = styled.section`
         justify-content: flex-start;
         align-items: center;
         width: 90%;
-        text-align: center;
-
+        text-align: center; 
+        font-size: 1rem;
+        
         i {
           flex: 1;
+          padding-right: .5rem;
+          font-size: 1.2rem;
         }
 
         p {
           flex: 5;
-          font-size: .9rem;
           text-align: start;
+          text-transform: uppercase;
         }
 
       }

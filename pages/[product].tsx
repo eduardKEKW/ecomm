@@ -9,7 +9,7 @@ import Image from 'next/image';
 import Breadcrumbs from 'components/Product/Breadcrumbs';
 import Title from 'components/Title';
 import Info from 'components/Product/Info';
-import Skeleton from 'components/helpers/Skeleton';
+import Skeleton, { SKELETONS } from 'components/helpers/Skeleton';
 import { SActions, SAttributes, SDescription, SProduct, SProductGrid } from 'components/styled/Page/Product';
 import ButtonMain from 'components/buttons/Main';
 import { faHistory, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
@@ -58,11 +58,13 @@ export default function Product ({}: Props) {
         setLoading(! product || router.isFallback || loadingProducts);
     }, [router.isFallback, loadingProducts, product])
 
+    if(loading) return <>{SKELETONS['product']('product', 'product')}</>
+
     return (
         <SProductGrid>
             <Skeleton loading={loading} name="product" gridArea="product">
                 <SProduct gridArea="product">
-                    <Breadcrumbs gridArea="breadcrumbs" paths={['Home', 'something', 'something2']} />
+                    <Breadcrumbs gridArea="breadcrumbs" paths={product.breadcrumbs} />
 
                     <Title gridArea="title" description={`Product CODE: ${product?.id}`} name={product?.name} style={{ 
                         fontSize: "1.5rem"
@@ -193,7 +195,7 @@ export const getStaticProps: GetStaticProps = async (context)  => {
             includeGallery: true,
         }
     });
-    
+    console.log('data', data);
     return {
         props: {
             apolloCache: apolloClient.cache.extract(),

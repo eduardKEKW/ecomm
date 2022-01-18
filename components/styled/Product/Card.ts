@@ -57,7 +57,7 @@ export const SProductCardHeader = styled.div`
         transform: translateX(-80%) translateY(-20%);
 
         i {
-            color: ${({ theme }) => theme.colors.darkBlue};
+            color: ${({ theme }) => theme.colors.black};
         }
 
         & > &:hover {
@@ -109,6 +109,7 @@ export const SProductCardBody = styled.div`
     display: flex;
     justify-content: flex-start;
     flex-direction: column;
+    z-index: 1;
 
     & > a {
         flex: 4;
@@ -180,9 +181,8 @@ export const SProductCardBody = styled.div`
     & > #price {
         position: absolute;
         top: 64%;
+        left: 50%;
         min-height: 50px;
-        transform: translateX(-87%);
-        left: 100%;
         width: 7rem;
         box-shadow: ${({ theme }) => theme.shadows.containerInner};
         background: ${({ theme }) => theme.colors.main};
@@ -190,7 +190,19 @@ export const SProductCardBody = styled.div`
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: ${({ theme }) => theme.shadows.btn};
+
+        &:after {
+            content: "";
+            position: absolute;
+            width: 7rem;
+            border-radius: .35rem;
+            top: 5%;
+            left: 3%;
+            background: ${({ theme }) => theme.colors.black};
+            z-index: -1;
+            width: 100%;
+            height: 100%;
+        }
     }
 
     & > #add {

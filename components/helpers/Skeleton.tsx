@@ -36,7 +36,7 @@ const ImageSquare = ({ gridArea, className = 'image_square'}) => {
     )
 }
 
-const SKELETONS = {
+export const SKELETONS = {
     suggestion: (name) => {
         return (
             <div className={[styles.skeleton, styles[name]].join(' ')}> 
@@ -73,7 +73,7 @@ const SKELETONS = {
 }
 
 const Skeleton = ({ children, loading, name, gridArea }: Props) => {
-    return loading ? SKELETONS[name](name, gridArea) : <> {children} </>;
+    return loading ? SKELETONS[name](name, gridArea) : children;
 }
 
 export default Skeleton

@@ -26,7 +26,7 @@ export const SBenefitsItem = styled.div`
     align-items: center;
     width: 15rem;
     height: 10rem;
-
+    z-index: 1;
     i {
         background: ${({ theme }) => theme.gradient.main};
         border-radius: 50%;
@@ -37,14 +37,26 @@ export const SBenefitsItem = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        box-shadow: ${({ theme }) => theme.shadows.main};
+        position: relative;
+
+        &:after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            height: 4rem;
+            width: 4rem;
+            top: 5%;
+            left: 5%;
+            background: black;
+            z-index: -1;
+            transform: scale(.95);
+        }
     }
 
 
     p {
         padding: .7rem;
         color: black;
-        font-size: .9rem;
         pointer-events: none;
     }
 `;

@@ -31,7 +31,7 @@ const Categories = ({ children, show = false, setMenuHover }: Props) => {
                 onMouseEnter={() => setMenuHover(true)}
                 onMouseLeave={() => setMenuHover(false)}
             >
-                <SCategories>
+            <SCategories show={show}>
                         <ul>
                             <Loading loading={loading}>
                                 <>

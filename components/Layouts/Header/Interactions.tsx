@@ -56,6 +56,7 @@ const Interactions = () => {
     
     const setCount = useCallback(
         (count, index) => {
+            countRef.current[index]?.classList[count ? 'add' : 'remove'](styles.interactions__item_count);
             countRef.current[index]?.setAttribute("data-after-content", count)
         }, []
     );
@@ -77,7 +78,7 @@ const Interactions = () => {
                             <>
                                 <div 
                                     ref={el => (countRef.current[index] = el)} 
-                                    className={styles.interactions__item_icon} 
+                                    className={[styles.interactions__item_icon, count && styles.interactions__item_count].join(' ')} 
                                     data-after-content={count}
                                 > 
                                     {Icon}

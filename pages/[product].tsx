@@ -196,7 +196,7 @@ export const getStaticProps: GetStaticProps = async (context)  => {
             includeGallery: true,
         }
     });
-    console.log('data', data);
+    
     return {
         props: {
             apolloCache: apolloClient.cache.extract(),

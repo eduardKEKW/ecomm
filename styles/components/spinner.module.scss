@@ -29,7 +29,7 @@
 
         &__pulse {
             border-radius: 1rem;
-            box-shadow: $colorMain 0px 0px 4px 0px;
+            box-shadow: $shadowMain;
             pointer-events: none;
 
             & > div {

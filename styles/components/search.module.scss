@@ -20,7 +20,8 @@
         position: relative;
         font-weight: 200;
         overflow: hidden;
-
+        box-shadow: $shadowBtn;
+        
         &::placeholder {
             color: rgba(128, 128, 128, 0.637);
             font-size: .9rem;

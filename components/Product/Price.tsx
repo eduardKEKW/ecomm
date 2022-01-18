@@ -1,4 +1,3 @@
-import { ProductInterface } from 'Interfaces/Product.interface'
 import React from 'react'
 import styles from 'styles/components/price.module.scss';
 

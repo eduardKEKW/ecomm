@@ -1,7 +1,7 @@
+import { ProductInterface } from 'apollo/querys/Product.query';
 import Price from 'components/Product/Price'
 import Rating from 'components/Product/Rating'
 import { SInfo, SRating } from 'components/styled/Page/Product';
-import { ProductInterface } from 'Interfaces/Product.interface'
 import React from 'react'
 
 interface Props {

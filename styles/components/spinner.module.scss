@@ -29,11 +29,13 @@
 
         &__pulse {
             border-radius: 1rem;
-            box-shadow: $shadowMain;
             pointer-events: none;
 
             & > div {
-                animation: pulsating .4s infinite ease-out alternate;
+                box-shadow: 0 0 0 0 #70cbdf91;                
+                border-radius: 1rem;
+                border: solid 1px rgba(128, 128, 128, 0.068);
+                animation: pulsating 1s infinite;
             }
         }
     }

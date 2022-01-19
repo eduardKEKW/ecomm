@@ -27,9 +27,9 @@ export const SBenefitsItem = styled.div`
     width: 15rem;
     height: 10rem;
     z-index: 1;
+
     i {
-        background: ${({ theme }) => theme.gradient.main};
-        border-radius: 50%;
+        background: ${({ theme }) => theme.colors.main};
         color: white;
         font-size: 2rem;
         height: 4rem;
@@ -42,7 +42,6 @@ export const SBenefitsItem = styled.div`
         &:after {
             content: "";
             position: absolute;
-            border-radius: 50%;
             height: 4rem;
             width: 4rem;
             top: 5%;
@@ -58,5 +57,6 @@ export const SBenefitsItem = styled.div`
         padding: .7rem;
         color: black;
         pointer-events: none;
+        font-size: 1.2rem;
     }
 `;

@@ -25,7 +25,7 @@
                 content: attr(data-after-content);
                 position: absolute;
                 background: $white;
-                border-radius: 50%;
+                // border-radius: 50%;
                 color: $colorRed;
                 font-size: .6rem;
                 top: -8%;
@@ -41,10 +41,11 @@
             @include flex-center;
             position: relative;
             margin-right: .6rem;
-            border-radius: 50%;
+            // border-radius: 50%;
             padding: .65rem;
             // box-shadow: $shadowBtn;
             background: $colorMain;
+            box-shadow: $shadowBtn;
             cursor: pointer;    
 
             &_content {

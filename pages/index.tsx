@@ -1,32 +1,41 @@
 import { initializeApollo } from '../apollo-client';
 import Carousel from 'components/Carousel';
 import Image from 'next/image';
-import React from 'react';
+import React, { FC } from 'react';
 import Benefits from 'components/Benefits';
 import { BANNERS } from 'helpers/local';
-import ProductSlider from 'components/Product/ProductSlider';
+import ProductSlider from 'components/Product/CategorySlider';
 import Subscribe from 'components/Subscribe';
 import { GetStaticProps } from 'next';
-import { Grid } from 'components/styled/Page/Home';
+import { Grid, SSliders } from 'components/styled/Page/Home';
+import { getApiImage } from 'helpers/helpers';
+import { initialCategoriesLoad } from 'components/Layouts/Header/Categories/Categories';
+import { DefaultLayout } from './_app';
+import { CategoriesDocument, CategoriesQuery, CategoriesQueryVariables, useVelocityMetaDataQuery, VelocityMetaDataDocument, VelocityMetaDataQuery, VelocityMetaDataQueryVariables } from 'Graphql/generated/graphql';
+import  banner1 from 'public/banner1.png';
+import  banner2 from 'public/banner2.png';
+import  banner3 from 'public/banner3.png';
 
-export default function Home({  }) {
+const localBanners = [
+  banner1,
+  banner2,
+  banner3
+]
 
-  return (
+const Home: FC & { Layout: FC<{}>; } = function ({  }) {
+  const { data }= useVelocityMetaDataQuery();
+console.log(getApiImage({ url: data?.metaData?.advertisement[1] }));
+  return (  
       <Grid>
-        
-        <Carousel gridArea="main-carousel" slidesCount={BANNERS.length} height="32rem">
+        <Carousel navigationInside={true} gridArea="main-carousel" slidesCount={BANNERS.length} height="32rem">
           <>
-            { 
-              BANNERS.map(({ img, alt, blur }, index) => {
+            {
+              data?.metaData?.advertisement?.map((src, index) => {
                 return (
-                  <div key={index} style={{ height: "100%" }}>
+                  <div key={index} style={{ height: "100%", width: "100%" }}>
                       <Image
-                          src={img}
-                          alt={alt}
-                          width={1480}
-                          height={513}
-                          placeholder="blur"
-                          blurDataURL={blur}
+                          src={localBanners[index]}
+                          layout="fill"
                           objectFit="cover"
                       />
                   </div>
@@ -38,30 +47,42 @@ export default function Home({  }) {
 
         <Benefits gridArea="benefits" />
 
-        <ProductSlider gridArea="slider-1" category="Home" />
-
-        <ProductSlider gridArea="slider-2" category="Lighting" />
-
-        <ProductSlider gridArea="slider-3" category="Health, Household & Personal Care" />
-        
-        <ProductSlider gridArea="slider-4" category="Garden" />
-
-        <ProductSlider gridArea="slider-5" category="Beauty" />
+        <SSliders gridArea="slider" >
+            {
+              data?.metaData?.homePageCategories?.map((category, index) => {
+                return (
+                  <ProductSlider category={category} key={index} />
+                )
+              })
+            }
+        </SSliders>
 
         <Subscribe gridArea="subscribe" />
-
       </Grid> 
   )
 }
 
+Home.Layout = DefaultLayout;
+
+export default Home;
 
 export const getStaticProps: GetStaticProps  = async (context) => {
   const apolloClient = initializeApollo();
 
+  const [{ data }, categories] = await Promise.all([
+    apolloClient.query<VelocityMetaDataQuery, VelocityMetaDataQueryVariables>({
+      query: VelocityMetaDataDocument,
+    }),
+    apolloClient.query<CategoriesQuery, CategoriesQueryVariables>({
+      query: CategoriesDocument,
+      ...initialCategoriesLoad
+    })
+  ]);
+
   return {
     props: {
       apolloCache: apolloClient.cache.extract(),
-      title: 'Ecomm | Home'
+      title: 'Home'
     },
  };
 }

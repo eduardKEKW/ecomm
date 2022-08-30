@@ -1,0 +1,10 @@
+fragment categoryFieldsFragment on Category {
+    id
+    name
+    slug
+    urlPath
+    metaTitle
+    metaDescription
+    metaKeywords
+    path @client
+}

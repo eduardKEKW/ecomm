@@ -16,6 +16,7 @@ export const SMain = styled.div`
     border-radius: ${({ rounded }) => rounded && '.4rem'};
     padding: .2rem;
     box-shadow: ${({ theme }) => theme.shadows.btn};
+    border: solid 1px ${({ theme }) => theme.colors.black};
 
     &:hover {
         background: ${({ reverse, theme }) => reverse ? theme.colors.main : theme.colors.white};
@@ -50,7 +51,7 @@ export const SIcon = styled.div`
     align-items: center;
     background: transparent;
     flex: 2;
-    z-index: 9; 
+    /* z-index: 1;  */
 
     & > i {
         display: flex;

@@ -1,59 +1,53 @@
-import { ProductInterface } from 'apollo/querys/Product.query'
-import { SRating } from 'components/styled/Product/Rating'
+import { SRating, STagItem, STags } from 'components/styled/Product/Rating'
+import { ProductFlatFragmentFragment } from 'Graphql/generated/graphql'
 import React from 'react'
 import Stars from './Stars'
 
+export interface TagInterface {
+    value: string
+    color: string
+    name: string
+    condition: boolean
+};
+
 interface Props {
-    product: ProductInterface
+    product: ProductFlatFragmentFragment
     content?: JSX.Element
-    tags?: ["discount" | "new" | "disponibility"] | null
+    tags?: TagInterface[]
 }
 
 function Review({
     product,
     content = null,
-    tags = null
+    tags = []
 }: Props) {
 
     return (
         <SRating>
-            <Stars rating={product.rating} />
+            <Stars rating={product.averageRating} />
 
             {
-                product.rating && (
+                !! product.averageRating && (
                     <>
-                        &#160; {product.rating} ( {product.reviews_number} )
+                        &#160; {product.averageRating} ( {product.reviewsCount} )
                     </>
                 )
             }
 
-            { 
-                content && 
-                    <div>
-                        {content}
-                    </div>
-            }
-            
-            {
-                tags && tags.includes("discount") && product.discount && (
-                    <span id="off" style={{ 
-                        marginLeft: product.rating && ".4rem"
-                    }}>
-                        -{product.discount}%
-                    </span>
-                )
-            }
-
-            {
-                tags && tags.includes("disponibility") && product.disponibility && (
-                    <span id="stoc" style={{ 
-                        marginLeft: product.disponibility && ".4rem",
-                        background: product.disponibility ? "green" : "red"
-                    }}>
-                        {product.disponibility ? "IN STOC" : "OUT OF STOCK"} 
-                    </span>
-                )
-            }
+            <STags>
+               { 
+                    tags.map(tag => {
+                        return tag.condition && (
+                            <STagItem  
+                                color={tag.color}
+                                key={tag.name} 
+                            >
+                                 {tag.value}
+                            </STagItem>
+                        )
+                    })
+               }
+            </STags>
         </SRating>
     )
 }

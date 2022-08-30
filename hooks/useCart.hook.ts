@@ -1,64 +1,105 @@
-import { ApolloCache, DefaultContext, MutationFunctionOptions, useMutation, useQuery } from '@apollo/client';
-import { CartQueryInterface, CartQueryVarsInterface, MUTATE_CART_ITEMS } from 'apollo/mutations/Cart.mutator';
-import { GET_USER_QUERY, UserQueryInterface, UserQueryVarsInterface } from 'apollo/querys/User.query';
 import { useEffect, useState } from 'react'
-import {CartInterface, GET_GUEST_CART} from 'apollo/querys/Cart.query';
 import { useGlobalDispatch } from 'Providers/GlobalProvider.provider';
 import { addNotificationAction } from 'Providers/Actions';
-import { faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { faCartArrowDown, faShoppingCart } from '@fortawesome/free-solid-svg-icons';
+import { NotificationInterface } from 'components/Notification';
+import { CartDetailDocument, CartDetailQuery, useAddItemToCartMutation, useCartDetailQuery, useRemoveCartItemMutation } from 'Graphql/generated/graphql';
 
-interface guestCartInterface {
-    cartItems: CartInterface
-}
-
-interface guestCartInterfaceReturn {
-    cart: CartInterface
+interface DataInterface {
+    cart: CartDetailQuery
     loading: boolean
 }
 
-interface Props {
-    notify?: boolean
+interface MutateCartInterface {
+    detach: boolean
+    productId: string
+    qty?: number
 }
 
-function useCart({ notify = true }: Props = {}): [guestCartInterfaceReturn, typeof mutateCartItems] {
+interface Props {
+    useNotifications?: boolean
+}
+
+function useCart({ useNotifications = true }: Props = {}): [DataInterface, typeof mutateCart] {
     const [loading, setLoading] = useState<boolean>(true);
-    const [cart, setCart]       = useState<CartInterface>({ items: [] });
+    const [cart, setCart]       = useState<CartDetailQuery | null>(null);
     const dispatchGlobalState   = useGlobalDispatch();
 
-    const { data: guestCartData, loading: guestCartLoading }    = useQuery<guestCartInterface, CartQueryVarsInterface>(GET_GUEST_CART, {
+    const { data, loading: loadingCartItems } = useCartDetailQuery({
         notifyOnNetworkStatusChange: true,
     });
-
-    const { data: userCartData, loading: userLoading }          = useQuery<UserQueryInterface, UserQueryVarsInterface>(GET_USER_QUERY, {
-        notifyOnNetworkStatusChange: true,
-    });
-    
-    const [mutateCartItems, { data: userData, loading: userItemsLoading }] = useMutation<CartQueryInterface, CartQueryVarsInterface>(MUTATE_CART_ITEMS, {
-        refetchQueries: [GET_USER_QUERY, GET_GUEST_CART],
+        
+    const [removeItemFromCart, { data: removeItem, loading: loadingCartItemRemove }] = useRemoveCartItemMutation({
+        refetchQueries: [CartDetailDocument],
         awaitRefetchQueries: true,
-        onCompleted: ({ MutateCartItems }) => {
-            const { message, success } = MutateCartItems
-            if(notify) {
-                dispatchGlobalState(addNotificationAction({
-                    status: success,
-                    description: message,
-                    time: 5000,
-                    icon: faShoppingCart,
-                    color: "rgb(255, 89, 89)"
-                }));
-            }
-        }
+        onCompleted: ({ removeCartItem }) => notify({
+            title: 'Cart items updated!',
+            description: 'Item removed from cart 😅',
+            icon: faShoppingCart,
+            status: true
+        }),
+        onError: ({ message }) => notify({
+            title: 'We did an oopsie! 🤭',
+            description: message,
+            icon: faShoppingCart,
+            status: false
+        })
     });
 
-    useEffect(() => {
-        setCart(userCartData?.me?.cart ?? guestCartData?.cartItems);
-    }, [guestCartData, userCartData]);
+    const [addItemToCart, { data: addIten, loading: loadingCartAddItem }] = useAddItemToCartMutation({
+        refetchQueries: [CartDetailDocument],
+        awaitRefetchQueries: true,
+        onCompleted: ({ addItemToCart }) => notify({
+            title: 'Cart items updated!',
+            description: 'Item added to cart 😅',
+            icon: faCartArrowDown,
+            status: true
+        }),
+        onError: ({ message }) => notify({
+            title: 'Out of stock! 🤭',
+            description: 'Please try again later.',
+            icon: faShoppingCart,
+            status: false
+        })
+    });
+
+    const notify = (data: Omit<NotificationInterface, "time" | "color">) => {
+        if(useNotifications) {
+            dispatchGlobalState(addNotificationAction({
+                ...data,
+                time: 5000,
+            }));
+        }
+    }
+
+    const mutateCart = (options: MutateCartInterface): Promise<any> => {
+        if(options.detach) {
+            return removeItemFromCart({
+                variables: {
+                    id: options.productId,
+                }
+            })
+        } else {
+            return addItemToCart({
+                variables: {
+                    input: {
+                        productId: options.productId,
+                        quantity: options.qty
+                    }
+                }
+            })
+        }
+    }
 
     useEffect(() => {
-        setLoading(guestCartLoading || userLoading || userItemsLoading);
-    }, [guestCartLoading, userLoading, userItemsLoading])
+        setCart(data);
+    }, [loadingCartItems]);
 
-    return [ { cart, loading }, mutateCartItems];
+    useEffect(() => {
+        setLoading(loadingCartItems || loadingCartItemRemove || loadingCartAddItem);
+    }, [loadingCartItems, loadingCartItemRemove, loadingCartAddItem])
+
+    return [ { cart, loading }, mutateCart];
 }
 
 export default useCart

@@ -1,0 +1,37 @@
+# Write your query or mutation here
+query Products (
+    $input: FilterProductListingInput
+    $first: Int = 10
+    $page: Int = 1
+  ) {
+  getProductListing (
+    input: $input
+    first: $first
+    page: $page
+  ) {
+    data {
+      id
+      productFlat(locale: "en") {
+        ...productFlatFragment
+      }
+      inventories {
+        qty
+      }
+      categories {
+        name
+        slug
+        urlPath
+      }
+      attributeValues {
+        id
+        textValue
+      }
+      configutableData {
+        attributes {
+          id
+          code
+        }
+      }
+    }
+  }
+}

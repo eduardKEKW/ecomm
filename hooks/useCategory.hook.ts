@@ -1,26 +1,32 @@
-import { useQuery } from "@apollo/client";
-import { QueryHookOptions, useLazyQuery } from "@apollo/react-hooks";
-import { CategoryInterface, CategoryQueryInterface, CategoryQueryVarsInterface, CATEGORY_QUERY } from 'apollo/querys/Category.query';
+import { QueryHookOptions } from "@apollo/client";
+import { CategoryQuery, CategoryQueryVariables, useCategoryQuery } from "Graphql/generated/graphql";
+
+export type CategorySingleType = CategoryQuery['category'];
+export type AttributeType = CategoryQuery['category']['filterableAttributes'][0]
 
 interface Props {
-    lazy?: boolean
-    variables: CategoryQueryVarsInterface   
+    variables?: CategoryQueryVariables   
     options?: QueryHookOptions
+    skip?: boolean
 }
 
-interface useCategoryReturn {
-    categories: CategoryInterface[]
+interface useCategoryReturn extends Omit<ReturnType<typeof useCategoryQuery>, 'data'> {
+    category: CategorySingleType
     loading: boolean
 }
 
-const useCategory = ({ variables, options }: Props): useCategoryReturn => {
-    const { data, loading } = useQuery<CategoryQueryInterface, CategoryQueryVarsInterface>(CATEGORY_QUERY, {
-        variables: variables,
+const useCategory = ({ variables = {}, options, skip = false }: Props): useCategoryReturn => {
+    const { data, loading, ...rest } = useCategoryQuery({
+        notifyOnNetworkStatusChange: true,
+        fetchPolicy: "cache-and-network",
+        variables,
+        skip
     });
 
     return { 
-        categories: (data?.category ?? []) as CategoryInterface[],
-        loading
+        category: data?.category,
+        loading,
+        ...rest
     };
 }
 

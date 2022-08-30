@@ -1,0 +1,5 @@
+mutation newsletterSubscriber ($input: SubscriberInput!) {
+    subscribe (input: $input) {
+        id
+    }
+}

@@ -1,7 +1,5 @@
 
 import React, { useCallback, useRef } from 'react'
-import { faHeart, faUser } from '@fortawesome/free-regular-svg-icons';
-
 import Account from './Navigations/Account';
 import Cart from './Navigations/Cart';
 import Favorites from './Navigations/Favorites';
@@ -9,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Image from 'next/image';
 import Tooltip from 'components/helpers/Tooltip';
 import cart from '/public/cart.svg';
-import { faSortDown, IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faSortDown, faUser, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import styles from 'styles/components/interactions.module.scss';
 
 interface ButtonInterface {
@@ -23,7 +21,7 @@ interface ButtonInterface {
 
 const buttons: { [key: string]: ButtonInterface } = {
     profile: { 
-        name: "My Profile",
+        name: "my profile",
         icon: faUser,
         showCount: false,
         count: 0,
@@ -32,7 +30,7 @@ const buttons: { [key: string]: ButtonInterface } = {
         }
     },
     favorites: {
-        name: "My Favorites",
+        name: "my favorites",
         icon: faHeart,
         count: 0,
         Content: function Content (props = {}) {
@@ -40,7 +38,7 @@ const buttons: { [key: string]: ButtonInterface } = {
         }
     },
     cart: { 
-        name: "My Cart",
+        name: "my cart",
         count: 0,
         IconElem: function IconElem () {
             return <Image width="18" height="18" alt="add_to_card" src={cart} />
@@ -85,10 +83,8 @@ const Interactions = () => {
                                 </div>
 
                                 <div className={styles.interactions__item_title}> 
-                                    {itemName} 
+                                    {itemName} <FontAwesomeIcon icon={faSortDown} className={styles.interactions__item_icon_arrow} />
                                 </div>
-                                
-                                <FontAwesomeIcon icon={faSortDown} className={styles.interactions__item_icon_arrow} />
                             </>
                         </Tooltip>
                     )

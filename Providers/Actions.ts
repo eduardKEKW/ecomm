@@ -11,7 +11,7 @@ export const addNotificationAction = (notification: NotificationInterface) => {
     }
 }
 
-export const cancelNotificationAction = (id: Number) => {
+export const cancelNotificationAction = (id: symbol) => {
     return {
         type: CANCEL_NOTIFICATION_ACTION,
         payload: { id }

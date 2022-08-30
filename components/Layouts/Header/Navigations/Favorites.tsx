@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import ButtonMain from 'components/buttons/Main';
 import Link from 'components/helpers/LinkCustom';
 import Loading from 'components/helpers/Loading';
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import style from 'styles/components/interactions.module.scss';
 import { useFavorite } from 'hooks/useFavorite.hook';
 import Item from './Item';
 import useCart from 'hooks/useCart.hook';
+import { produce } from 'immer';
 
 interface Props {
     setCount?: (count: number) => void
@@ -16,40 +16,50 @@ interface Props {
 const Favorites = ({
     setCount
 }: Props) => {
-    const [childLoadingIds, setChildLoading]            = useState<Array<number|null>>([]);
+    const [childLoadingIds, setChildLoading]            = useState<{[key: string]: boolean}>({});
     const [{ items, loading }, setFavoriteItems]        = useFavorite({ notify: false });
     const [{ loading: loadingCart }, mutateCartItems]   = useCart();
-    
-    const mutateFavorite = (id: number) => {
-        setChildLoading([...childLoadingIds, id]);
-        setFavoriteItems({ variables: {
-            items: [id],
-            detach: true
-        }});
+
+    const mutateFavorite = (id: string) => {
+        setChildLoading(produce(childLoadingIds, (draft) => {
+            draft[id] = true;
+        }));
+
+        setFavoriteItems({ detach: true, productId: id }).finally(() => {
+            setChildLoading(produce(childLoadingIds, (draft) => {
+                delete draft[id];
+            }));
+        });
     }
 
-    const mutateCart = (id: number) => {
-        setChildLoading([...childLoadingIds, id]);
+    const mutateCart = (id: string) => {
+        setChildLoading(produce(childLoadingIds, (draft) => {
+            draft[id] = true;
+        }));
+        
         mutateCartItems({
-            variables: {
-                items: [id],
-                detach: false,
-                qty: 1
-            }
+            detach: false,
+            productId: id,
+            qty: 1
+        }).finally(() => {
+            setChildLoading(produce(childLoadingIds, (draft) => {
+                delete draft[id];
+            }));
         });
     }
 
     useEffect(() => {
-        if(! loading && ! loadingCart) {      
-            setCount(items.length);
-            setChildLoading([]);
+        if(! loading) {      
+            setChildLoading({});
         }
-    }, [loading, items, loadingCart, setCount]);
+
+        setCount(items.length);
+    }, [loading, items, setCount]);
 
     return (
         <div className={style.items}>
             <div className={style.items__container}>
-                <Loading loading={!childLoadingIds.length && loading} minHeight={items.length ? "0rem" : "3rem"} minWidth="15rem">
+                <Loading loading={! Object.keys(childLoadingIds).length && loading} minHeight={items.length ? "0rem" : "3rem"} minWidth="15rem">
                     <>
                         {
                             items.map(item => 
@@ -58,7 +68,7 @@ const Favorites = ({
                                     onAddProps={mutateCart}
                                     key={item.id} 
                                     item={item}
-                                    loading={childLoadingIds.includes(item.id)}
+                                    loading={childLoadingIds.hasOwnProperty(item.id)}
                                     type="favorite"
                                 />
                             )
@@ -70,9 +80,7 @@ const Favorites = ({
             {  !! items.length && (
                     <div className={style.items__btn}>
                         <Link href="/favorites">
-                            <ButtonMain style={{ 
-                                width: "20rem"
-                            }} >
+                            <ButtonMain>
                                 See all favorites items
                             </ButtonMain>
                         </Link>

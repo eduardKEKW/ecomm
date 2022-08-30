@@ -2,88 +2,92 @@ import React, { useEffect, useState } from "react";
 import ButtonMain from "components/buttons/Main";
 import Link from "components/helpers/LinkCustom";
 import Loading from "components/helpers/Loading";
-import style from 'styles/components/interactions.module.scss';
+import style from "styles/components/interactions.module.scss";
 import Item from "./Item";
 import Price from "components/Product/Price";
 import useCart from "hooks/useCart.hook";
+import produce from "immer";
 
 interface Props {
-    setCount?: (count: number) => void
+  setCount?: (count: number) => void;
 }
 
-const Cart = ({
-    setCount
-}: Props) => {
-    const [{ cart, loading }, mutateCartItems]  = useCart({ notify: false });
-    const [childLoadingIds, setChildLoading]    = useState<Array<number|null>>([]);
+const Cart = ({ setCount }: Props) => {
+  const [{ cart, loading }, mutateCartItems]  = useCart();
+  const [childLoadingIds, setChildLoading]    = useState<{
+    [key: string]: boolean;
+  }>({});
 
-    const onDelete = (id: number) => {
-        setChildLoading([...childLoadingIds, id]);
+  const onDelete = (id: string) => {
+    setChildLoading(
+      produce(childLoadingIds, (draft) => {
+        draft[id] = true;
+      })
+    );
 
-        mutateCartItems({
-            variables: {
-                items: [id],
-                detach: true,
-                qty: 0
-            }
-        });
-    }
-    
-    useEffect(() => {
-        if(! loading) {
-            setCount(cart?.items?.length ?? 0);
-            childLoadingIds.shift;
-            setChildLoading([...childLoadingIds]);
-        }
-    }, [loading, cart]);
+    mutateCartItems({
+      detach: true,
+      productId: id,
+    }).finally(() => {
+      setChildLoading(
+        produce(childLoadingIds, (draft) => {
+          delete draft[id];
+        })
+      );
+    });
+  };
 
-    return (    
-        <>
-            <div className={style.items}>
-                <div className={style.items__container}>
-                    <Loading loading={! childLoadingIds.length && loading} minHeight={cart?.items?.length ? "0rem" : "3rem"} minWidth="15rem">
-                        <>
-                        
-                            {
-                                cart?.items?.map(item => 
-                                    <Item
-                                        onDeleteProp={onDelete}
-                                        key={item.id} 
-                                        item={item}
-                                        loading={childLoadingIds.includes(item.id)} 
-                                        type="cart"
-                                    />
-                                )
-                            }
+  useEffect(() => {
+    setCount(cart?.cartDetail?.allItems?.length ?? 0);
+  }, [loading, cart]);
 
-                        </>
-                    </Loading>
-                </div>
+  return (
+    <>
+      <div className={style.items}>
+        <div className={style.items__container}>
+          <Loading
+            loading={!Object.keys(childLoadingIds).length && loading}
+            minHeight={cart?.cartDetail?.itemsCount ? "0rem" : "3rem"}
+            minWidth="15rem"
+          >
+            <>
+              {cart?.cartDetail?.allItems?.map((item) => (
+                <Item
+                  onDeleteProp={() => onDelete(item.id)}
+                  key={item.id}
+                  item={{ ...item.productFlat, quantity: item.quantity }}
+                  loading={childLoadingIds.hasOwnProperty(item.id)}
+                  type="cart"
+                />
+              ))}
+            </>
+          </Loading>
+        </div>
 
-                {  !!cart?.items?.length && 
-                    (<>
-                        <div className={style.items__total}>
-                            <span> Total: </span> <Price price={cart.total} />
-                        </div>
-
-                        <div className={style.items__btn}>
-                            <Link href="/cart">
-                                <ButtonMain style={{ 
-                                    width: "20rem"
-                                }} >
-                                    Cart details
-                                </ButtonMain>
-                            </Link>
-                        </div>
-                    </>)
-                }
-
-                {
-                    ! loading && ! cart?.items?.length && <p>You don`t have any favorite products.</p> 
-                }
+        {!!cart?.cartDetail?.itemsCount && (
+          <>
+            <div className={style.items__total}>
+              <span> Total: </span>{" "}
+              <Price
+                price={cart.cartDetail.grandTotal}
+                specialPrice={cart.cartDetail.discountAmount}
+              />
             </div>
-        </>        
-    )
-}
 
-export default Cart
+            <div className={style.items__btn}>
+              <Link href="/cart">
+                <ButtonMain>Cart details</ButtonMain>
+              </Link>
+            </div>
+          </>
+        )}
+
+        {!loading && !cart?.cartDetail?.itemsCount && (
+          <p>Your cart is empty.</p>
+        )}
+      </div>
+    </>
+  );
+};
+
+export default Cart;

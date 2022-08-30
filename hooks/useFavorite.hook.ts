@@ -1,86 +1,105 @@
-
-import { ApolloCache, DefaultContext, MutationFunctionOptions, useMutation, useQuery } from "@apollo/react-hooks";
 import { useEffect, useState } from "react";
-
-import { FavoriteMutatorInterface, FavoriteMutatorVarsInterface, FAVORITE_MUTATION } from "apollo/mutations/Favorites.mutator";
-import { FavoriteQueryInterface, FavoriteQueryVarsInterface, FAVORITE_QUERY } from 'apollo/querys/Favorite.query';
 import { useGlobalDispatch } from "Providers/GlobalProvider.provider";
 import { addNotificationAction } from "Providers/Actions";
 import { faHeart as regularFaHeart } from "@fortawesome/free-regular-svg-icons";
 import { faHeart as solidFaHeart } from "@fortawesome/free-solid-svg-icons";
-import { UserInterface } from "apollo/fragments/User.fragment";
-import { ProductInterface } from "apollo/querys/Product.query";
+import { NotificationInterface } from "components/Notification";
+import { ProductFlat, useAddToWishlistMutation, useRemoveFromWishlistMutation, useWishlistQuery, WishlistDocument, WishlistQuery } from "Graphql/generated/graphql";
 
+export interface setFavoriteInterface {
+    detach: boolean,
+    productId: string
+}
 
-export type options = MutationFunctionOptions<FavoriteMutatorInterface, FavoriteMutatorVarsInterface, DefaultContext, ApolloCache<any>>;
+type Item = WishlistQuery["wishlist"]["data"][0]["product"]["productFlat"]; 
 
-interface ReturnInterface { 
-    items?: ProductInterface[],
+interface DataInterface { 
+    items?: Item[],
     loading?: boolean,
-    user?: UserInterface | null
 };
 
 interface Props {
     notify?: boolean
 }
 
-const useFavorite = ({ notify: useNotifications = true }: Props = {}): [ReturnInterface, typeof setFavoriteItems ] => {
+const useFavorite = ({ notify: useNotifications = true }: Props = {}): [DataInterface, typeof setFavoriteItems] => {
     const [loading, setLoading]             = useState<boolean>(false);
-    const [favorites, setFavorites]         = useState<ProductInterface[]>([]);
-    const [notifications, setNotifications] = useState<{ [key: number]: boolean }>([]);
+    const [favorites, setFavorites]         = useState<Item[]>([]);
     const dispatchGlobalState               = useGlobalDispatch();
     
-    const { data: favoriteItems, loading: loadingFavoriteItems }   = useQuery<FavoriteQueryInterface, FavoriteQueryVarsInterface>(FAVORITE_QUERY, {
+    const { data: favoriteItems, loading: loadingFavoriteItems }   = useWishlistQuery({
         notifyOnNetworkStatusChange: true,
         variables: {
-            from: 0,
-            size: 50
+            first: 10,
+            page: 1   
         }
     });
-    const [ mutateFavoriteItems, { loading: loadingMutation } ]   = useMutation<FavoriteMutatorInterface, FavoriteMutatorVarsInterface>(FAVORITE_MUTATION, {
-        refetchQueries: [FAVORITE_QUERY],
+
+    const [ addItemsToFavorites, { loading: loadingAdd } ] = useAddToWishlistMutation({
+        refetchQueries: [WishlistDocument],
         awaitRefetchQueries: true,
-        onCompleted: ({ mutateFavoriteItems: ids }) => {
-            ids.forEach(id => {
-                if(notifications.hasOwnProperty(id)) {
-
-                    notify({ detach: notifications[id], success: true })
-
-                    setNotifications(state => {
-                        delete notifications[id]
-                        return { ...state }
-                    })
-
-                }
-            });
-        },
-        onError: () => {
-            notify({ detach: false, success: false })
-        }
+        onCompleted: ({ addToWishlist }) => notify({
+            title: 'Favorite list updated!',
+            description: 'Item added to favorites 😍',
+            icon: solidFaHeart,
+            status: true
+        }),
+        onError: ({ message }) => notify({
+            title: 'We did an oopsie! 😓',
+            description: message,
+            icon: solidFaHeart,
+            status: false
+        })
+    });
+    
+    const [ removeItemsToFavorites, { loading: loadingRemove } ] = useRemoveFromWishlistMutation({
+        refetchQueries: [WishlistDocument],
+        awaitRefetchQueries: true,
+        onCompleted: ({ removeFromWishlist }) => notify({
+            title: 'Favorite list updated!',
+            description: 'Favorite item removed 😓',
+            icon: regularFaHeart,
+            status: true
+        }),
+        onError: ({ message }) => notify({
+            title: 'We did an oopsie! 😓',
+            description: message,
+            icon: solidFaHeart,
+            status: false
+        })
     });
 
-    const notify = ({ detach, success }) => {
+    const notify = (data: Omit<NotificationInterface, "time" | "color">) => {
         if(useNotifications) {
             dispatchGlobalState(addNotificationAction({
-                status: success,
-                description: `Item ${detach ? 'removed from' : 'added to'} favorites.`,
+                ...data,
                 time: 5000,
-                icon: detach ? regularFaHeart : solidFaHeart,
-                color: "rgb(255, 89, 89)"
             }));
         }
     }
     
-    const setFavoriteItems = (options: options) => {
-        mutateFavoriteItems(options);
-        setNotifications((not) => ({
-            ...not,
-            [options.variables.items[0]]: options.variables.detach
-        }))
+    const setFavoriteItems = (options: setFavoriteInterface): Promise<any> => {
+        if(options.detach) {
+            return removeItemsToFavorites({
+                variables: {
+                    input: {
+                        productId: options.productId,
+                    }
+                }
+            })
+        } else {
+            return addItemsToFavorites({
+                variables: {
+                    input: {
+                        productId: options.productId
+                    }
+                }
+            })
+        }
     }
 
     useEffect(() => {
-        const items = favoriteItems?.favoriteItems;
+        const items = favoriteItems?.wishlist?.data?.map(p => p.product.productFlat);
 
         if(! loadingFavoriteItems && items) {
             setFavorites(items);
@@ -88,8 +107,8 @@ const useFavorite = ({ notify: useNotifications = true }: Props = {}): [ReturnIn
     }, [loadingFavoriteItems]);
 
     useEffect(() => {
-        setLoading(loadingFavoriteItems || loadingMutation);
-    }, [loadingFavoriteItems, loadingMutation]);
+        setLoading(loadingFavoriteItems || loadingAdd || loadingRemove);
+    }, [loadingFavoriteItems, loadingAdd, loadingRemove]);
     
     return [{ items: favorites, loading }, setFavoriteItems];
 }

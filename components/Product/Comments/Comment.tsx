@@ -2,20 +2,20 @@ import { SAbout, SAvatar, SBody, SComment, SDate, SInfo, SName, SRating, SText, 
 import Image from 'next/image';
 import defaultAvatar from '/public/avatar.png';
 import React, { useMemo } from 'react'
-import { getInitials, getStarTitle, randomColor } from 'helpers/helpers';
+import { getStarTitle, randomColor } from 'helpers/helpers';
 import Stars from '../Stars';
+import { ReviewsType } from 'hooks/useComments';
+import { useLikeReviewMutation } from '../../../Graphql/generated/graphql';
 import Like from './Like';
-import { CommentInterface } from 'apollo/fragments/Comment.fragment';
-import { MutationFunctionOptions, DefaultContext, ApolloCache } from '@apollo/react-hooks';
-import { LikeDataMutationInterface, LikeMutationVarsInterface } from 'apollo/mutations/Like.mutator';
 
 interface Props {
-    comment: CommentInterface,
-    like:  (options?: MutationFunctionOptions<LikeDataMutationInterface, LikeMutationVarsInterface, DefaultContext, ApolloCache<any>>) => Promise<any>
+    comment: ReviewsType[0],
+    like:  ReturnType<typeof useLikeReviewMutation>[0]
     index: number
+    isGuest: boolean
 }
 
-const Comment = ({ comment, like, index }: Props) => {
+const Comment = ({ comment, like, index, isGuest }: Props) => {
     const avatarColor = useMemo<string>(() => randomColor(), []);
 
     const onLike = () => {
@@ -32,17 +32,17 @@ const Comment = ({ comment, like, index }: Props) => {
                 <SAvatar style={{ color: avatarColor }} >
                     <Image src={defaultAvatar} layout="responsive" objectFit="cover" alt='avatar_default' />
                     <div style={{ background: avatarColor }} >
-                        <span>{getInitials(comment.user.name)}</span>
+                        <span>{comment.initials}</span>
                     </div>
                 </SAvatar>
 
                 <SInfo>
                     <SName>
-                        {comment.user.name}
+                        {comment.customerName}
                     </SName>
                     
                     <SDate>
-                        {comment.created_at}
+                        {comment.createdAt}
                     </SDate>
                 </SInfo>
             </SAbout>
@@ -57,11 +57,11 @@ const Comment = ({ comment, like, index }: Props) => {
                 </SRating>
 
                 <SText>
-                    {comment.body}
+                    {comment.comment}
                 </SText>
             </SBody>
 
-            <Like onLike={onLike} likes={comment.likes} userLike={comment.userLike} />
+            <Like isGuest={isGuest} onLike={onLike} likes={comment.likes} userLike={comment.userLike} />
         </SComment>
     )
 }

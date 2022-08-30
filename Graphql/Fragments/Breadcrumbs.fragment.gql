@@ -1,0 +1,5 @@
+fragment breadcrumbsFragment on CategoryBreadcrumbs {
+    name
+    slug
+    urlPath
+}

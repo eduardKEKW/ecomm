@@ -2,6 +2,7 @@ import { faStar } from '@fortawesome/free-solid-svg-icons'
 import { faStar as faStarRegular } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import React, { useEffect, useState } from 'react'
+import { SStars } from 'components/styled/Product/Rating'
 
 interface Props {
     rating?: number
@@ -14,7 +15,7 @@ function Stars({
 }: Props) {
     const [selected, setSelected] = useState<number>(rating);
 
-    useEffect(() => setSelected(rating), [rating]);
+    useEffect(() => setSelected(rating), [rating]); 
 
     const onHover = (index: number) => {
         if(onChange) {
@@ -23,7 +24,7 @@ function Stars({
     }
 
     return (
-        <>
+        <SStars>
             {
                 new Array(5).fill(0).map((_, index) => {
                     const i     = index + 1;
@@ -48,7 +49,7 @@ function Stars({
                 })
                     
             } 
-        </>
+        </SStars>
     )
 }
 

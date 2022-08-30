@@ -1,0 +1,6 @@
+mutation customerRegister ($input: CreateRegisterInput!) {
+  customerRegister(input: $input) {
+    status
+    success
+  }
+}

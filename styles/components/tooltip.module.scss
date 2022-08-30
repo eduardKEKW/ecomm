@@ -2,7 +2,6 @@
 
 .tooltip {
     position: absolute;
-    border-radius: .2rem;
     left: 50%;
     transform: translateX(-50%);
     top: 100%;
@@ -18,22 +17,48 @@
         background-color: $white;
         box-shadow: $shadowMain;
         margin-top: 1rem;
+        border: solid 1px $colorBlack;
 
         &__wrap {
             position: absolute;
             top: 0%;
             left: 50%;
             transform: translateX(-50%) translateY(15%);
-            filter: drop-shadow(-1px -1.5px 1.5px rgba(36, 35, 35, 0.1));
-    
+
             &_arrow {
                 width: 1.2rem;
                 height: .9rem;    
                 font-size: 2rem;
                 background: $white;
                 clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+                background: $colorBlack;
             }
         }
     }
 
+    &:after {
+        content: "";
+        position: absolute;
+        top: .2rem;
+        left: .2rem;
+        width: 100%;
+        height: calc(100% - 1rem);
+        transform: translateY(1rem);
+        background: $white;
+        border: solid 1px $colorBlack;
+        z-index: -1;
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: .4rem;
+        left: .4rem;
+        width: 100%;
+        height: calc(100% - 1rem);
+        transform: translateY(1rem);
+        background: $white;
+        border: solid 1px $colorBlack;
+        z-index: -1;
+    }
 }

@@ -1,0 +1,19 @@
+  query velocityMetaData {
+    metaData (id: 1) {
+        homePageContent
+        advertisement
+        logo
+        homePageCategories {
+          id		
+          name
+          slug
+          urlPath
+          productCount
+          breadcrumbs {
+            name
+            slug
+            urlPath
+          }
+        }
+    }
+  }

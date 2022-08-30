@@ -1,0 +1,19 @@
+query categories (
+    $input: FilterCategoryListInput = {
+      parent: null
+    },
+   	$first: Int = 10,
+  	$page: Int,
+) {
+  categories(input: $input, first: $first, page: $page) {
+    data {
+        ...categoryFieldsFragment
+        children {
+            ...categoryFieldsFragment
+            children {
+                ...categoryFieldsFragment
+            }
+        }
+    }
+  }
+}

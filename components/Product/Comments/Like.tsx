@@ -8,22 +8,30 @@ interface Props {
     onLike: () => void
     userLike: boolean
     likes: number
+    isGuest: boolean
 }
 
-const Like = ({ onLike, userLike, likes }: Props): JSX.Element => {
+const Like = ({ onLike, userLike, likes, isGuest}: Props): JSX.Element => {
     const [liked, setLiked]         = useState<boolean>(userLike)
     const [translate, setTranslate] = useState<number>(0)
 
     useEffect(() => setLiked(userLike), [userLike])
 
+
+    useEffect(() => {
+        setTranslate(0)
+    }, [likes])
+
     const likeComment = () => { 
+        if(isGuest) return;
+
         setLiked(v => !v);
         setTranslate(v => liked ? v - 1 : v + 1);
         onLike();
     }
 
     return (            
-        <SLike onClick={() => likeComment()} liked={liked}>
+        <SLike onClick={() => likeComment()} liked={liked} isGuest={isGuest} >
             <div>
                 <i> 
                     <FontAwesomeIcon icon={liked ? faThumbsUpSolid : faThumbsUp} /> 

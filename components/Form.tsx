@@ -1,18 +1,19 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { SForm } from './styled/Form'
 
-interface Props {
-    initialState?: any
+interface Props<State> {
+    initialState?: State
     children: JSX.Element
     onSubmit: (state: State) => void
+    gridArea?: string
 }
 
 interface State {}
 
 export const FormContext = createContext({});
 
-function Form({ initialState, children, onSubmit }: Props) {
-    const [state, setState] = useState(() => ({ ...initialState }));
+function Form<State>({ initialState, children, onSubmit, gridArea}: Props<State>) {
+    const [state, setState] = useState<State>(() => initialState);
     
     const changeForm = ({ name, value }) => {
 
@@ -38,7 +39,7 @@ function Form({ initialState, children, onSubmit }: Props) {
 
     return (
         <FormContext.Provider value={ value as any }>
-            <SForm>
+            <SForm gridArea={gridArea}>
                 { children }
             </SForm>    
         </FormContext.Provider>

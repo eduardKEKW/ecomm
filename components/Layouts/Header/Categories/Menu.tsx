@@ -1,51 +1,41 @@
-import useCategory from "hooks/useCategory.hook";
 import React from "react";
 import { SMenu } from 'components/styled/Header';
-import Loading from "components/helpers/Loading";
 import Link from "components/helpers/LinkCustom";
+import { CategoryType } from "hooks/useCategories.hook";
 
 interface Props {
-    category: number
+    category: CategoryType
 }
 
 function Menu({ category }: Props) {
-    const { categories, loading } = useCategory({
-        variables: {
-            includeChildren: true,
-            parent: +category
-        }
-    });
-
     return (
         <SMenu>
-            <Loading loading={loading}>
-                <ul>
-                    {
-                        categories && categories.map(({
-                            children,
-                            name,
-                            slug,
-                            id
-                        }) => {
-                            return (
-                                <li key={id} id={`row-${children.length + 1}`}>
-                                    <Link href={`categories/${slug}`}><span>{name}</span></Link>
+            <ul>
+                {
+                    category?.children && category.children.map(({
+                        children,
+                        name,
+                        path,
+                        id
+                    }) => {
+                        return (
+                            <li key={id} id={`row-${children.length + 1}`}>
+                                <Link href={path}><span>{name}</span></Link>
 
-                                    <ul>
-                                        {
-                                            children && children.map(({ name, id, slug }) => (
-                                                <Link href={`categories/${slug}`} key={id}>
-                                                    <li>{name}</li>
-                                                </Link>
-                                            ))
-                                        }
-                                    </ul>
-                                </li>
-                            )
-                        })
-                    }
-                </ul>
-            </Loading>
+                                <ul>
+                                    {
+                                        children && children.map(({ name, id, path }) => (
+                                            <Link href={path} key={id}>
+                                                <li>{name}</li>
+                                            </Link>
+                                        ))
+                                    }
+                                </ul>
+                            </li>
+                        )
+                    })
+                }
+            </ul>
         </SMenu>
     )
 }

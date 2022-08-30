@@ -22,7 +22,7 @@ const Select = ({ options, onSelect, selected, width = '100%' }: Props): JSX.Ele
         >
 
             <span onClick={() => setShowOptions(true)}>
-                {selected.name}
+                {selected?.name}
             </span>
 
             <ul>
@@ -31,7 +31,7 @@ const Select = ({ options, onSelect, selected, width = '100%' }: Props): JSX.Ele
                         return (
                             <SSelectItem 
                                 show={showOptions}
-                                selected={option.value == selected.value}
+                                selected={option.value == selected?.value}
                                 key={option.value}
                                 onClick={() => {
                                     onSelect(option)

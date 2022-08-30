@@ -1,0 +1,13 @@
+query reviewsInfo (
+  $productId: Int
+) {
+  reviewsInfo(
+    productId: $productId
+  ) {
+    averageRating
+    starsMap {
+      rating
+      count
+    }
+  }
+}

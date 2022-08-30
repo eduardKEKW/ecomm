@@ -1,0 +1,14 @@
+query me {
+  accountInfo {
+    status
+    customer {
+      id
+      firstName
+      lastName
+      email
+      phone
+      isVerified
+      subscribedToNewsLetter
+    }
+  }
+}

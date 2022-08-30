@@ -37,7 +37,7 @@ function ImageSquare ({ gridArea, className = 'image_square'}) {
 }
 
 export const SKELETONS = {
-    suggestion: function Suggestion (name) {
+    suggestion: function (name) {
         return (
             <div className={[styles.skeleton, styles[name]].join(' ')}> 
                 <ImageSquare gridArea="product-image" />
@@ -46,7 +46,7 @@ export const SKELETONS = {
             </div> 
         )
     },
-    card: function Card (name) {
+    card: function (name) {
         return (
             <div className={[styles.skeleton, styles[name]].join(' ')}> 
                 <ImageSquare gridArea="product-image" />
@@ -58,7 +58,7 @@ export const SKELETONS = {
             </div> 
         )
     },
-    product: function Product (name, gridArea = '') {
+    product: function (name, gridArea = '') {
         return (
             <div className={[styles.skeleton, styles[name]].join(' ')} style={{ gridArea: gridArea }}> 
                 <Text gridArea="breadcrumbs" size={1} height='medium' />
@@ -69,7 +69,24 @@ export const SKELETONS = {
                 <Text gridArea="text-actions" size={2} height='big' />
             </div> 
         )   
-    }
+    },
+    title: function (name, gridArea = '') {
+        return (
+            <div className={[styles.skeleton, styles[name]].join(' ')} style={{ gridArea: gridArea }}> 
+                <Text gridArea="name" size={1} height='medium' />
+                <Text gridArea="title" size={1} height='medium' />
+            </div> 
+        )   
+    },
+    category: function (name, gridArea = '') {
+        return (
+            <div className={[styles.skeleton, styles[name]].join(' ')} style={{ gridArea: gridArea }}> 
+                <Text gridArea="title" size={4} height='medium' />
+                <ImageSquare gridArea="side" />
+                <ImageSquare gridArea="main" />
+            </div> 
+        )   
+    },
 }
 
 const Skeleton = ({ children, loading, name, gridArea }: Props) => {

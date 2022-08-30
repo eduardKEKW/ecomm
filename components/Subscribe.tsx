@@ -1,15 +1,15 @@
-import { useQuery } from '@apollo/react-hooks'
 import { faEnvelope } from '@fortawesome/free-regular-svg-icons'
 import { faCheck } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { GET_USER_QUERY, UserQueryInterface, UserQueryVarsInterface } from 'apollo/querys/User.query'
+import { useMeQuery } from 'Graphql/generated/graphql'
 import { SUBSCRIBE_TEXT } from 'helpers/local'
 import useSubscription from 'hooks/useSubscribe'
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ButtonMain from './buttons/Main'
 import Form from './Form'
 import Link from './helpers/LinkCustom'
 import Input from './input/Input.main'
+import { STitledSection } from './styled/Benefits'
 import { SSubscribe } from './styled/Subscribe'
 import Title from './Title'
 
@@ -19,64 +19,56 @@ interface Props {
 
 const formState = {
     email: { value: '', validation: ['required'] },
-    terms: { value: '', validation: ['required'] }
+    terms: { value: false, validation: ['required'] }
 };
 
 function Subscribe({ gridArea }: Props) {
-    const { data: { me: user } = { me: null }, loading }                            = useQuery<UserQueryInterface, UserQueryVarsInterface>(GET_USER_QUERY);
-    const [{ response, loading: subscribeLoading, called }, mutateSubscription]     = useSubscription({});
-    const [email, setEmail]                                                         = useState<string>('');
-    const subscribed                                                                = useMemo(() => (called && ! subscribeLoading && response.success), [called, subscribeLoading, response]);
+    const { data: { accountInfo: user } = { me: null }, loading } = useMeQuery();
+    const [{ loading: subscribeLoading, called, isSubscribed, defaultAddress,  ...response }, mutateSubscription] = useSubscription({});
+    const [email, setEmail] = useState<string>('');
     
     useEffect(() => {
-        setEmail(email || user?.email || '')
-    }, [loading, setEmail])
+        setEmail(email || user?.customer?.email || '')
+    }, [loading, setEmail]);
     
     return (
         <>
-            <SSubscribe gridArea={gridArea}>
+            <STitledSection style={{ marginTop: "5rem" }} name="newsletter" gridArea={gridArea} > 
+                <SSubscribe subscribed={isSubscribed}  gridArea={gridArea}>
+                    <Form initialState={formState} onSubmit={(state) => mutateSubscription({
+                        variables: { input: {
+                            email: (state as any).email.value || state.email
+                        }}
+                    })} >
+                        <>
+                            <div>
+                                <Input initialValue={defaultAddress} name="email" type="email" placeholder="Your Email Address" />
+                                
+                                <ButtonMain 
+                                    disable={isSubscribed} 
+                                    loading={subscribeLoading} 
+                                    icon={faEnvelope}
+                                    id="subscribe"
+                                    type="submit"
+                                >
+                                    {isSubscribed ? <FontAwesomeIcon icon={faCheck} /> : "Subscribe"}
+                                </ButtonMain>
+                            </div>
 
-                <Form initialState={formState} onSubmit={(state) => mutateSubscription({
-                    variables: { email: (state as any).email.value }
-                })} >
-                    <>
-                        <div>
-                            <Input name="email" type="email" placeholder="Your Email Address" style={{ 
-                                borderRadius: "0rem",
-                                height: "3rem",
-                            }} />
+                            <div>
+                                <Input name="terms" type="checkbox">
+                                    <span>
+                                        I accept the <Link href="#">terms and conditions.</Link>
+                                    </span>
+                                </Input>
+                            </div>
                             
-                            <ButtonMain 
-                                disable={subscribed} 
-                                loading={subscribeLoading} 
-                                icon={faEnvelope}
-                                type="submit"
-                                style={{ 
-                                    width: "100%",
-                                    height: "3rem"
-                                }}
-                            >
-                                {subscribed ? <FontAwesomeIcon icon={faCheck} /> : "Subscribe"}
-                            </ButtonMain>
-                        </div>
+                        </>
+                    </Form>
 
-                        <div>
-                            <Input name="terms" type="checkbox" style={{ 
-                                height: "1rem",
-                                width: "1rem"
-                            }}>
-                                <span>
-                                    I accept the <Link href="#">terms and conditions.</Link>
-                                </span>
-                            </Input>
-                        </div>
-                    </>
-                </Form>
-
-                <h3>
-                    <Title name="Subscribe" description={SUBSCRIBE_TEXT} />
-                </h3>
-            </SSubscribe>
+                    <Title background='white' name="subscribe" description={SUBSCRIBE_TEXT} />
+                </SSubscribe>
+            </STitledSection>
         </>
     )
 }

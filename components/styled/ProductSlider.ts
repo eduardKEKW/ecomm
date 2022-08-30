@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 
 export const SProductSlider = styled.div`
-    grid-area: ${({ gridArea }) => gridArea};
+    width: 100%;
     margin-top: 3rem;
+    grid-area: ${({ gridArea }) => gridArea};
     
     & > div {
         & > div {

@@ -1,12 +1,12 @@
-import { ProductInterface } from 'apollo/querys/Product.query';
 import Price from 'components/Product/Price'
 import Rating from 'components/Product/Rating'
 import { SInfo, SRating } from 'components/styled/Page/Product';
+import { ProductFlatFragmentFragment } from 'Graphql/generated/graphql';
 import React from 'react'
 
 interface Props {
     gridArea?: string
-    product: ProductInterface
+    product: ProductFlatFragmentFragment
 }
 
 function Info({ gridArea, product }: Props) {
@@ -15,13 +15,14 @@ function Info({ gridArea, product }: Props) {
         <SInfo gridArea={gridArea}>
 
             <SRating>
-                <Rating product={product} content={(<a href="#reviews">{product.reviews_number} Reviews</a>)} />
+                <Rating product={product} content={(<a href="#reviews">{product.reviewsCount} Reviews</a>)} />
             </SRating>
             
             <Price 
                 showTva={true} 
-                price={product?.price ?? 0} 
-                discount={product?.discount} 
+                price={product?.price}
+                specialPrice={product.specialPrice}
+                showDiscount={true}
                 style={{ 
                     fontSize: "2.5rem"
                 }} 

@@ -4,46 +4,38 @@ import Link from 'components/helpers/LinkCustom';
 import Price from './Price';
 import React from 'react'
 import Skeleton from 'components/helpers/Skeleton';
-import { shortenString } from 'helpers/helpers';
+import { getProductThumbnail, shortenString } from 'helpers/helpers';
 import styles from 'styles/components/search.module.scss';
-import { SkeletonProductInterface } from 'apollo/querys/Product.query';
+import { SkeletonSuggestionInterface } from 'components/Layouts/Header/Search';
+import { ID } from 'hooks/useProduct';
 
 interface Props {
-    product: SkeletonProductInterface
-    parents: number[]
+    product: SkeletonSuggestionInterface
+    parents: ID[]
 }
 
 function Suggestion({ product, parents }: Props) {
-    const {
-        name = "",
-        id,
-        category,
-        loading,
-        thumb,
-        price,
-        discount
-    } = product;
-
-    const firstChild = parents.includes(id); // first product found in category
+    const { loading, productFlat, categories } = product;
+    const firstChild = parents.some((v: string) => v === productFlat?.id); // first product in category
 
     return (
         <>
             { ! loading && firstChild &&
                 (<div className={styles.search__suggestions_item_category}>
-                    <Link href="/cat">
+                    <Link href={`/category/${categories[0]?.id}?n=${categories[0]?.slug}`}>
                         <>
-                            <span>{category} category</span>
+                            <span>In {categories?.length && categories[0].name}</span>
                         </>
                     </Link>
                 </div>)
             }
 
-            <Skeleton loading={loading} name="suggestion">
-                <Link href="/product/item" parentClassName={styles.search__suggestions_item}>
+            <Skeleton loading={! productFlat} name="suggestion">
+                <Link href={`/${productFlat?.id}?n=${productFlat?.urlKey}`} parentClassName={styles.search__suggestions_item}>
                     <>
                         <Image
-                            src={thumb}
-                            alt={name}
+                            src={getProductThumbnail({ path: productFlat?.thumbnail })}
+                            alt={productFlat?.name}
                             width="50"
                             height="50"
                             className={styles.search__suggestions_item_img}
@@ -52,7 +44,7 @@ function Suggestion({ product, parents }: Props) {
                         <div className={styles.search__suggestions_item_name}>
                             {
                                 shortenString({
-                                    str: name,
+                                    str: productFlat?.name,
                                     word: true,
                                     count: 10
                                 })
@@ -60,7 +52,7 @@ function Suggestion({ product, parents }: Props) {
                         </div>
 
                         <div className={styles.search__suggestions_item_price}>
-                            <Price price={price} discount={discount} />
+                            <Price price={productFlat?.price} specialPrice={productFlat?.specialPrice} />
                         </div>
                     </>
                 </Link>

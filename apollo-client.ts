@@ -1,77 +1,165 @@
-import { ApolloClient, gql, HttpLink, InMemoryCache } from "@apollo/client/core";
+import { ApolloClient, gql, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core';
+
 
 import { setContext } from '@apollo/client/link/context';
-import { makeVar, NormalizedCacheObject } from "@apollo/react-hooks";
-import { ACTIVITY_QUERY } from "apollo/querys/Activity.query";
-import { userLikesVar } from "apollo/Reactives";
-import { useMemo } from "react";
+import { Product, UserActivityDocument, UserActivityQuery, UserActivityQueryVariables } from 'Graphql/generated/graphql';
+import { getApiImage, getInitials, getProductThumbnail } from 'helpers/helpers';
+import { LOCAL_ACCESS_TOKEN_NAME } from 'helpers/local';
+import { useMemo } from 'react';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
+const ISSERVER = typeof window === "undefined";
 
 const authLink = setContext((_, { headers }) => {
-  // get the authentication token from local storage if it exists
-  // const token = localStorage.getItem('token');
-  const token = "VYdNejhr4lt3mKNGo7dDF0ATwcoKyzzN0Rj2d5r8qBvzfuUjpfY80YUSbFiy";
+  let accessToken = '';
+  
+  if(! ISSERVER) { // get the authentication token from local storage if it exists
+    accessToken = localStorage.getItem(LOCAL_ACCESS_TOKEN_NAME);
+  }
+
   // return the headers to the context so httpLink can read them
-  if(_.operationName == "user" && ! token) {
-    throw new Error("Unauthorized");
+  if(_.operationName == 'user' && ! accessToken) {
+    throw new Error('Unauthorized');
   }
   
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: accessToken ? accessToken : '',
     }
   }
 });
 
-export const asyncRead = (fn, defaultValue) => {
-  return (_, args) => {
-      if (!args.storage.var) {
-          args.storage.var = makeVar(defaultValue)
-          fn(_, args).then(
-              data => {
-                  args.storage.var(data)
-              }
-          )
-      }
-      return args.storage.var()
-  }
-}
-
 function createApolloClient() { 
   return new ApolloClient({
-    ssrMode: typeof window === "undefined",
+    ssrMode: typeof window === 'undefined',
     link: authLink.concat(new HttpLink({
-      uri: process.env.GRAPHQL || "http://localhost/graphql",
+      // uri: process.env.NEXT_PUBLIC_BAGISTO_GRAPHQL,
+      uri: "https://murmuring-spire-52308-eu.herokuapp.com/graphql",
+      credentials: 'include'
     })),
     cache: new InMemoryCache({
       typePolicies: {
-        Query: {
+        Category: {
+          keyFields: ["slug"],
           fields: {
-            comments: {
-              keyArgs: ['productId'],
+            path: {
+              read(slug, { readField }) {
+                return `/category/${readField('id')}?n=${readField('slug')}`;
+              },
             }
           }
         },
-        Comment: {
+        userActivityType: {
+          keyFields: ["productId"],
           fields: {
-            userLike: (_, { variables, readField, args }) => {
-              return !! userLikesVar().find(({ comment_id }) => +comment_id == +readField('id'));
-            },
-            userOwned: asyncRead(async (_, { variables, readField }) => {
-              const data = await apolloClient.query({
-                  query: ACTIVITY_QUERY,
-                  variables: {
-                    productId: variables.productId
-                  }
-              });
+            productId: {
+              read(_, { args, variables }) {
+                return variables?.input?.productId;
+              }
+            }
+          }
+        },
+        ProductFlat: {
+          fields: {
+          //  urlKey(urlKey, { readField, storeFieldName, storage }) {
+          //     const stored = storage[storeFieldName];
+          //     return stored ? stored : storage[storeFieldName] = `${readField('id')}?n=${urlKey}`;
+          //   }, 
+            qty: {
+              read(_, { readField, cache }) {
+                const { inventories = [] } = cache.readFragment<Product>({
+                  id: `Product:${readField("id")}`,
+                  fragment: gql`
+                    fragment product on Product {
+                      inventories {
+                        qty
+                      }
+                    }
+                  `,
+                }) ?? {};
 
-              return !! (data?.data?.activity?.comment?.id == +readField('id'));
-          }, false)
+                return inventories?.find(inv => !! inv.qty)?.qty ?? 0;
+              }
+            },
+            mainCategory: {
+              read(_, { readField, cache, toReference }) {
+                const { categories = [] } = cache.readFragment<Product>({
+                  id: `Product:${readField("id")}`,
+                  fragment: gql`
+                    fragment product on Product {
+                      categories {
+                        name
+                        urlPath
+                        slug
+                        id
+                      }
+                    }
+                  `,
+                }) ?? {};
+
+                const mainCat = categories[categories.length - 1];
+
+                if(! mainCat?.slug) return null;
+
+                return toReference({
+                  __typename: 'Category',
+                  slug: mainCat.slug,
+                })
+              }
+            },
+          },
+        },
+        Image: {
+          fields: {
+            path: {
+              read(path) {
+                return getApiImage({ url: path })
+              }
+            }
+          }
+        },
+        Review: {
+          fields: {
+            initials: {
+              read(_, { readField }) {
+                return getInitials(readField('customerName'));
+              }
+            },
+            userLike: {
+              read(_, { readField, cache }) {
+                const { userActivity } = cache.readQuery<UserActivityQuery, UserActivityQueryVariables>({
+                  query: UserActivityDocument,
+                  variables: { // Provide any required variables here.  Variables of mismatched types will return `null`.
+                    input: {
+                      productId: +readField('productId'),
+                    }
+                  },
+                }) ?? {};
+
+                const reviewId = readField('id');
+                
+                return !! userActivity ?  userActivity.commentLikes.some(({ reviewId: id }) => id == reviewId) : false;
+              }
+            }
+          }
+        },
+        ProductAttributeValue: {
+          keyFields: false,
+          fields: {
+            value: {
+              read(_, { readField }) {
+                return readField('textValue')
+                || readField('booleanValue')
+                || readField('integerValue')
+                || readField('floatValue')
+                || readField('dateTimeValue')
+                || readField('dateValue');
+              }
+            }
           }
         }
-      }
+      },
     }),
   });
 }
@@ -89,7 +177,7 @@ export function initializeApollo(initialState = null) {
     _apolloClient.cache.restore({ ...existingCache, ...initialState });
   }
   // For SSG and SSR always create a new Apollo Client
-  if (typeof window === "undefined") return _apolloClient;
+  if (typeof window === 'undefined') return _apolloClient;
   // Create the Apollo Client once in the client
   if (!apolloClient) apolloClient = _apolloClient;
   return _apolloClient;

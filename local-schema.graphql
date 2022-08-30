@@ -1,0 +1,21 @@
+extend type ProductFlat {
+  mainCategory: Category
+  qty: Int
+}
+
+extend type ProductAttributeValue {
+  value: String
+}
+
+extend type Review {
+  userLike: Boolean
+  initials: String
+}
+
+extend type userActivityType {
+  productId: ID
+}
+
+extend type Category {
+  path: String
+}

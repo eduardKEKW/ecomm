@@ -6,16 +6,15 @@ import Image from 'next/image';
 import Link from 'components/helpers/LinkCustom';
 import Loading from 'components/helpers/Loading';
 import Price from 'components/Product/Price';
-import { shortenString } from 'helpers/helpers';
+import { getProductThumbnail, shortenString } from 'helpers/helpers';
 import style from 'styles/components/interactions.module.scss';
-import { CartItemInterface } from 'apollo/fragments/Cart.fragment';
-import { ProductInterface } from 'apollo/querys/Product.query';
+import { ProductFlat } from 'Graphql/generated/graphql';
 
 interface Props {
-    item: CartItemInterface & ProductInterface;
-    onDeleteProp?: (id: number) => void
+    item: ProductFlat & { quantity?: number }
+    onDeleteProp?: (id: string) => void
     type: string
-    onAddProps?: (id: number) => void,
+    onAddProps?: (id: string) => void,
     loading: boolean
 }
 
@@ -23,10 +22,11 @@ const Item = ({
     item: {
         id,
         name,
-        thumb,
+        thumbnail,
         price,
-        discount,
-        quantity
+        specialPrice,
+        quantity,
+        urlKey
     },
     onDeleteProp,
     onAddProps,
@@ -52,14 +52,14 @@ const Item = ({
             <Loading loading={loading} >
                 <>
                     <Image
-                        src={thumb}
+                        src={getProductThumbnail({ path: thumbnail })}
                         alt={name}
                         width="40"
                         height="20"
                         className={style.items__item__image}
                     />
 
-                    <Link href="/product" parentClassName={style.items__item__name}>
+                    <Link href={`/${id}?n=${urlKey}`} parentClassName={style.items__item__name}>
                         {
                             shortenString({
                                 str: name,
@@ -78,7 +78,7 @@ const Item = ({
                     }
 
                     <div className={style.items__item__price}>
-                        <Price price={price} discount={discount} />
+                        <Price price={price} specialPrice={specialPrice} />
                     </div>
 
                     <div className={[style.items__item__buttons, hover && style.animation_fadeUp].join(' ')}>

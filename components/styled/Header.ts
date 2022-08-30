@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import { fadeLeft } from './Animations';
+import { fadeDown, fadeLeft } from './Animations';
+import { breakpoints, media } from './Media';
 
 const createClasses = () => {
     const classes = new Array(10).fill(null).map((_, index) => `
@@ -15,76 +16,139 @@ export const SCategories = styled.div`
     display: flex;
     position: absolute;
     color: ${({ theme }) => theme.colors.grey};
-    top: 100%;
-    left: 0;
-    animation: ${fadeLeft} .3s both;
+    animation: ${fadeDown} .2s both;
     min-height: 25rem;
-    box-shadow: ${({ theme }) => theme.shadows.btn};
+    min-width: ${({ selectedCategory }) => selectedCategory ? '100%' : 'auto'};
     z-index: 9999;
+    opacity: 0;
+    font-weight: 400;
 
     & > ul {
+        border: solid 1px ${({ theme }) => theme.colors.black};
+        border-top: none;
+        border-right: ${({ selectedCategory }) => selectedCategory ? 'none' : 'auto'};
         position: relative;
-        box-shadow: ${({ theme }) => theme.shadows.container};
-        width: 13rem;
+        min-width: 11rem; 
+        width: 11rem;
         padding: .35rem .7rem;
-        font-size: .9rem;
+        font-size: 1rem;
         background: ${({ theme }) => theme.colors.white};
-        
+        color: black;
+        z-index: 1;
+
         li {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
-            margin: .7rem 0rem;
-            transition: padding .3s ease;
+            position: relative;
+            padding: .4rem 0rem;
 
-            & > span:last-child {
+            &:first-child {
+                margin-top: .7rem;
+            }
+
+            & > span:first-child {
+                flex: 1;
+                padding-left: .4rem;
                 display: flex;
-                justify-content: center;
-                align-items: center;
-                transition: transform .3s ease, opacity .3s ease;
-                transform: translateX(1rem);
-                opacity: 0;
+                justify-content: flex-start;
+                z-index: 1;
 
                 i {
+                    height: 1.5rem;
+                    width: 1.5rem;
                     display: flex;
                     justify-content: center;
                     align-items: center;
-                    border-radius: 50%;
-                    height: 1.2rem;
-                    font-size: .65rem;
-                    margin-left: .3rem;
-                    width: 1.2rem;
-                    background: ${({ theme }) => theme.colors.white};
-                    color: ${({ theme }) => theme.colors.main};
+                    position: relative;
+                    background: white;
+                    border: solid 1px ${({ theme }) => theme.colors.black};
+                    font-style: normal;
 
-                    box-shadow: ${({ theme }) => theme.shadows.main};
-                }   
+                    &:after {
+                        content: "";
+                        position: absolute;
+                        height: inherit;
+                        width: inherit;
+                        top: .15rem;
+                        left: .15rem;
+                        background: ${({ theme }) => theme.colors.black};
+                        z-index: -1;
+                    }
+                }            
+            }
+
+            & > span:last-child {
+                flex: 3;
+                padding: 0rem .3rem;
+            }
+
+            &:after {
+                content: "";
+                position: absolute;
+                top: 0%;
+                left: 0%;
+                width: 0%;
+                height: 100%;
+                background: ${({ theme }) => theme.colors.yellow};
+                transition: width .2s ease-in-out;
+                z-index: -1;
             }
         }
     }
 
     #selected {
-        border-left: 2px solid ${({ theme }) => theme.colors.main};
-        padding-left: .3rem;
-
-        & > span:last-child {
-            transform: translateX(0rem);
-            opacity: 1;
+        &:after {
+            width: 100%;
         }
+    }
+
+    &:after {
+        content: "";
+        position: absolute;
+        top: .2rem;
+        left: .2rem;
+        height: 100%;
+        width: 100%;
+        background: white;
+        border: solid 1px ${({ theme }) => theme.colors.black};
+        z-index: -1;
+    }
+
+    &:before {
+        content: "";
+        position: absolute;
+        top: .4rem;
+        left: .4rem;
+        height: 100%;
+        width: 100%;
+        background: white;
+        border: solid 1px ${({ theme }) => theme.colors.black};
+        box-shadow: ${({ theme }) => theme.shadows.container};
+        z-index: -1;
     }
 
 `;
 
+export const SCategoryItem = styled.li`
+    cursor: pointer;
+`
+
 export const SMenu = styled.div`
-    position: absolute;
-    top: 0%;
-    left: 13rem;
-    min-width: 60rem;
-    width: 57.8vw;
-    height: 25rem;
+    min-width: calc(100% - 11rem);
     background: white;
-    animation: ${fadeLeft} .3s both;
-    z-index: 999999;
+    border: solid 1px ${({ theme }) => theme.colors.black};
+    border-left: none;
+    animation: ${fadeLeft} .2s both;
+    z-index: 99;
+    
+    /* width: max(60%,  ${breakpoints.lg}); */
+
+    
+    ${media.lg`
+        /* background: black; */
+        min-width: calc(${breakpoints.lg} - 11rem);
+    `}
 
     & > ul {
         height: 25rem;
@@ -97,7 +161,6 @@ export const SMenu = styled.div`
         overflow-y: auto;
         overflow-x: hidden;
         scrollbar-width: none;
-        box-shadow: ${({ theme }) => theme.shadows.btn};
 
         & > li {
 
@@ -114,7 +177,7 @@ export const SMenu = styled.div`
                 }
             }
 
-            a:hover {
+            a:hover, a:focus {
                 text-decoration: underline;
             }
         }

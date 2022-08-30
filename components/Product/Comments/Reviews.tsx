@@ -1,11 +1,18 @@
-import { CommentsMetaInterface, RatingsInterface } from "apollo/querys/Comments.query";
 import { SDetails, SDetailsItem, SProgress, SReviews, STotal } from "components/styled/Product/Reviews";
+import produce from "immer";
 import React from "react";
 import { useMemo } from "react";
 import Stars from "../Stars";
 
-interface Props extends CommentsMetaInterface {
+interface Props {
+    avgRating?: number
+    ratingsCount?: RatingsMap[] | []
+    reviewCount?: number
+}
 
+interface RatingsMap { 
+    count?: number,
+    rating?: number
 }
 
 const Reviews = ({
@@ -13,14 +20,14 @@ const Reviews = ({
     ratingsCount = [],
     reviewCount = 0,
 }: Props): JSX.Element => {
-    const ratingsMap = useMemo(() => getRatingsMap(ratingsCount), [ratingsCount]);
+    const ratingsMap = useMemo(() => getRatingsMap(ratingsCount), [ratingsCount, reviewCount]);
 
-    return (
+    return (    
         <SReviews>
             <STotal>
                 <div>
-                    <span>{avgRating.toFixed(2)}</span>
-                    <span><Stars rating={+avgRating.toFixed(1)} /></span>
+                    <span>{avgRating?.toFixed(2)}</span>
+                    <span><Stars rating={+avgRating?.toFixed(1)} /></span>
                     <span>{reviewCount} total reviews</span>
                 </div>
             </STotal>
@@ -47,15 +54,17 @@ const Reviews = ({
 
 const reviewsColors = ['#03f710','#34ca39' ,'#ffc400', '#ff9900', '#f00d0d'];
 
-const getRatingsMap = (data: RatingsInterface[]): {[key: number]: number} => {
-    return data.reduce((acc, { amount, stars }) => {
-        return {
-            ...acc,
-            [stars]: amount
-        }
+const getRatingsMap = (data: RatingsMap[]): any => {
+    return data.reduce((acc, { rating, count }) => {
+        return produce(acc, (accDraft) => {
+            accDraft[rating] = count
+        })
     }, {});
 }
 
-export default React.memo(Reviews, (prev, curr) => {
-    return prev.avgRating == curr.avgRating
+export default React.memo(Reviews, (prevProps, nextProps) => {
+    if(!! prevProps.reviewCount) {
+        return true;
+    }
+    return false;
 });

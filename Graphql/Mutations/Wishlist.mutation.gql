@@ -1,0 +1,23 @@
+mutation addToWishlist ($input: AddToWishlistInput!) {
+    addToWishlist(input: $input) {
+        wishlist {
+            product {
+                productFlat {
+                    ...productFlatFragment
+                }
+            }
+        }
+    }
+}
+
+mutation removeFromWishlist ($input: AddToWishlistInput!) {
+    removeFromWishlist(input: $input) {
+        wishlist {
+            product {
+                productFlat {
+                    ...productFlatFragment
+                }
+            }
+        }
+    }
+}

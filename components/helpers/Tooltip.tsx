@@ -1,11 +1,11 @@
-import React, {useEffect, useState} from 'react'
+import React, {ReactNode, useEffect, useState} from 'react'
 
 import styles from 'styles/components/tooltip.module.scss';
 
 interface Props {
-    children?: JSX.Element | React.Component | string
+    children?: ReactNode
     className?: any
-    content: JSX.Element | React.Component | string
+    content: ReactNode
     minWidth?: string
     contentStyle?: React.CSSProperties
     position?: "bottom" | "left"
@@ -18,13 +18,16 @@ const Tooltip = ({ children, content, minWidth, contentStyle, position = "bottom
     const [show, setShow] = useState<boolean>(false);
 
     useEffect(() => {
-        setShow(contentHover || parentHover);
+        // setTimeout(() => {
+            setShow(contentHover || parentHover);
+        // }, (contentHover || parentHover) ? 0 : 550)
     }, [contentHover, parentHover])
 
     if(! content) return <>{children}</>
     
     return (
         <div
+            style={{ zIndex: 99 }}
             {...props}
             onMouseEnter={() => setParentHover(true)}
             onMouseLeave={() => setParentHover(false)}
@@ -37,9 +40,7 @@ const Tooltip = ({ children, content, minWidth, contentStyle, position = "bottom
                     ${show && (position == "left" ? styles.animation_tooltip_left : styles.animation_tooltip)}
                 `}
                 style={{ 
-                    minWidth: minWidth ?? "",
-                    transform: position == "left" ? "translateX(-95%)" : "translateX(-50%)",
-                    borderRight: position == "left" ? "solid 1rem transparent" : ""
+                    minWidth: minWidth,
                 }}
                 onMouseEnter={() => setContentHover(true)}
                 onMouseLeave={() => setContentHover(false)}
@@ -48,11 +49,6 @@ const Tooltip = ({ children, content, minWidth, contentStyle, position = "bottom
                     <div className={styles.tooltip__content__wrap} style={{ 
                             top: position == "left" ? "50%" : "0%",
                             left: position == "left" ? "100%" : "50%",
-                            transform: position == "left" 
-                            ?
-                                `translateX(-20%) translateY(15%) rotate(90deg)`
-                            :
-                                `translateX(-50%) translateY(15%)`
                          }} >
                         <div className={styles.tooltip__content__wrap_arrow} />
                     </div>

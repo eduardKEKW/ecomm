@@ -1,0 +1,25 @@
+query cartDetail {
+    cartDetail {
+        id
+        itemsCount
+        itemsQty
+        globalCurrencyCode
+        grandTotal
+        baseGrandTotal
+        subTotal
+        discountAmount
+        baseTaxTotal
+        allItems {
+            cartId
+            id
+            quantity
+            total
+            basePrice
+            discountPercent
+            discountAmount
+            productFlat {
+                ...productFlatFragment
+            }
+        }
+    }
+}

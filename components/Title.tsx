@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from './helpers/LinkCustom'
-import { STitle } from './styled/Title'
+import { theme } from './styled/Theme'
+import { STitle, STitleReverse } from './styled/Title'
 
 interface Props {
     name: string 
@@ -8,21 +9,27 @@ interface Props {
     style?: React.CSSProperties
     gridArea?: string
     href?: string
+    background?: string
+    reverse?: boolean
 }
 
-function Title({ name, description, style, gridArea, href }: Props) {
+function Title({ name, description, style, gridArea, href, background = theme.colors.background, reverse = false }: Props) {
+    const TitleComponent = reverse ? STitleReverse : STitle;
 
     return (
-        <STitle gridArea={gridArea} showAfter={!! description} style={style} >
-            {
-                href 
-                ?
-                    <Link href="#"><h3>{name}</h3></Link> 
-                :    
-                    <h3>{name}</h3>
-            }
+        <TitleComponent background={background} gridArea={gridArea} showAfter={!! description} style={style} >
+            <div>
+                {
+                    href 
+                    ?
+                        <Link href="#"><h2>{name}</h2></Link> 
+                    :    
+                        <h2>{name}</h2>
+                }
+            </div>
+
             {description && <p>{description}</p>}
-        </STitle>
+        </TitleComponent>
     )
 }
 

@@ -1,0 +1,22 @@
+query searchProduct(
+        $input: SearchProductInput,
+        $locale: String = "en",
+        $first: Int = 5,
+        $page: Int = 1
+    ) {
+        searchProduct(input: $input, first: $first, page: $page) {
+            data {
+                productFlat(locale: $locale) {
+                    ...productFlatFragment
+                }
+                categories {
+                    name
+                    slug
+                    id
+                    __typename
+                }
+                __typename
+            }
+            __typename
+        }
+}

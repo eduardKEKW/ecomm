@@ -9,20 +9,27 @@ interface Props {
     slidesCount: number
     perPage?: number
     height?: string
-    showDotsNavigation?: boolean,
+    showDotsNavigation?: boolean
     navigation?: "inside" | "outside"
+    gap?: number
+    navigationInside?: boolean
+    isExtended?: boolean
+    // itemWidth: number
 }
 
-const getCarouselNavigation = ({ slidesCount, width = 100 }): Array<string | null> => {
-    return [
-        null,
-        ...(new Array(slidesCount).fill(0).map((_, index) => `translateX(-${index * width}%)`)),
-        null
-    ];
-}
-
-function Carousel({ gridArea, children, slidesCount, perPage = 1, height, showDotsNavigation = true, navigation = "inside" }: Props) {
-    const gap                           = perPage == 1 ? 0 : 2;
+function Carousel({
+        gap: propGap = 2,
+        gridArea, 
+        children, 
+        slidesCount, 
+        perPage = 1, 
+        height, 
+        showDotsNavigation = true, 
+        navigation = "inside",
+        navigationInside = false,
+        isExtended = false
+    }: Props) {
+    const gap                           = perPage == 1 ? 0 : propGap;
     const [currentItem, setCurrentItem] = useState<number>(0);
     const [width, pages]                = useMemo(() => [
         `${(100 / perPage) - (gap - (gap / perPage))}%`,
@@ -31,13 +38,19 @@ function Carousel({ gridArea, children, slidesCount, perPage = 1, height, showDo
     
     return (
         <SCarousel gridArea={gridArea} >
-            <SContent gap={`${gap}%`}  width={width} height={height} transform={`translateX(-${(currentItem * 100) + (currentItem * gap)}%)`}  perPage={perPage} >
+            <SContent 
+                isExtended={isExtended} 
+                gap={`${gap}%`} 
+                width={width} 
+                height={height} 
+                transform={`translateX(-${(currentItem * 100) + (currentItem * gap)}%)`}  
+                perPage={perPage} >
                 <div>
                     {children}
                 </div>
             </SContent>
 
-            <SNavigation navigation={navigation}>
+            <SNavigation navigation={navigation} navigationInside={navigationInside}>
                 <section>
                     <a
                         onClick={() => setCurrentItem(Math.max(currentItem - 1, 0))} 

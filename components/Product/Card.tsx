@@ -1,124 +1,148 @@
 import { faHeart } from '@fortawesome/free-regular-svg-icons';
 import { faHeart as faHeartFull } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ProductInterface } from 'apollo/querys/Product.query';
 import Link from 'components/helpers/LinkCustom';
-import Skeleton from 'components/helpers/Skeleton';
-import { SProductCard, SProductCardBody, SProductCardHeader } from 'components/styled/Product/Card'
-import { shortenString } from 'helpers/helpers';
-import { options } from 'hooks/useFavorite.hook';
+import { SKELETONS } from 'components/helpers/Skeleton';
+import { SProductCard, SProductCardBody, SProductCardContent, SProductCardHeader, STagRibboneAndOutline, STags } from 'components/styled/Product/Card'
+import { getProductThumbnail, shortenString } from 'helpers/helpers';
+import { setFavoriteInterface } from 'hooks/useFavorite.hook';
 import Image from "next/image";
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import Price from './Price';
-import Rating from './Rating';
+import Rating, { TagInterface } from './Rating';
+import { faCartArrowDown } from '@fortawesome/free-solid-svg-icons';
+import useCart from 'hooks/useCart.hook';
+import Loading from 'components/helpers/Loading';
+import { theme } from 'components/styled/Theme';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { ProductFlatFragmentFragment } from 'Graphql/generated/graphql';
 
 interface Props {
-    product: ProductInterface
-    loading: boolean
-    setFavoriteItems: (options?: options) => any
+    product: ProductFlatFragmentFragment   
+    skeletonLoading: boolean
+    setFavoriteItems: (options: setFavoriteInterface) => void
     isFavorited: boolean
 }
 
-function Card({ product, loading, setFavoriteItems, isFavorited }: Props) {
-    const [favorited, setFavorite]          = useState<boolean>(isFavorited)
-    const [selectedColor, setSelectedColor] = useState<number | null>(0)
+function Card({ product, skeletonLoading, setFavoriteItems, isFavorited }: Props) {
+    const [favorited, setFavorite]  = useState<boolean>(isFavorited);
+    const [loading, setLoading]     = useState<boolean>(false);
+    const [_, mutateCartItems]      = useCart();
 
     useEffect(() => setFavorite(isFavorited) ,[isFavorited])
 
-    return (
-        <Skeleton loading={loading} name="card">
-            <>
-                <SProductCard>
-                    <SProductCardHeader animate={favorited}>
-                        <div>
-                            <Link href={`/${product.slug}`}>
-                                <Image src={product.thumb} layout="fill" objectFit="contain" alt={product.thumb} />
-                            </Link>
-                        </div>
+    const addToCart = (id: string) => {
+        setLoading(true);
+        mutateCartItems({
+            detach: false,
+            productId: product.id,
+            qty: 1
+        }).finally(() => {
+            setLoading(false);
+        });
+    }
 
-                        <div id="favorite" onClick={() => {
-                                setFavorite((v) => ! v)
-                                setFavoriteItems({
-                                    variables: {
-                                        items: [product.id],
-                                        detach: favorited
-                                    }
-                                })
-                            }
-                        }>
-                            {
-                                favorited 
+    const addToFavorite = () => {
+        setFavorite((v) => ! v)
+        setFavoriteItems({
+            detach: favorited,
+            productId: product.id
+        })
+    }
+
+    const tags = useMemo<TagInterface[]>(() => {
+        return product && [
+            {
+                color: theme.colors.red,
+                name: 'stock',
+                condition: product.qty === 0,
+                value: 'No Stock'
+            },
+            {
+                condition: !! product.specialPrice,
+                color: theme.colors.red,
+                name: 'price',
+                value: `-${product.specialPrice}%`
+            }
+        ]
+    }, [product]);
+
+    if(skeletonLoading) return SKELETONS["card"]("card");
+
+    return (
+        <SProductCard title={product.name}>
+            <SProductCardContent>
+                <SProductCardHeader animate={favorited}>
+                    <div>
+                        <Link href={`/${product.id}?n=${product.urlKey}`}>
+                            <Image 
+                                src={getProductThumbnail({ path: product.thumbnail })}
+                                layout="fill" 
+                                objectFit="contain" 
+                                alt={product?.name} 
+                            />
+                        </Link>
+                    </div>
+
+                    <div className="favorite" onClick={() => addToFavorite()}>
+                        {
+                            favorited 
                                 ?
                                     <i style={{ color: "red" }}><FontAwesomeIcon icon={faHeartFull} /></i>
                                 :
-                                    <i><FontAwesomeIcon icon={faHeart} /></i> 
-                            }
-                        </div>
-
-                        {
-                            ! product.disponibility && (
-                                <>
-                                    <div id="header" />
-                                    <div id="stoc" >{product.disponibility ? `In Stock` : `Out Of Stock`}</div>
-                                </>
-                            )
+                                    <i><FontAwesomeIcon icon={faHeart as IconProp} /></i> 
                         }
-                    </SProductCardHeader>
+                    </div>
+                </SProductCardHeader>
 
-                    <SProductCardBody>
-                        <Link href="#">
-                            <span id="name">
-                                {shortenString({ str: product.name, word: true, count: 5, safeMax: 40 })}
-                                
-                            </span>
-                        </Link>
+                <STags>
+                    {
+                        tags.filter(tag => !! tag.condition).map(tag => 
+                            <STagRibboneAndOutline key={tag.name} color={tag.color}>
+                                <span>{tag.value}</span>
+                            </STagRibboneAndOutline>
+                        )
+                    }
+                </STags>
 
-                        <span id="category" ><Link href="#">{product.category}</Link></span>
-                        
-                        <div id="rating">
-                            <Rating product={product} tags={['discount']} />
+                <SProductCardBody disable={loading}>
+
+                    <Link href={`/${product.id}?n=${product.urlKey}`}>
+                        <span title={product.name} className="name">
+                            {shortenString({ str: product.name, word: true, count: 15, safeMax: 60 })}
+                        </span>
+                    </Link>
+
+                    <span className="category" >
+                        {!! product?.mainCategory?.slug && <Link href={product?.mainCategory?.path}>{product?.mainCategory?.name}</Link> }
+                    </span> 
+                    
+                    <div className="rating">
+                        <Rating product={product} />
+                    </div>
+
+                    <div className="info" onClick={() => addToCart(product.id)}>
+                        <div className='info_container'>
+                            <Loading loading={loading}>
+                                <>
+                                    <div className='add_to_cart' >
+                                        <FontAwesomeIcon icon={faCartArrowDown} />
+                                    </div>
+
+                                    <div className='product_price' >
+                                        <Price price={product.price} specialPrice={product.minPrice} showDiscount={product.minPrice !== product.price} color="white" style={{ 
+                                            justifyContent: "center"
+                                        }} />
+                                    </div>
+                                </>
+                            </Loading>
                         </div>
+                    </div>
 
-                        <div id="colors">
-                            {
-                                product.color && (
-                                    <>
-                                        <span>colors</span>
-                                        <div>
-                                            {
-                                                product.color.map((color, index) => {
-                                                    return (
-                                                        <div 
-                                                            onClick={() => setSelectedColor(index)}
-                                                            style={{
-                                                                border: selectedColor == index ? `solid 1px ${color}` : ""
-                                                            }} 
-                                                            key={index}
-                                                        >
-                                                            <div style={{
-                                                                background: color
-                                                            }}></div>
-                                                        </div>
-                                                    )
-                                                })
-                                            }
-                                        </div>
-                                    </>
-                                )
-                            }
-                        </div>
-
-                        <div id="price">
-                            <Price price={product.price} discount={product.discount} showDiscount={true} color="white" />
-                        </div>
-
-                        <div id="add">
-                        </div>
-                    </SProductCardBody>
-                </SProductCard>
-            </>
-        </Skeleton>
+                </SProductCardBody>
+            </SProductCardContent>
+        </SProductCard>
     )
 }
 
-export default Card
+export default React.memo(Card)

@@ -1,34 +1,32 @@
 import styled from 'styled-components';
+import { breakpoints, media } from '../Media';
 
 export const SProductGrid = styled.main`
-  /* width: 70%;
-  min-width: 75rem;
-  margin: 0 auto; */
-  /* width: 100%; */
+  width: max(60%,  ${breakpoints.lg});
   min-height: 100vh;
-  min-width: 100rem;
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   grid-template-areas:
-    "product product product product product product"
-    ". attributes  attributes  attributes  attributes   ."
-    ". description description description description  ."
-    ". review      review      review      review       ."
-    "comments comments comments comments comments comments"
-    ". recommended recommended recommended recommended  .";
+    " product product "
+    " attributes  attributes       "
+    " description description    "
+    " review      review                   "
+    " comments comments   "
+    " recommended recommended    ";
 `;
 
 export const SProduct = styled.section`
-  background: white;
   grid-area: ${({ gridArea }) => gridArea};   
   min-height: 100vh;
+  margin: 0 auto;
   padding-bottom: 15%;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   grid-template-areas:
-    ". breadcrumbs breadcrumbs breadcrumbs breadcrumbs ."
-    ". title       title       title       title       ."
-    ". slider      info      info        actions     .";
+    " breadcrumbs breadcrumbs breadcrumbs breadcrumbs "
+    " title       title       title       title       "
+    " slider      info      info        actions     ";
 `;
 
 export const SInfo = styled.section`
@@ -90,13 +88,19 @@ export const SDescription = styled.section`
   font-size: 1rem;
   padding: 2.5rem 0rem;
   min-height: 5rem;
+
+  div {
+    & > h1 {
+      background: transparent !important;
+    }
+  }
 `
 
 export const SAttributes = styled.section`
   grid-area: ${({ gridArea }) => gridArea};
-  padding: 2.5rem 0rem;
   
   & > ul {
+    padding: 2.5rem 0rem;
 
     & > li {
       display: flex;

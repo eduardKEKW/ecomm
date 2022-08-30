@@ -5,8 +5,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    padding-right: .3rem;
-    font-weight: 400;
+    justify-content: flex-start;
+    font-weight: 200;
     font-size: inherit;
     color: $colorMain;
     -webkit-text-stroke: 0.45px;

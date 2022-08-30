@@ -33,19 +33,19 @@ const Header = () => {
 
             <div className={styles.menu}>
                 <div className={styles.menu__items}>
-                        <Categories show={showMenu} setMenuHover={(value) => setMenuHover(value)}>
-                            <div 
-                                className={[styles.menu__items__item, showMenu && styles.menu_selected].join(' ')} 
-                                onMouseEnter={() => setShowHoverCategoriesMenu(true)}
-                                onMouseLeave={() => setShowHoverCategoriesMenu(false)}
-                            >
-                                <Link href="/">                                
-                                    <div>
-                                        <FontAwesomeIcon icon={faBars} className={styles.menu__items__icon} /> Products
-                                    </div>
-                                </Link>
-                            </div>
-                        </Categories>
+                    <Categories show={showMenu} setMenuHover={(value) => setMenuHover(value)}>
+                        <div 
+                            className={[styles.menu__items__item, showMenu && styles.menu_selected].join(' ')} 
+                            onMouseEnter={() => setShowHoverCategoriesMenu(true)}
+                            onMouseLeave={() => setShowHoverCategoriesMenu(false)}
+                        >
+                            <Link href="/">                                
+                                <div>
+                                   <i><FontAwesomeIcon icon={faBars} /></i> <span>Products</span>
+                                </div>
+                            </Link>
+                        </div>
+                    </Categories>
                     <div className={styles.menu__items__item}>
                         <Link href="/">     
                             <div> 

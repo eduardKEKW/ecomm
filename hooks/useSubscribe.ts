@@ -1,37 +1,48 @@
-import { ApolloCache, DefaultContext, MutationFunctionOptions, useMutation } from "@apollo/client";
-import { ApolloError } from "@apollo/react-hooks";
 import { faEnvelope } from "@fortawesome/free-regular-svg-icons";
+import { NewsletterSubscriberMutationVariables, useNewsletterSubscriberMutation } from "Graphql/generated/graphql";
 import { addNotificationAction } from "Providers/Actions";
 import { useGlobalDispatch } from "Providers/GlobalProvider.provider";
-import { responseBodyInterface, SubscribeInterface, SubscribeVarsInterface, SUBSCRIBE_MUTATION } from "../apollo/mutations/Subscribe.mutator";
+import { useEffect, useState } from "react";
+import useUser from "./useUser";
 
 interface Props {
-    variables?: SubscribeVarsInterface   
+    variables?: NewsletterSubscriberMutationVariables   
 }
 
-interface useSubscriptionReturn {
-    response: responseBodyInterface
-    loading: boolean
-    called: boolean
-    error: ApolloError
-}
-
-const useSubscription = ({ variables }: Props): [useSubscriptionReturn, typeof mutatateSubscription] => {
+const useSubscription = ({ variables }: Props): [typeof response & { isSubscribed: boolean, defaultAddress: string}, typeof mutatateSubscription] => {
     const dispatchGlobalState = useGlobalDispatch();
+    const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
+    const { isGuest, user} = useUser();
     
-    const [mutatateSubscription, { data, loading, called, error }] = useMutation<SubscribeInterface, SubscribeVarsInterface>(SUBSCRIBE_MUTATION, {
+    const [mutatateSubscription, response] = useNewsletterSubscriberMutation({
         variables: variables,
-        onCompleted: ({ Subscribe }) => {
+        onCompleted: ({ }) => {
+            setIsSubscribed(true);
+
             dispatchGlobalState(addNotificationAction({
                 status: true,
-                description: Subscribe.message,
+                description: "Subscribed !",
                 time: 5000,
                 icon: faEnvelope,
+                title: "Subscribed to newsletter."
             }));
         }
     });
 
-    return [{ response: data?.Subscribe, loading, called, error }, mutatateSubscription];
+    useEffect(() => {
+        if(! isGuest) {
+            setIsSubscribed(!! user?.accountInfo?.customer?.subscribedToNewsLetter);            
+        }
+    }, [isGuest])
+
+    return [
+        {
+            ...response, 
+            isSubscribed: isSubscribed,
+            defaultAddress: user?.accountInfo?.customer?.email
+        },
+        mutatateSubscription
+    ];
 }
 
 export default useSubscription;

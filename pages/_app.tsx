@@ -3,7 +3,6 @@ import '../styles/_globals.scss';
 import Header from '../components/Layouts/Header';
 import Footer from '../components/Layouts/Footer';
 import Notification from '../components/Notification';
-import { ApolloProvider } from '@apollo/react-hooks';
 import { useApollo } from '../apollo-client';
 import { GlobalProvider } from '../Providers/GlobalProvider.provider';
 
@@ -14,26 +13,27 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Loading from 'components/helpers/Loading';
+import { ApolloProvider } from '@apollo/client';
 
-function MyApp({ Component, pageProps: { apolloCache, ...props } }) {
-  const apolloClient = useApollo(apolloCache);
+function MyApp({ Component, pageProps}) {
+  const apolloClient = useApollo(pageProps.apolloCache);
 
   return (
     <ApolloProvider client={apolloClient}>
       <ThemeProvider theme={theme}>
         <GlobalProvider>
-          <LoadingPageChange>
-            <DefaultLayout title={props.title}> 
-              <Component {...props} />
-            </DefaultLayout>
-          </LoadingPageChange>
+          <PageLoader>
+            <Component.Layout title={pageProps.title}> 
+              <Component {...pageProps} />
+            </Component.Layout>
+          </PageLoader>
         </GlobalProvider>
       </ThemeProvider>
     </ApolloProvider>
   )
 }
 
-const LoadingPageChange = ({ children }): JSX.Element => {
+const PageLoader = ({ children }): JSX.Element => {
   const [pageChanging, setPageChanging] = useState<boolean>(false);
   const router = useRouter();
 
@@ -73,8 +73,11 @@ const LoadingPageChange = ({ children }): JSX.Element => {
     )
 }
 
-const DefaultLayout = ({ children, title }) => {
-
+export interface DefaultLayoutProps {
+  children: JSX.Element
+  title: string
+}
+export const DefaultLayout = ({ children, title }: DefaultLayoutProps) => {
   return (
     <>
       <PageHead title={title} />
@@ -82,13 +85,13 @@ const DefaultLayout = ({ children, title }) => {
       <>
         { children }
       </>
-      <Footer />
       <Notification />
+      <Footer />
     </>
   )
 }
 
-const PageHead = ({ title }) => {
+export const PageHead = ({ title }) => {
   return (
     <Head>
       <title>{title}</title>

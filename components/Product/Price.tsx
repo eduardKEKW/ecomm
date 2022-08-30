@@ -9,17 +9,25 @@ interface Props {
     color?: string
     style?: React.CSSProperties
     showTva?: boolean
+    specialPrice?: string | number
 }
 
-const Price = ({ price, discount, showDiscount = true, color, style, showTva = false }: Props) => {
-
-    let specialPrice    = (price - ((discount/100) * price)).toFixed(2);
-    let initialPrice    = price.toFixed(2);
-
-    let [speacialPriceFormat, specialPriceDec]  = formatPrice(specialPrice);
-    let [initialPriceFormat, initialPriceDec]   = formatPrice(initialPrice);
+const Price = ({ 
+        price,
+        specialPrice = 0,
+        discount,
+        color,
+        style,
+        showTva = false,
+        showDiscount = true
+    }: Props) => {
+    let discountedPrice    = discount ? (price - ((discount/100) * price)).toFixed(2) : Number.parseFloat(specialPrice as string).toFixed(2);
+    let initialPrice       = price?.toFixed(2);
     
-    if(! discount) {
+    let [speacialPriceFormat, specialPriceDec]  = formatPrice(discountedPrice);
+    let [initialPriceFormat, initialPriceDec]   = formatPrice(initialPrice);
+   
+    if(! discount && ! specialPrice) {
         [speacialPriceFormat, specialPriceDec] = [initialPriceFormat, initialPriceDec];
     }
 
@@ -27,7 +35,7 @@ const Price = ({ price, discount, showDiscount = true, color, style, showTva = f
         <div className={styles.price} style={style}>
            <div 
                 style={{ 
-                    color: color || (discount ? "rgb(255, 89, 89)" : "#70cadf")
+                    color: color || (discount || specialPrice ? "rgb(255, 89, 89)" : "#70cadf")
                 }}
                 className={styles.price__last}
            >
@@ -40,23 +48,24 @@ const Price = ({ price, discount, showDiscount = true, color, style, showTva = f
                <span>RON</span>
            </div>
 
-           { showDiscount && discount &&
-                (
-                    <div 
-                        className={`${styles.price__last} ${styles.price__old}`}
-                        style={{ 
-                            color: color
-                        }}
-                    >
+           {
+                !! showDiscount && !! (discount || specialPrice) &&
+                    (
                         <div 
-                                // data-after-content={initialPriceDec}
-                                className={styles.price__round}
-                            >
-                                {initialPriceFormat}
+                            className={`${styles.price__last} ${styles.price__old}`}
+                            style={{ 
+                                color: color
+                            }}
+                        >
+                            <div 
+                                    // data-after-content={initialPriceDec}
+                                    className={styles.price__round}
+                                >
+                                    {initialPriceFormat}
+                            </div>
+                            <span>RON</span>
                         </div>
-                        <span>RON</span>
-                    </div>
-                )
+                    )
            }
 
             {
@@ -70,8 +79,7 @@ const Price = ({ price, discount, showDiscount = true, color, style, showTva = f
     )
 }
 
-const formatPrice = (price: number | string): string[] => {
-
+const formatPrice = (price: number | string = 0): string[] => {
     const dec: string = price.toString().split('.').slice(-1)[0];
     const formatPrice: string = price.toString().split('.').slice(0, -1).join('.');
 

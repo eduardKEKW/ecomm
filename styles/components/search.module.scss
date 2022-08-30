@@ -2,14 +2,14 @@
 
 .search {
     @include flex-center;
-    flex: 6;
+    flex: 5;
     z-index: 999;
     font-weight: 200;
     position: relative;
 
     &__input {
         min-width: 100%;
-        border: 1px solid rgba(128, 128, 128, 0.37);
+        border: solid 1px #2d3b3e;
         padding: .7rem 3rem .7rem;
         height: 2.5rem;
         outline: 0;
@@ -20,21 +20,18 @@
         font-weight: 200;
         overflow: hidden;
         box-shadow: $shadowBtn;
-        
+
         &::placeholder {
-            color: rgba(128, 128, 128, 0.637);
+            color: #2d3b3e;
             font-size: .9rem;
         }
 
         &:focus {
             box-shadow: $shadowInputMain;
-            border: 1px solid $shadowSuggestions;
-            border: none;
         }
 
         &_on_search {
-            border-bottom-right-radius: 0rem;
-            border-bottom-left-radius: 0rem;
+            border: solid 2px $colorBlack;
             border-bottom: none;
             
             &:focus {
@@ -47,13 +44,10 @@
         top: 0%;
         left: 0%;
         position: absolute;
-        border-bottom-left-radius: .3rem;
-        border-top-left-radius: .3rem;
         width: 2.5rem;
         height: 100%;
         color: $white;
         background: $colorRed;
-        border: none;
         outline: 0;
         font-size: 1rem;
         cursor: pointer;
@@ -62,10 +56,18 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        border: solid 1px #2d3b3e;
+        border-right: none;
 
         &:hover {
             // color: $colorBlack
         }
+    }
+    
+    &__search_selected {
+        border: none;
+        border-top: solid 2px $colorBlack;
+        border-left: solid 2px $colorBlack;
     }
 
     &__button_erase {
@@ -80,7 +82,7 @@
         z-index: 99;
         transition: color .25s;
         opacity: 0;
-        color: $colorGrey;
+        color: $colorBlack;
         
         &:hover {
             color: $colorBlack;
@@ -90,14 +92,41 @@
     &__suggestions {
         @include flex-center;
         flex-direction: column;
-        width: 0%;
+        width: 100%;
+        overflow: visible;
         position: absolute;
         top: 100%;
-        padding-top: .4rem;
+        color: $colorBlack;
         background-color: $white;
         box-shadow: $shadowSuggestions;
+        border: solid 2px $colorBlack;
         border-top: none;
-        overflow: hidden;
+
+        &:after {
+            content: "";
+            position: absolute;
+            top: .4rem;
+            left: .4rem;
+            width: 100%;
+            height: calc(100% + 2.5rem);
+            transform: translateY(-2.5rem);
+            background: $white;
+            border: solid 2px $colorBlack;
+            z-index: -1;
+        }
+    
+        &:before {
+            content: "";
+            position: absolute;
+            top: .7rem;
+            left: .7rem;
+            width: 100%;
+            height: calc(100% + 2.5rem);
+            transform: translateY(-2.5rem);
+            background: $white;
+            border: solid 2px $colorBlack;
+            z-index: -1;
+        }
 
         &_separator {
             height: .1rem;
@@ -117,7 +146,7 @@
         
         &_item {
             @include flex-center;
-            // font-weight: 400;
+            font-weight: 400;
             position: relative;
             padding: 1rem .5rem;
             transition: background .3 ease-in;
@@ -126,13 +155,13 @@
             &_category {
                 @include ribbone;
                 margin-bottom: .5rem;
-                width: 102.5%;
+                width: calc(100% + .65rem);
                 padding: .2rem 1rem;
                 transform: translateX(-.65rem);
                 text-align: left;
-                font-size: .8rem;
+                font-size: 1rem;
                 background: $colorMain;
-                box-shadow: $shadowRibbone;
+                box-shadow: $colorBlack;
                 color: $white;
 
                 &:hover {
@@ -172,8 +201,7 @@
     }
 
     &__more {
-        width: 100%;
-        margin-top: 1rem;
+        margin-bottom: 1rem;
     }
 
     &__wrapper {
@@ -181,8 +209,14 @@
         top: 0rem;
         left: 0rem;
         width: 100vw;
-        height: 100vh;
+        height: 100%;
         background-color: rgba(0, 0, 0, 0.226);
         z-index: 99;
     }
+}
+
+.hide_suggestions {
+    width: 0%;
+    overflow: hidden;
+    border: none;
 }

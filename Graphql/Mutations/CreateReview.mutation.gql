@@ -1,0 +1,12 @@
+mutation createReview (
+    $input: CreateReviewInput!
+) {
+  createReview (input: $input
+  ) {
+    review {
+      id
+      productId
+    }
+    success
+  }
+}

@@ -1,0 +1,12 @@
+mutation LikeReview (
+    $commentId: ID
+) {
+  LikeReview(commentId: $commentId) {
+    status
+    message
+    review {
+      likes
+      id
+    }
+  }
+} 

@@ -14,7 +14,7 @@ const Create = ({ productId, border }: Props): JSX.Element => {
     return (    
         <SCreate border={border} >
             <ButtonMain onClick={() => router.push(`/create/comment/${productId}`)}>
-                Leave a Review
+                Write a Review
             </ButtonMain>
             <div>
                 <Stars onChange={(v) => router.push(`/create/comment/${productId}`)} />

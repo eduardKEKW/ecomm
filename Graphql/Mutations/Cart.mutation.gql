@@ -1,0 +1,16 @@
+mutation addItemToCart ($input: AddItemToCartInput!){
+    addItemToCart(input: $input) {
+        status
+        message
+        cart {
+            isGuest
+        }
+    }
+}
+
+mutation removeCartItem ($id: ID!) {
+    removeCartItem(id: $id) {
+        status
+        message
+    }
+}

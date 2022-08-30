@@ -5,34 +5,38 @@ export const SCarousel = styled.div`
     width: 100%;
     position: relative;
 
-    
     &:hover aside section a {
         opacity: .8;
     }
 `;
 
 export const SContent = styled.div`
-    width: 100%;
-    overflow-x: hidden;
+    overflow: ${({ isExtended }) => isExtended ? "clip" : "hidden"};
+    overflow-clip-margin: 1rem;
     scroll-snap-type: x mandatory;
     scroll-behavior: smooth;
 
     & > div {
         display: flex; 
+        height: ${({ height }) => height};
         transform: ${({ transform }) => transform};
         transition: transform .2s ease-in-out;
         gap: ${({ gap }) => gap};
 
-        & > div {   
+        & > div {
+            &:first-child {
+                /* margin-left: 1rem; */
+            }  
 
             &:nth-child(${({ perPage }) => perPage}n) {
-                /* margin-right: 2%; */
+                /* margin-right: 0rem; */
             }
 
             scroll-snap-align: start;
             flex-shrink: 0;
+            /* width: calc(${({ width }) => width} - (2rem / 6)); */
             width: ${({ width }) => width};
-            height: ${({ height }) => height };
+            height: ${({ height }) => height};
             position: relative;
         }
     }
@@ -40,21 +44,31 @@ export const SContent = styled.div`
 
 export const SNavigation = styled.aside`
     section:first-child {
+        
+        a:nth-child(1) {
+            @media (max-width: 1400px) {
+                left: 0%;
+            }
+        }
+
         a:nth-child(2) {
             left: ${({ navigation }) => (navigation == "outside" ? "104%" : "99%")};
             transform: translateX(-100%) translateY(-50%);
+                        
+            @media (max-width: 1400px) {
+                left: 100%;
+            }
         }
 
         a {
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
+            transform: translateY(-50%);    
             left: ${({ navigation }) => (navigation == "outside" ? "-4%" : "1%")};
-            border-radius: .2rem;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: solid 1px black;
+            border: solid 1px ${({ theme }) => theme.colors.black};
             background: white;
             cursor: pointer;
             opacity: .3;
@@ -62,8 +76,7 @@ export const SNavigation = styled.aside`
             width: 2rem;
             height: 4rem;
             box-shadow: ${({ theme }) => theme.shadows.main};
-            border: none;
-            
+
             i {
                 color: ${({ theme }) => theme.colors.main};
                 font-size: 1rem;
@@ -77,7 +90,7 @@ export const SNavigation = styled.aside`
 
     section:last-child {
         position: absolute;
-        top: 95%;
+        top: ${({ navigationInside }) => navigationInside ? '95%' : '102%'};
         left: 50%;
         transform: translateX(-50%);
         z-index: 99;
@@ -89,7 +102,6 @@ export const SNavigation = styled.aside`
             width: 1rem;
             height: 1rem;
             margin-right: .3rem;
-            border-radius: 50%;
             transition: background .2s ease;
             background: white;
             background: grey;

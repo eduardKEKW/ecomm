@@ -1,6 +1,7 @@
 import { NotificationInterface } from 'components/Notification';
+import produce from 'immer';
 import { createContext, useContext, useReducer } from 'react';
-import { DEFAULT_ACTION, ADD_NOTIFICATION_ACTION, CANCEL_NOTIFICATION_ACTION } from './Actions';
+import { DEFAULT_ACTION, ADD_NOTIFICATION_ACTION } from './Actions';
 
 interface initialStateInterface {
 
@@ -8,7 +9,7 @@ interface initialStateInterface {
 
 interface defaultStateInterface {
     isLoggedIn: boolean
-    notifications: NotificationInterface[]
+    notification: NotificationInterface | null
 }
 
 type State = initialStateInterface & defaultStateInterface;
@@ -43,25 +44,19 @@ const reducer = (state: State, action: Action): State => {
  
     switch(type) {
         case ADD_NOTIFICATION_ACTION: return addNotificationAction(state, payload as NotificationInterface);
-        case CANCEL_NOTIFICATION_ACTION: return cancelNotificationAction(state, payload as NotificationInterface);
         default: return { ...state };
     }
 }
 
-const addNotificationAction = (state: State, payload) => {
-    state.notifications = [{ id: Math.random() ,...payload}, ...state.notifications]
-    return { ...state };
-}
-
-const cancelNotificationAction = (state: State, payload) => {
-
-    state.notifications = state.notifications.filter(({ id }) => payload.id !== id);
-    return { ...state };
+const addNotificationAction = (state: State, payload: NotificationInterface): State => {
+    return produce(state, draft => {
+        draft.notification = { id: Math.random(), ...payload};
+    });
 }
 
 const defaultState = {
     isLoggedIn: false,
-    notifications: []
+    notification: null
 }
 
 const useGlobalState    = () => useContext<State>(StateContext); // read

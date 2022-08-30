@@ -1,0 +1,14 @@
+query wishlist ($first: Int = 10, $page: Int = 1) {
+    wishlist (first: $first, page: $page) {
+        data {
+            product {
+                productFlat {
+                    ...productFlatFragment
+                }
+            }
+        }
+        paginatorInfo {
+            ...paginatorFieldsFragment
+        }
+    }
+}

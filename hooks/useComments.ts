@@ -1,51 +1,79 @@
-import { QueryResult, useMutation, useQuery } from "@apollo/client";
-import { QueryHookOptions } from "@apollo/react-hooks";
-import { CommentInterface } from "apollo/fragments/Comment.fragment";
-import { CommentQueryInteraface, CommentsMetaInterface, COMMENTS_QUERY, CommnetQueryVarsInterface, PaginationInterface } from 'apollo/querys/Comments.query';
-import { CommentMutationInteraface, COMMENT_MUTATION, CommnetMutationVarsInterface } from '../apollo/mutations/Comment.mutator';
-import { LikeDataMutationInterface, LikeMutationVarsInterface, LIKE_MUTATION } from '../apollo/mutations/Like.mutator';
 import useActivity from "../hooks/useActivity";
 import { userLikesVar } from "apollo/Reactives";
 import { toggleArrayValue } from "helpers/helpers";
-import { LikeInterface } from "apollo/querys/Activity.query";
+import { ReviewsInfoQueryHookResult, ReviewsListQuery, ReviewsOrder, useLikeReviewMutation, useReviewsInfoQuery, useReviewsListQuery } from '../Graphql/generated/graphql'
+import { ListInterface } from "components/helpers/Resource";
+
+export const commentsFiltersOptions: ListInterface[] = [
+    {name: 'All', value: 'null', selected: true},
+    {name: '1 Stars', value: '1'},
+    {name: '2 Stars', value: '2'},
+    {name: '3 Stars', value: '3'},
+    {name: '4 Stars', value: '4'},
+    {name: '5 Stars', value: '5'},
+];
+
+export const commentsSortingOptions: ListInterface[] = [
+    {name: 'Popular', value: ReviewsOrder.Popular, selected: true},
+    {name: 'Newset', value: ReviewsOrder.Newest},
+];
+
+export const commentsPerPageOptions: ListInterface[] = [
+    {name: '3', value: '3', selected: true},
+    {name: '6', value: '6'},
+    {name: '9', value: '9'}
+];
+
+export type OptionsType = Parameters<typeof useReviewsListQuery>[0];
 
 interface Props {
-    options?: QueryHookOptions<CommentQueryInteraface, CommnetQueryVarsInterface>
+    options?: OptionsType
 }
 
-interface LocalCommentInterface extends CommentInterface {
-    userLike?: boolean
-    userOwned?: boolean
-}
+export type ReviewsType  = ReviewsListQuery['reviewsList']['data'];
+export type PageInfoType = ReviewsListQuery['reviewsList']['paginatorInfo'];
+export type ReviewsInfoType = ReviewsInfoQueryHookResult['data'];
 
-interface DataInterface extends Omit<QueryResult<CommentQueryInteraface, CommnetQueryVarsInterface>, 'data'> {
-    comments: CommentInterface[]
-    pageInfo: PaginationInterface
-    metaData: CommentsMetaInterface
+interface DataInterface extends Omit<ReturnType<typeof useReviewsListQuery>, 'data'> {
+    comments: ReviewsType
+    pageInfo: PageInfoType
+    reviewsInfo: ReviewsInfoType
 }
 
 const useComments = ({ options }: Props = {}): [typeof mutateComments, DataInterface & { like: typeof likeComment }] => {
     const { } = useActivity({ 
         options: {
-            variables: { productId: options?.variables?.productId },
+            variables: {
+                input: {
+                    productId: options.variables.productId
+                }
+            },
             onCompleted: (data) => {
-                userLikesVar(data.activity.likes);
+                userLikesVar(data.userActivity.commentLikes);
             }
         }
     });
-    const { data, loading, error, ...rest } = useQuery<CommentQueryInteraface, CommnetQueryVarsInterface>(COMMENTS_QUERY, {
+    const { data: reviewsInfo } = useReviewsInfoQuery({
+        variables: {
+            productId: options.variables.productId
+        }
+    });
+    const { data, loading, error, ...rest } = useReviewsListQuery({
         notifyOnNetworkStatusChange: true,
         ...options
     })
 
-    const [mutateComments, { }] = useMutation<CommentMutationInteraface, CommnetMutationVarsInterface>(COMMENT_MUTATION);
-    const [likeComment, {}] = useMutation<LikeDataMutationInterface, LikeMutationVarsInterface>(LIKE_MUTATION,{
+    const [mutateComments, {}]  = useLikeReviewMutation();
+    const [likeComment, {}]     = useLikeReviewMutation({
         onCompleted: (data) => {
-            userLikesVar(
-                toggleArrayValue<LikeInterface>({
+            userLikesVar(   
+                toggleArrayValue({
                     arr: userLikesVar(),
-                    key: 'comment_id',
-                    value: data.LikeComment.id
+                    key: 'reviewId',
+                    value: +data.LikeReview.review.id,
+                    create: {
+                        reviewId: +data.LikeReview.review.id,
+                    }
                 })
             )
         }
@@ -54,9 +82,9 @@ const useComments = ({ options }: Props = {}): [typeof mutateComments, DataInter
     return [
         mutateComments,
         {
-            comments: data?.comments.hits,
-            pageInfo: data?.comments.pageInfo,
-            metaData: data?.comments.metaData,
+            comments: data?.reviewsList.data,
+            pageInfo: data?.reviewsList.paginatorInfo,
+            reviewsInfo: reviewsInfo,
             loading,
             like: likeComment,
             ...rest

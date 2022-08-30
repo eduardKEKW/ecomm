@@ -1,0 +1,19 @@
+overwrite: true
+schema: 
+  - ${NEXT_PUBLIC_BAGISTO_GRAPHQL}
+  - local-schema.graphql
+documents: "**/*.{gql,graphql}"
+config:
+  skipTypename: true
+  withHooks: true
+  withHOC: false
+  withComponent: false
+generates:
+  Graphql/generated/graphql.tsx:
+    plugins:
+      - "typescript"
+      - "typescript-operations"
+      - "typescript-react-apollo"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"

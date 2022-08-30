@@ -1,0 +1,61 @@
+query product (
+    $onlyLink: Boolean = false,
+    $id: ID
+) {
+    product(id: $id) {
+        id
+        type
+        sku
+        productFlat { 
+            ...productFlatFragment
+        }
+        parent {
+            variants {
+                id
+                sku
+                productFlat { 
+                    ...productFlatFragment
+                }
+            }
+        }
+        relatedProducts {
+            productFlat {
+                ...productFlatFragment
+            }
+        }
+        attributeValues {
+            id
+            textValue
+            booleanValue
+            integerValue
+            floatValue
+            dateTimeValue
+            dateValue
+            value @client
+            attribute {
+                code
+                adminName
+                isVisibleOnFront
+            }
+        }
+        categories {
+            ...categoryFieldsFragment
+            productCount    @skip(if: $onlyLink)
+            count           @skip(if: $onlyLink)
+            breadcrumbs     { ...breadcrumbsFragment }
+        }
+        inventories {
+            id
+            qty
+        }
+        images {
+            id
+            type
+            path
+            url
+        }
+        cacheGalleryImages {
+            largeImageUrl
+        }
+    }
+}

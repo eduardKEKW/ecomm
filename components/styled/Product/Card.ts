@@ -1,27 +1,34 @@
 import styled from 'styled-components';
 import { popUp } from '../Animations';
+import { outline, ribbone } from '../Helpers';
 
 export const SProductCard = styled.div`
+    background: ${({ theme }) => theme.colors.yellow};
+    box-shadow: ${({ theme }) => theme.shadows.container};
+`;
+
+export const SProductCardContent = styled.div`
     display: flex;
     flex-direction: column;
     background: white;
-    border-radius: .5rem;
     padding: .5rem;
-    box-shadow: ${({ theme }) => theme.shadows.container};
-    margin-bottom: 1.5rem;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform .2s ease-in-out;
 
     &:hover {
-        box-shadow: ${({ theme }) => theme.shadows.main};
+        transform: translateX(.5rem) translateY(-.5rem);
     }
-`;
+`
 
 export const SProductCardHeader = styled.div`
     flex: 2;
     width: 100%;
-    position: relative;
     display: flex;
     justify-content: center;
     margin-bottom: .5rem;
+    z-index: 1;
 
     & > div {
         width: 100%;
@@ -38,67 +45,65 @@ export const SProductCardHeader = styled.div`
         max-height: 5rem;
     }
 
-    & > #favorite {
+    & > .favorite {
         display: flex;
         justify-content: center;
         align-items: center;
         position: absolute;
-        width: 1.5rem;
-        height: 1.5rem;
-        background-color: white;
-        border-radius: 50%;
         top: 0%;
-        z-index: 999;
         left: 100%;
-        animation-name: ${({ animate }) => animate ? popUp : ""};
-        animation-fill-mode: both;
-        animation-duration: .3s;
+        transform: translateX(-100%);
+        z-index: 999;
+        width: 2rem;
+        height: 2rem;
+        background: white;
+        border-radius: 50%;
         cursor: pointer;
-        transform: translateX(-80%) translateY(-20%);
 
         i {
             color: ${({ theme }) => theme.colors.black};
+            animation-name: ${({ animate }) => animate ? popUp : ""};
+            animation-fill-mode: both;
+            animation-duration: .3s;
         }
 
         & > &:hover {
             color: ${({ theme }) => theme.colors.main};
         }
     }
+`;
 
-    & > #header {
-        position: absolute;
-        background-color: ${({ theme }) => theme.colors.background};
-        top: -7%;
-        padding: .3rem;
-        left: 50%;
-        width: 8rem;
-        height: 1rem;
-        transform: translateX(-50%);
-        font-size: .5rem;
-        z-index: 99;
-        text-align: center;
-        text-transform: uppercase;
-        clip-path: polygon(0 0, 100% 0, 80% 100%, 20% 100%);
-        box-shadow: inset 0px -3px 5px 0px rgba(0,0,0,0.1);
+export const STags = styled.div`
+    display: flex;
+    position: absolute;
+    top: 5%;
+    left: -5%;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: .5rem;
+    color: white;
+    z-index: 9;
+`
+const STag = styled.div`
+    width: 4rem;
+    font-size: .7rem;
+    padding: .2rem;
+    text-align: center;
+    background: ${({ color }) => color};
+    color: white;
+    font-size: .75rem;
+`
+
+export const STagRibboneAndOutline = styled(STag)`
+    position: relative;
+
+    &:after {
+        ${outline()}
     }
 
-    & > #stoc {
-        position: absolute;
-        top: 0%;
-        width: 4rem;
-        font-size: .5rem;
-        height: 1rem;
-        z-index: 99;
-        left: 50%;
-        transform: translateX(-50%) translateY(-100%);
-        box-shadow: ${({ theme }) => theme.shadows.container};
-        color: white;
-        background: ${({ theme }) => theme.colors.main};
-        padding: .2rem;
-        border-radius: .5rem;
-        text-align: center;
-        text-transform: uppercase;
-        font-weight: 400;
+    &:before {
+        ${ribbone()}
     }
 `;
 
@@ -112,19 +117,23 @@ export const SProductCardBody = styled.div`
     z-index: 1;
 
     & > a {
-        flex: 4;
+        flex: 3;
+        display: flex;
+        align-items: center;
+        
+        & > .name {
+            font-weight: bold;
+            font-size: .9rem;
+            font-weight: 400;
+            color: ${({ theme }) => theme.colors.black};
+        }
     }
 
-    & > a > #name {
-        font-weight: bold;
-        font-size: .9rem;
-        font-weight: 400;
-        color: ${({ theme }) => theme.colors.black};
-    }
-
-    & > #category {
+    & > .category {
         font-size: .7rem;
         flex: 2;
+        display: flex;
+        align-items: center;
         text-transform: uppercase;
 
         a:hover {
@@ -132,80 +141,51 @@ export const SProductCardBody = styled.div`
         }
     }
 
-    & > #rating {
+    & > .rating {
         font-size: .75rem;
         flex: 2;
     }
 
-    & > #colors {
-        display: flex;
-        flex-direction: column;
-        position: relative;
-        flex: 5;
+    & > .info {
+        flex: 4;   
 
-        & > span {
-            text-transform: uppercase;
-            font-size: .7rem;
-            color: black;
-            font-weight: 400;
-            flex: 1;
-        }
-
-        & > div {
+        & > .info_container {
+            cursor: pointer;
+            width: 80%;
+            pointer-events: ${({ disable }) => disable ? 'none' : 'all'};
+            position: absolute;
+            left: 27%;
             display: flex;
-            justify-content: flex-start;
-            align-items: center;
-            flex: 2 ;
-            gap: .3rem;
 
-            & > div {
+            &:after {
+                ${outline()}
+            }
+            
+            & > .add_to_cart {
+                position: relative;
+                min-height: 50px;
+                flex: 1;
+                box-shadow: ${({ theme }) => theme.shadows.main};
+                background: ${({ theme }) => theme.colors.secondary};
+                color: white;
                 display: flex;
-                justify-content: center;
                 align-items: center;
-                padding: .2rem;
-                border-radius: 50%;
-                cursor: pointer;
-                width: 1.5rem;
-                height: 1.5rem;
+                justify-content: center;
+                padding-right: 1rem;
+                font-size: 1rem;
+            }
 
-                & > div {
-                    box-shadow: ${({ theme }) => theme.shadows.lower};
-                    width: .8rem;
-                    height: .8rem;
-                    border-radius: 50%;
-                }
+            & > .product_price {
+                position: relative;
+                margin-left: -1rem;
+                min-height: 50px;
+                flex: 2;
+                box-shadow: ${({ theme }) => theme.shadows.containerInner};
+                background: ${({ theme }) => theme.colors.main};
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
         }
-    }
-
-    & > #price {
-        position: absolute;
-        top: 64%;
-        left: 50%;
-        min-height: 50px;
-        width: 7rem;
-        box-shadow: ${({ theme }) => theme.shadows.containerInner};
-        background: ${({ theme }) => theme.colors.main};
-        border-radius: .35rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &:after {
-            content: "";
-            position: absolute;
-            width: 7rem;
-            border-radius: .35rem;
-            top: 5%;
-            left: 3%;
-            background: ${({ theme }) => theme.colors.black};
-            z-index: -1;
-            width: 100%;
-            height: 100%;
-        }
-    }
-
-    & > #add {
-        flex: 2;
     }
 `;

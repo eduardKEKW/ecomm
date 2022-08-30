@@ -1,0 +1,24 @@
+fragment productFlatFragment on ProductFlat {
+    id
+    createdAt
+    name
+    urlKey
+    price
+    specialPrice
+    thumbnail
+    reviewsCount
+    averageRating
+    new
+    featured
+    status
+    description
+    minPrice
+    qty @client
+    mainCategory @client {
+        name
+        slug
+        id
+        path
+        breadcrumbs { ...breadcrumbsFragment }
+    }
+}

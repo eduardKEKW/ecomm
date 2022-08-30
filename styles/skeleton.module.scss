@@ -78,3 +78,28 @@
     ". .           .            .           .               ." 
     ". .           .            .           .               ."; 
 }
+
+.title {
+    width: 25%;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: auto;
+    grid-template-areas: 
+    "name title"; 
+}
+
+.category {
+    width: 70%;
+    margin: 0 auto;
+    display: grid;
+    grid-gap: 1rem;
+    grid-template-columns: 15% 85%;
+    grid-auto-rows: auto;
+    padding: 1rem 0rem;
+    height: 100vh;
+    grid-template-areas:
+      "title    title"
+      "side     main"
+      "side     main"
+      ".        main";
+}

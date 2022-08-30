@@ -1,9 +1,10 @@
+import { CategoryBreadcrumbs } from 'Graphql/generated/graphql'
 import React from 'react'
 import Link from '../helpers/LinkCustom'
 import { SBreadcrumbs, SItem } from '../styled/Product/Breadcrumbs'
 
 interface Props {
-    paths: string[]
+    paths: CategoryBreadcrumbs[]
     gridArea: string
 }
 
@@ -11,10 +12,10 @@ function Breadcrumbs({ paths, gridArea }: Props) {
     return (
         <SBreadcrumbs gridArea={gridArea}>
             {
-                paths.map(path => 
-                    <SItem key={path}>
-                        <Link href={path}> 
-                            {path}
+                paths.map(category => 
+                    <SItem key={category.name}>
+                        <Link href={category.urlPath}> 
+                            {category.name}
                         </Link>
                     </SItem>
                 )   

@@ -17,12 +17,12 @@ interface Props {
     showChildren?: boolean,
     pulsating?: boolean
     contentStyle?: CSSProperties
-    size?: "small" | "medium" | "big"
+    size?: keyof typeof sizes
 }
 
 const Loading = ({ 
         children,
-        loading = false,
+        loading,
         minHeight = "",
         minWidth = "",
         showChildren = true,
@@ -42,7 +42,7 @@ const Loading = ({
                     minWidth: minWidth,
                  }}
             >
-                <div className={style.spinner__content} style={{ background: pulsating ? 'white' : 'rgba(255, 255, 255, 0.616)' }}>
+                <div className={style.spinner__content} style={{ background: 'rgba(255, 255, 255, 0.541)' }}>
                     {
                         pulsating 
                         ? 

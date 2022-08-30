@@ -1,14 +1,16 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IconDefinition } from '@fortawesome/free-solid-svg-icons';
+import { IconDefinition as IconDefinitionRegular } from '@fortawesome/free-regular-svg-icons';
 import React, { useContext } from 'react'
 import Loading from 'components/helpers/Loading';
 import { FormContext } from 'components/Form';
 import { SButton, SIcon, SMain } from 'components/styled/Buttons/Main';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface Props {
     children?: any
     onClick?: () => void
-    icon?: IconDefinition | null
+    icon?: IconDefinition | IconDefinitionRegular | null
     customStyles?: any
     styles?: React.CSSProperties
     style?: React.CSSProperties
@@ -19,6 +21,7 @@ interface Props {
     border?: string
     reverse?: boolean
     rounded?: boolean
+    id?: string
 }
 
 const ButtonMain = ({ 
@@ -32,7 +35,8 @@ const ButtonMain = ({
         type, 
         border, 
         reverse = false,
-        rounded = false
+        rounded = false,
+        id = null
     }: Props) => {
     const [context, setContext] = useContext<any>(FormContext);
     
@@ -49,13 +53,13 @@ const ButtonMain = ({
     }
 
     return (
-        <SMain onClick={click} style={style} border={border} reverse={reverse} disable={disable} rounded={rounded}>
+        <SMain id={id} onClick={click} style={style} border={border} reverse={reverse} disable={disable} rounded={rounded}>
             <Loading loading={loading}>
                 {
                     icon && (
                         <SIcon>
                             <i>
-                                <FontAwesomeIcon icon={icon} />
+                                <FontAwesomeIcon icon={icon as IconProp} />
                             </i> 
                         </SIcon>
                     )

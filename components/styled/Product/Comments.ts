@@ -4,11 +4,12 @@ import { card } from '../Animations'
 export const SComments = styled.section`
   grid-area: ${({ gridArea }) => gridArea};
   background: white;
+  padding: 1rem;
   min-height: 10rem;
   padding: 0rem 1rem;
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-template-areas: ". container container container container .";
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-areas: "container container";
 
   & > div {
     grid-area: container;
@@ -141,7 +142,7 @@ export const SLike = styled.div`
     align-items: center;  
     font-size: 1rem;
     gap: .5rem;
-    cursor: pointer;
+    cursor: ${({ isGuest }) => isGuest ? "auto" : "pointer"};
 
     &:hover {
       border: solid 1px ${({ theme }) => theme.colors.lowGrey}; 

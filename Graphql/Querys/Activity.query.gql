@@ -1,0 +1,13 @@
+query userActivity (
+  $input: UserActivityinput
+) {
+  userActivity (input: $input) {
+    productId @client
+    commentLikes {
+      id
+      reviewId
+    }
+  }
+}
+
+

@@ -1,0 +1,33 @@
+query reviewsList (
+    $productId: Int,
+    $order: ReviewsOrder
+    $first: Int = 5,
+    $page: Int,
+    $rating: Int
+) {
+  reviewsList(input: {
+      productId:  $productId,
+      order:      $order,
+      rating: $rating
+    },
+    first: $first,
+    page: $page
+  ) {
+    data {
+      id
+      title
+      rating
+      comment
+      status
+      customerName
+      likes
+      createdAt
+      productId
+      initials @client  
+      userLike @client
+    }
+    paginatorInfo {
+      ...paginatorFieldsFragment
+    }
+  }
+}

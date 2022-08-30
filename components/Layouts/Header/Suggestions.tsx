@@ -1,13 +1,13 @@
-import ButtonMain from 'components/buttons/Main';
+    import ButtonMain from 'components/buttons/Main';
 import React from 'react'
 import Suggestion from '../../Product/Suggestion';
 import { groupSuggestedProducts } from 'helpers/helpers';
 import styles from 'styles/components/search.module.scss';
-import { SkeletonProductInterface } from 'apollo/querys/Product.query';
+import { SkeletonSuggestionInterface } from './Search';
 
 interface Props {
     loading: boolean
-    products: SkeletonProductInterface[]
+    products: SkeletonSuggestionInterface[]
     called: boolean
     input: React.MutableRefObject<HTMLInputElement>
     focus: boolean
@@ -17,8 +17,6 @@ interface Props {
 const Suggestions = ({
     loading,
     products,
-    called,
-    focus,
     showSuggestions
 }: Props) => {
 
@@ -26,13 +24,10 @@ const Suggestions = ({
 
     return (
         <div
-            style={{ 
-                width: showSuggestions ? "100%" : "0%",
-                overflow: showSuggestions ? "visible" : "hidden"
-            }}
             className={`
                 ${styles.search__suggestions} 
                 ${showSuggestions && styles.animation_fadeDown}
+                ${! showSuggestions && styles.hide_suggestions}
             `}
         >
             {! sortedProducts.length && <div className={styles.search__suggestions_separator}><div/></div>}
@@ -52,11 +47,7 @@ const Suggestions = ({
 
             { ! loading && !!sortedProducts.length &&
                 (<div className={styles.search__more}>
-                    <ButtonMain 
-                        styles={{
-                            borderRadius: "0rem"
-                        }}
-                    >
+                    <ButtonMain>
                         More results
                     </ButtonMain>
                 </div>)

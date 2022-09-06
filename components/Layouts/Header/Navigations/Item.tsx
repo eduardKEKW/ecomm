@@ -8,10 +8,10 @@ import Loading from 'components/helpers/Loading';
 import Price from 'components/Product/Price';
 import { getProductThumbnail, shortenString } from 'helpers/helpers';
 import style from 'styles/components/interactions.module.scss';
-import { ProductFlat } from 'Graphql/generated/graphql';
+import { CartDetailQuery } from 'Graphql/generated/graphql';
 
 interface Props {
-    item: ProductFlat & { quantity: number }
+    item: CartDetailQuery["cartDetail"]["allItems"][0]["productFlat"] & { quantity: number }
     onDeleteProp?: (id: string) => void
     type: string
     onAddProps?: (id: string) => void,

@@ -1,9 +1,10 @@
-    import ButtonMain from 'components/buttons/Main';
+import ButtonMain from 'components/buttons/Main';
 import React from 'react'
 import Suggestion from '../../Product/Suggestion';
 import { groupSuggestedProducts } from 'helpers/helpers';
 import styles from 'styles/components/search.module.scss';
 import { SkeletonSuggestionInterface } from './Search';
+import { SSuggestionsContainer } from 'components/styled/Suggestions';
 
 interface Props {
     loading: boolean
@@ -23,13 +24,7 @@ const Suggestions = ({
     const [sortedProducts, parents] = groupSuggestedProducts({ products });
 
     return (
-        <div
-            className={`
-                ${styles.search__suggestions} 
-                ${showSuggestions && styles.animation_fadeDown}
-                ${! showSuggestions && styles.hide_suggestions}
-            `}
-        >
+        <SSuggestionsContainer show={showSuggestions} >
             {! sortedProducts.length && <div className={styles.search__suggestions_separator}><div/></div>}
 
             <div className={styles.search__suggestions_items}>
@@ -57,7 +52,7 @@ const Suggestions = ({
                 ! sortedProducts.length &&
                     (<p>No results found</p>)
             }
-        </div>
+        </SSuggestionsContainer>
     )
 }
 

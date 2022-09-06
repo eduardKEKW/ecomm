@@ -5,9 +5,8 @@ import Card from "components/Product/Card"
 import { Layout } from "components/styled/Layouts/Pages/Category"
 import Title from "components/Title"
 import { GetProductListingQueryVariables, SortValues, useCategoryLazyQuery, useGetProductListingLazyQuery } from "Graphql/generated/graphql"
-import useCategory from "hooks/useCategory.hook"
 import { useFavorite } from "hooks/useFavorite.hook"
-import useProducts, { productsPerPageOptions, productsSortingOptions } from "hooks/useProducts.hook"
+import { productsPerPageOptions, productsSortingOptions } from "hooks/useProducts.hook"
 import { GetStaticPaths, GetStaticProps } from "next"
 import { NextRouter, useRouter } from "next/router"
 import { FC, useEffect, useState } from "react"
@@ -56,7 +55,7 @@ const Category: FC & { Layout: FC<{}>; } = function ({ }: Props) {
         }
     }, [router.isReady])
 
-    if(loading || router.isFallback || ! categoryData) return <>{SKELETONS['category']('category', 'category')}</>
+    if(loading || router.isFallback || ! categoryData) return <>{SKELETONS['category']('category', 'category')}</>;
 
     return (    
         <Layout>
@@ -87,14 +86,7 @@ const Category: FC & { Layout: FC<{}>; } = function ({ }: Props) {
                     }
 
                     setVariables((vars) => {
-                        return produce(vars, (draft) => {
-                            // draft.input = {
-                            //     ...(draft?.input ?? {}),
-                            //     attributes: [
-                            //         ...(draft?.input?.attributes ?? []),
-                            //     ]
-                            // }
-    
+                        return produce(vars, (draft) => {    
                             let {
                                 code: attrCode = data.code,
                                 values = []
@@ -116,7 +108,6 @@ const Category: FC & { Layout: FC<{}>; } = function ({ }: Props) {
                             }
     
                             draft.input.attributes = newAttributes;
-                            console.log('NEW', draft.input);
                         })
                     })
                 }}

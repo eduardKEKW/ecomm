@@ -17,7 +17,7 @@ import { ApolloProvider } from '@apollo/client';
 
 function MyApp({ Component, pageProps}) {
   const apolloClient = useApollo(pageProps.apolloCache);
-
+  
   return (
     <ApolloProvider client={apolloClient}>
       <ThemeProvider theme={theme}>
@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps}) {
           <PageLoader>
             <Component.Layout title={pageProps.title}> 
               <Component {...pageProps} />
-            </Component.Layout>
+            </Component.Layout> 
           </PageLoader>
         </GlobalProvider>
       </ThemeProvider>

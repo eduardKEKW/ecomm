@@ -1,7 +1,7 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMain from "components/buttons/Main";
-import Form from "components/Form";
+import Form, { IFormState } from "components/Form";
 import Input from "components/input/Input.main";
 import { Columns, Container, Layout, SFormError } from "components/styled/Layouts/Pages/Login";
 import Title from "components/Title";
@@ -16,7 +16,7 @@ import { useRouter } from "next/router";
 import { LOCAL_ACCESS_TOKEN_NAME } from "helpers/local";
 import Loading from "components/helpers/Loading";
 
-const formState = {
+const formState: IFormState = {
     firstName:  { value: '', validation: ['required'] },
     lastName:   { value: '', validation: ['required'] },
     email:      { value: '', validation: ['required'] },
@@ -106,7 +106,6 @@ const Register: FC & { Layout: FC<DefaultLayoutProps>; }  = function ( ) {
                                     id="subscribe"
                                     type="submit"
                                     style={{ width: "100%" }}
-                                    loading={loading || loginLoading}
                                 >
                                     <>
                                         Register here <FontAwesomeIcon icon={faUser} />
@@ -115,8 +114,14 @@ const Register: FC & { Layout: FC<DefaultLayoutProps>; }  = function ( ) {
 
                                 <p>Don`t have an account ? <Link href="/register">Sign Up Here.</Link></p>
 
-                                <SFormError show={!! error?.message}>
-                                    {error?.message}
+                                <SFormError show={!! error?.graphQLErrors}>
+                                    {
+                                        error?.graphQLErrors.map(({ extensions }) => {
+                                            return Object.values(extensions?.validation).map((errArr) => {
+                                                return errArr[0];
+                                            });
+                                        })
+                                    }
                                 </SFormError>
                             </>
                         </Form>

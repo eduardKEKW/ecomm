@@ -62,9 +62,4 @@ const getRatingsMap = (data: RatingsMap[]): any => {
     }, {});
 }
 
-export default React.memo(Reviews, (prevProps, nextProps) => {
-    if(!! prevProps.reviewCount) {
-        return true;
-    }
-    return false;
-});
+export default React.memo(Reviews);

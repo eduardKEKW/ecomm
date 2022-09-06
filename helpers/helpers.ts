@@ -169,7 +169,7 @@ const getProductThumbnail = ({
         DefaultProductImage;
 }
 
-const getApiImage = ({ url }: { url: string }) => {
+const getApiImage = ({ url }: { url: string }) => { 
     return `${process.env.NEXT_PUBLIC_BAGISTO_ENDPOINT}/cache/medium/${url}`;
 }
 

@@ -14,7 +14,7 @@ interface Props {
     index: number
     isGuest: boolean
 }
-
+    
 const Comment = ({ comment, like, index, isGuest }: Props) => {
     const avatarColor = useMemo<string>(() => randomColor(), []);
 

@@ -1,19 +1,35 @@
 import React, { createContext, useMemo, useState } from 'react'
 import { SForm } from './styled/Form'
 
-interface Props<State> {
-    initialState?: State
+const validate = {
+    required: (value: any, name: string) => {
+        return value ? null : `${name} is required`
+    }
+}
+
+interface Props {
+    initialState?: IFormState
     children: JSX.Element
-    onSubmit: (state: State) => void
+    onSubmit: (state: IFormState) => void
     gridArea?: string
 }
 
-interface State {}
+type ValidationsTypes = keyof typeof validate;
+
+type FormField = {
+    value: any
+    validation: ValidationsTypes[]
+    errors?: string[]
+}
+
+export interface IFormState {
+    [key: string]: FormField
+}
 
 export const FormContext = createContext({});
 
-function Form<State>({ initialState, children, onSubmit, gridArea}: Props<State>) {
-    const [state, setState] = useState<State>(() => initialState);
+function Form({ initialState, children, onSubmit, gridArea}: Props) {
+    const [state, setState] = useState<IFormState>(() => initialState);
     
     const changeForm = ({ name, value }) => {
 
@@ -21,7 +37,7 @@ function Form<State>({ initialState, children, onSubmit, gridArea}: Props<State>
             const {isERR, state: newState} = validateForm(state);
 
             setState({ ...newState })
-
+            
             if(! isERR) {
                 onSubmit(state)
             }
@@ -46,16 +62,15 @@ function Form<State>({ initialState, children, onSubmit, gridArea}: Props<State>
     )
 }
 
-const validate = {
-    required: (value: any, name: string) => !! value ? null : `${name} is required`
-}
-
 const validateForm = (state) => {
-    return Object.keys(state).reduce((acc, key) => {
+    return Object.keys(state).reduce<{ isERR: boolean, state: IFormState }>((acc, key) => {
         const err = getErrors({ ...acc.state[key], name: key })
 
-        acc.state[key].errors = err
-        acc.isERR = err.length
+        acc.state[key].errors = err;
+
+        if(err.length) {
+            acc.isERR = true;
+        }   
 
         return acc;
     }, { isERR: false, state });

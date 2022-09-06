@@ -1,5 +1,4 @@
 import { makeVar } from '@apollo/client';
-import { LikeInterface } from 'apollo/querys/Activity.query';
+import { CommentLike } from 'Graphql/generated/graphql';
 
-export const userLikesVar = makeVar<LikeInterface[]>([]);
-export const testVar = makeVar<string>("test");
+export const userLikesVar = makeVar<CommentLike[]>([]);

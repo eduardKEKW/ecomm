@@ -1,9 +1,7 @@
 import { ApolloClient, gql, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core';
-
-
 import { setContext } from '@apollo/client/link/context';
 import { Product, UserActivityDocument, UserActivityQuery, UserActivityQueryVariables } from 'Graphql/generated/graphql';
-import { getApiImage, getInitials, getProductThumbnail } from 'helpers/helpers';
+import { getApiImage, getInitials } from 'helpers/helpers';
 import { LOCAL_ACCESS_TOKEN_NAME } from 'helpers/local';
 import { useMemo } from 'react';
 
@@ -25,7 +23,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: accessToken ? accessToken : '',
+      Authorization: accessToken ? accessToken : '',
     }
   }
 });
@@ -34,8 +32,7 @@ function createApolloClient() {
   return new ApolloClient({
     ssrMode: typeof window === 'undefined',
     link: authLink.concat(new HttpLink({
-      // uri: process.env.NEXT_PUBLIC_BAGISTO_GRAPHQL,
-      uri: "https://murmuring-spire-52308-eu.herokuapp.com/graphql",
+      uri: process.env.NEXT_PUBLIC_BAGISTO_GRAPHQL,
       credentials: 'include'
     })),
     cache: new InMemoryCache({

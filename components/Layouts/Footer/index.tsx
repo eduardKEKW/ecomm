@@ -1,4 +1,4 @@
-import { faFacebookSquare, faTwitterSquare, faYoutube } from "@fortawesome/free-brands-svg-icons";
+// import { faFacebookSquare, faTwitterSquare, faYoutube } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Link from "components/helpers/LinkCustom";
 import { SNavigationContent, SFooter, SItem, SNavigation, SSocial } from "components/styled/Footer";

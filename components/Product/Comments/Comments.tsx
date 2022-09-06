@@ -18,7 +18,7 @@ interface Props {
 function Comments({ productId, gridArea }: Props) {
     const [selectedPage, setSelectedPage]   = useState<number>(1);
     const { isGuest }                       = useUser();
-    const [comments, setComments]           = useState<ReviewsType>([]);
+    // const [comments, setComments]           = useState<ReviewsType>([]);
     const [options, setOptions]             = useState<OptionsType>({
         variables: {
             productId,
@@ -28,13 +28,13 @@ function Comments({ productId, gridArea }: Props) {
         }
     });
 
-    const [mutateComment, { loading, comments: data, reviewsInfo, pageInfo, fetchMore, like, called }] = useComments({
+    const [mutateComment, { loading, comments = [], reviewsInfo, pageInfo, fetchMore, like, called }] = useComments({
         options: options
     });
 
-    useEffect(() => {
-        if(! loading) setComments(data);
-    }, [data, loading])
+    // useEffect(() => {
+    //     if(! loading) setComments(data);
+    // }, [data, loading])
 
     useEffect(() => {
         fetchMore(options);

@@ -69,7 +69,7 @@ const useComments = ({ options }: Props = {}): [typeof mutateComments, DataInter
             userLikesVar(   
                 toggleArrayValue({
                     arr: userLikesVar(),
-                    key: 'reviewId',
+                    key: "reviewId",
                     value: +data.LikeReview.review.id,
                     create: {
                         reviewId: +data.LikeReview.review.id,

@@ -6,7 +6,6 @@ import Loading from 'components/helpers/Loading';
 import React from 'react'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import style from 'styles/components/interactions.module.scss';
-import { useQuery } from '@apollo/client';
 import { LOCAL_ACCESS_TOKEN_NAME, USER_NAVIGATION } from 'helpers/local';
 import { useRouter } from 'next/router';
 import { useMeQuery } from 'Graphql/generated/graphql';

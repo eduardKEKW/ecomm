@@ -142,11 +142,7 @@ export const SMenu = styled.div`
     animation: ${fadeLeft} .2s both;
     z-index: 99;
     
-    /* width: max(60%,  ${breakpoints.lg}); */
-
-    
     ${media.lg`
-        /* background: black; */
         min-width: calc(${breakpoints.lg} - 11rem);
     `}
 

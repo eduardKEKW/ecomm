@@ -24,7 +24,7 @@ const localBanners = [
 
 const Home: FC & { Layout: FC<{}>; } = function ({  }) {
   const { data }= useVelocityMetaDataQuery();
-console.log(getApiImage({ url: data?.metaData?.advertisement[1] }));
+
   return (  
       <Grid>
         <Carousel navigationInside={true} gridArea="main-carousel" slidesCount={BANNERS.length} height="32rem">

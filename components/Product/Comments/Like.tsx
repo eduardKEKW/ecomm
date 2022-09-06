@@ -14,19 +14,15 @@ interface Props {
 const Like = ({ onLike, userLike, likes, isGuest}: Props): JSX.Element => {
     const [liked, setLiked]         = useState<boolean>(userLike)
     const [translate, setTranslate] = useState<number>(0)
+    const [totalLikes, _]           = useState<number>(likes)
 
     useEffect(() => setLiked(userLike), [userLike])
 
-
-    useEffect(() => {
-        setTranslate(0)
-    }, [likes])
-
     const likeComment = () => { 
         if(isGuest) return;
-
-        setLiked(v => !v);
-        setTranslate(v => liked ? v - 1 : v + 1);
+        const isUserLike = ! liked;
+        setLiked(isUserLike);
+        setTranslate(isUserLike ? 1 : translate === 0 ? -1 : 0);
         onLike();
     }
 
@@ -38,9 +34,9 @@ const Like = ({ onLike, userLike, likes, isGuest}: Props): JSX.Element => {
                 </i>
                 <SIncrement translate={translate}>
                     <div>
-                        <span>{likes + 1}</span>
-                        <span>{likes}</span>
-                        <span>{likes - 1}</span>    
+                        <span>{totalLikes + 1}</span>
+                        <span>{totalLikes}</span>
+                        <span>{Math.max(0, totalLikes - 1)}</span>    
                     </div>        
                 </SIncrement>
             </div>

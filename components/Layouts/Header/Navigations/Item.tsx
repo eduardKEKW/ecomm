@@ -11,7 +11,7 @@ import style from 'styles/components/interactions.module.scss';
 import { ProductFlat } from 'Graphql/generated/graphql';
 
 interface Props {
-    item: ProductFlat & { quantity?: number }
+    item: ProductFlat & { quantity: number }
     onDeleteProp?: (id: string) => void
     type: string
     onAddProps?: (id: string) => void,

@@ -1,7 +1,7 @@
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMain from "components/buttons/Main";
-import Form from "components/Form";
+import Form, { IFormState } from "components/Form";
 import Input from "components/input/Input.main";
 import { Columns, Container, Layout, SFormError } from "components/styled/Layouts/Pages/Login";
 import Title from "components/Title";
@@ -16,9 +16,8 @@ import { useRouter } from "next/router";
 import { LOCAL_ACCESS_TOKEN_NAME } from "helpers/local";
 import Loading from "components/helpers/Loading";
 
-const formState = {
+const formState: IFormState = {
     email: { value: '', validation: ['required'] },
-    terms: { value: false, validation: ['required'] },
     password: { value: '' , validation: ['required'] }
 };
 
@@ -71,18 +70,10 @@ const Login: FC & { Layout: FC<DefaultLayoutProps>; }  = function ( ) {
                                 
                                 <Input name="password" type="password" placeholder="Password" />
 
-                                <Columns>
-                                    <Input name="terms" type="checkbox" />
-                                    <span>
-                                        I accept the <Link href="#">terms and conditions.</Link>
-                                    </span>
-                                </Columns>    
-
                                 <ButtonMain 
                                     id="subscribe"
                                     type="submit"
                                     style={{ width: "100%" }}
-                                    loading={loading}
                                 >
                                     <>
                                         Continue <FontAwesomeIcon icon={faUser} />
@@ -91,8 +82,14 @@ const Login: FC & { Layout: FC<DefaultLayoutProps>; }  = function ( ) {
 
                                 <p>Don`t have an account ? <Link href="/register">Sign Up Here.</Link></p>
 
-                                <SFormError show={!! error?.message}>
-                                    {error?.message}
+                                <SFormError show={!! error?.graphQLErrors}>
+                                    {
+                                        error?.graphQLErrors.map(({ extensions }) => {
+                                            return Object.values(extensions?.validation).map((errArr) => {
+                                                return errArr[0];
+                                            });
+                                        })
+                                    }
                                 </SFormError>
                             </>
                         </Form>

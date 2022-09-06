@@ -107,7 +107,7 @@ function Card({ product, skeletonLoading, setFavoriteItems, isFavorited }: Props
 
                 <SProductCardBody disable={loading}>
 
-                    <Link href={`product.urlKey`}>
+                    <Link href={product.urlKey}>
                         <span title={product.name} className="name">
                             {shortenString({ str: product.name, word: true, count: 15, safeMax: 60 })}
                         </span>

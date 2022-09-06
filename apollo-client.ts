@@ -67,7 +67,7 @@ function createApolloClient() {
           fields: {
            urlKey(urlKey, { readField, storeFieldName, storage }) {
               const stored = storage[storeFieldName];
-              return stored ? stored : storage[storeFieldName] = `${readField('id')}?n=${urlKey}`;
+              return stored ? stored : storage[storeFieldName] = `/${readField('id')}?n=${urlKey}`;
             }, 
             qty: {
               read(_, { readField, cache }) {

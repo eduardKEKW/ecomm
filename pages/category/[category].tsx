@@ -4,7 +4,7 @@ import Resource from "components/helpers/Resource"
 import Card from "components/Product/Card"
 import { Layout } from "components/styled/Layouts/Pages/Category"
 import Title from "components/Title"
-import { GetProductListingQueryVariables, SortValues, useCategoryLazyQuery, useGetProductListingLazyQuery } from "Graphql/generated/graphql"
+import { CategoryDocument, CategoryQuery, CategoryQueryVariables, GetProductListingQueryVariables, SortValues, useCategoryLazyQuery, useGetProductListingLazyQuery } from "Graphql/generated/graphql"
 import { useFavorite } from "hooks/useFavorite.hook"
 import { productsPerPageOptions, productsSortingOptions } from "hooks/useProducts.hook"
 import { GetStaticPaths, GetStaticProps } from "next"
@@ -218,14 +218,14 @@ export const getStaticPaths: GetStaticPaths = async (product) => {
 export const getStaticProps: GetStaticProps = async (context)  => {
     const apolloClient = initializeApollo();
         
-    // const [{ data }] = await Promise.all([
-    //     apolloClient.query<CategoryQuery, CategoryQueryVariables>({
-    //         query: CategoryDocument,
-    //         variables: {
-    //             id: context.params.category.toString()
-    //         }
-    //     })
-    // ]);
+    const [{ data }] = await Promise.all([
+        apolloClient.query<CategoryQuery, CategoryQueryVariables>({
+            query: CategoryDocument,
+            variables: {
+                id: context.params.category.toString()
+            }
+        })
+    ]);
 
     return {
         props: {

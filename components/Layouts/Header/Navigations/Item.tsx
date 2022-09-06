@@ -11,7 +11,7 @@ import style from 'styles/components/interactions.module.scss';
 import { CartDetailQuery } from 'Graphql/generated/graphql';
 
 interface Props {
-    item: CartDetailQuery["cartDetail"]["allItems"][0]["productFlat"] & { quantity: number }
+    item: CartDetailQuery["cartDetail"]["allItems"][0]["productFlat"] & { quantity?: number }
     onDeleteProp?: (id: string) => void
     type: string
     onAddProps?: (id: string) => void,

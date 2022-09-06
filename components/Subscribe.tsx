@@ -6,7 +6,7 @@ import { SUBSCRIBE_TEXT } from 'helpers/local'
 import useSubscription from 'hooks/useSubscribe'
 import React, { useEffect, useState } from 'react'
 import ButtonMain from './buttons/Main'
-import Form from './Form'
+import Form, { IFormState } from './Form'
 import Link from './helpers/LinkCustom'
 import Input from './input/Input.main'
 import { STitledSection } from './styled/Benefits'
@@ -17,7 +17,7 @@ interface Props {
     gridArea: string
 }
 
-const formState = {
+const formState: IFormState = {
     email: { value: '', validation: ['required'] },
     terms: { value: false, validation: ['required'] }
 };

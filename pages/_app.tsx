@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps}) {
       <ThemeProvider theme={theme}>
         <GlobalProvider>
           <PageLoader>
-            <Component.Layout title={pageProps.title}> 
+            <Component.Layout title={pageProps?.title}> 
               <Component {...pageProps} />
             </Component.Layout> 
           </PageLoader>

@@ -7,7 +7,7 @@ export const breakpoints = {
     lg: '1300px'
   };
 
-export const media = Object.keys(breakpoints).reduce(
+export const media: any = Object.keys(breakpoints).reduce(
   (accumulator, label) => {
     accumulator[label] = (...args) => css`
       @media (min-width: ${breakpoints[label]}) {

@@ -1,4 +1,4 @@
-import { ApolloClient, gql, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core';
+import { ApolloClient, defaultDataIdFromObject, gql, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import { Product, UserActivityDocument, UserActivityQuery, UserActivityQueryVariables } from 'Graphql/generated/graphql';
 import { getApiImage, getInitials } from 'helpers/helpers';
@@ -36,6 +36,12 @@ function createApolloClient() {
       credentials: 'include'
     })),
     cache: new InMemoryCache({
+      dataIdFromObject(responseObject) {
+        switch (responseObject.__typename) {
+          case 'Product': return `Product:${responseObject.id ?? Math.random()}:${responseObject.sku}`;
+          default: return defaultDataIdFromObject(responseObject);
+        }
+      },
       typePolicies: {
         Category: {
           keyFields: ["slug"],
@@ -59,10 +65,10 @@ function createApolloClient() {
         },
         ProductFlat: {
           fields: {
-          //  urlKey(urlKey, { readField, storeFieldName, storage }) {
-          //     const stored = storage[storeFieldName];
-          //     return stored ? stored : storage[storeFieldName] = `${readField('id')}?n=${urlKey}`;
-          //   }, 
+           urlKey(urlKey, { readField, storeFieldName, storage }) {
+              const stored = storage[storeFieldName];
+              return stored ? stored : storage[storeFieldName] = `${readField('id')}?n=${urlKey}`;
+            }, 
             qty: {
               read(_, { readField, cache }) {
                 const { inventories = [] } = cache.readFragment<Product>({

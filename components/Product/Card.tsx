@@ -74,7 +74,7 @@ function Card({ product, skeletonLoading, setFavoriteItems, isFavorited }: Props
             <SProductCardContent>
                 <SProductCardHeader animate={favorited}>
                     <div>
-                        <Link href={`/${product.id}?n=${product.urlKey}`}>
+                        <Link href={product.urlKey}>
                             <Image 
                                 src={getProductThumbnail({ path: product.thumbnail })}
                                 layout="fill" 
@@ -107,7 +107,7 @@ function Card({ product, skeletonLoading, setFavoriteItems, isFavorited }: Props
 
                 <SProductCardBody disable={loading}>
 
-                    <Link href={`/${product.id}?n=${product.urlKey}`}>
+                    <Link href={`product.urlKey`}>
                         <span title={product.name} className="name">
                             {shortenString({ str: product.name, word: true, count: 15, safeMax: 60 })}
                         </span>

@@ -56,7 +56,7 @@ const Product: FC & { Layout: FC<{}>; } = function ({}: Props) {
         <SProductGrid>
             <Skeleton loading={loading} name="product" gridArea="product">
                 <SProduct gridArea="product">
-                    <Breadcrumbs gridArea="breadcrumbs" paths={product.productFlat.mainCategory.breadcrumbs} />
+                    <Breadcrumbs gridArea="breadcrumbs" paths={product?.productFlat?.mainCategory?.breadcrumbs} />
 
                     <Title reverse={true} background='white' gridArea="title" description={`Product CODE: ${product?.id}`} name={product.productFlat.name} style={{ 
                         fontSize: "1.5rem"
@@ -176,7 +176,7 @@ export const getStaticPaths: GetStaticPaths = async (product) => {
     return {
         paths: [
             {  params: { product: '8' } },
-            {  params: { product: '2' } }
+            {  params: { product: '2' } },
         ],
         fallback: true
     }

@@ -31,7 +31,7 @@ function Suggestion({ product, parents }: Props) {
             }
 
             <Skeleton loading={! productFlat} name="suggestion">
-                <Link href={`/${productFlat?.id}?n=${productFlat?.urlKey}`} parentClassName={styles.search__suggestions_item}>
+                <Link href={productFlat?.urlKey} parentClassName={styles.search__suggestions_item}>
                     <>
                         <Image
                             src={getProductThumbnail({ path: productFlat?.thumbnail })}

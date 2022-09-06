@@ -59,7 +59,7 @@ const Item = ({
                         className={style.items__item__image}
                     />
 
-                    <Link href={`/${id}?n=${urlKey}`} parentClassName={style.items__item__name}>
+                    <Link href={urlKey} parentClassName={style.items__item__name}>
                         {
                             shortenString({
                                 str: name,

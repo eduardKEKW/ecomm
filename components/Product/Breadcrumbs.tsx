@@ -9,10 +9,12 @@ interface Props {
 }
 
 function Breadcrumbs({ paths, gridArea }: Props) {
+    if(! paths) return <></>;
+    
     return (
         <SBreadcrumbs gridArea={gridArea}>
             {
-                paths.map(category => 
+                paths?.map(category => 
                     <SItem key={category.name}>
                         <Link href={category.urlPath}> 
                             {category.name}

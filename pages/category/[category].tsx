@@ -208,8 +208,7 @@ const getUrlParams = ({ router }: { router: NextRouter }) => {
 export const getStaticPaths: GetStaticPaths = async (product) => {
     return {
         paths: [
-            {  params: { category: '8' } },
-            {  params: { category: '3' } }
+            {  params: { category: '34' } },
         ],
         fallback: true
     }

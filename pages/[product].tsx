@@ -176,7 +176,7 @@ export const getStaticPaths: GetStaticPaths = async (product) => {
     return {
         paths: [
             {  params: { product: '8' } },
-            {  params: { product: '2' } },
+            {  params: { product: '2' } },  
         ],
         fallback: true
     }

@@ -48,13 +48,15 @@ const Comment = ({ comment, like, index, isGuest }: Props) => {
             </SAbout>
             
             <SBody>
-                <STitle>
-                    {getStarTitle(comment.rating)}
-                </STitle>
+                <div>
+                    <STitle>
+                        {getStarTitle(comment.rating)}
+                    </STitle>
 
-                <SRating>
-                    <Stars rating={comment.rating} />
-                </SRating>
+                    <SRating>
+                        <Stars rating={comment.rating} />
+                    </SRating>
+                </div>
 
                 <SText>
                     {comment.comment}

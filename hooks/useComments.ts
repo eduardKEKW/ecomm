@@ -1,7 +1,7 @@
 import useActivity from "../hooks/useActivity";
 import { userLikesVar } from "apollo/Reactives";
 import { toggleArrayValue } from "helpers/helpers";
-import { ReviewsInfoQueryHookResult, ReviewsListQuery, ReviewsOrder, useLikeReviewMutation, useReviewsInfoQuery, useReviewsListQuery } from '../Graphql/generated/graphql'
+import { ReviewsInfoQueryHookResult, ReviewsListQuery, ReviewsOrder, useLikeReviewMutation, useReviewsInfoLazyQuery, useReviewsInfoQuery, useReviewsListLazyQuery, useReviewsListQuery } from '../Graphql/generated/graphql'
 import { ListInterface } from "components/helpers/Resource";
 
 export const commentsFiltersOptions: ListInterface[] = [
@@ -24,7 +24,7 @@ export const commentsPerPageOptions: ListInterface[] = [
     {name: '9', value: '9'}
 ];
 
-export type OptionsType = Parameters<typeof useReviewsListQuery>[0];
+export type OptionsType = Parameters<typeof useReviewsListLazyQuery>[0];
 
 interface Props {
     options?: OptionsType
@@ -40,7 +40,7 @@ interface DataInterface extends Omit<ReturnType<typeof useReviewsListQuery>, 'da
     reviewsInfo: ReviewsInfoType
 }
 
-const useComments = ({ options }: Props = {}): [typeof mutateComments, DataInterface & { like: typeof likeComment }] => {
+const useComments = ({ options }: Props = {}): [typeof getReviews, DataInterface & { like: typeof likeComment }] => {
     const { } = useActivity({ 
         options: {
             variables: {
@@ -58,12 +58,11 @@ const useComments = ({ options }: Props = {}): [typeof mutateComments, DataInter
             productId: options.variables.productId
         }
     });
-    const { data, loading, error, ...rest } = useReviewsListQuery({
+    const [getReviews, { data, loading, error, ...rest }] = useReviewsListLazyQuery({
         notifyOnNetworkStatusChange: true,
         ...options
     })
 
-    const [mutateComments, {}]  = useLikeReviewMutation();
     const [likeComment, {}]     = useLikeReviewMutation({
         onCompleted: (data) => {
             userLikesVar(   
@@ -80,7 +79,7 @@ const useComments = ({ options }: Props = {}): [typeof mutateComments, DataInter
     });
 
     return [
-        mutateComments,
+        getReviews,
         {
             comments: data?.reviewsList.data,
             pageInfo: data?.reviewsList.paginatorInfo,

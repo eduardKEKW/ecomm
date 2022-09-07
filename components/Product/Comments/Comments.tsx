@@ -3,8 +3,10 @@ import { SComments } from 'components/styled/Product/Comments';
 import Title from 'components/Title';
 import { ReviewsOrder } from 'Graphql/generated/graphql';
 import useComments, { commentsFiltersOptions, commentsPerPageOptions, commentsSortingOptions, OptionsType, ReviewsType } from 'hooks/useComments'
+import { useInitialRender } from 'hooks/useInitialRender.hook';
 import useUser from 'hooks/useUser';
 import produce from 'immer';
+import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react'
 import Comment from './Comment';
 import Create from './Create';
@@ -18,7 +20,8 @@ interface Props {
 function Comments({ productId, gridArea }: Props) {
     const [selectedPage, setSelectedPage]   = useState<number>(1);
     const { isGuest }                       = useUser();
-    // const [comments, setComments]           = useState<ReviewsType>([]);
+    const router                            = useRouter();
+    const initilaRedner                     = useInitialRender();
     const [options, setOptions]             = useState<OptionsType>({
         variables: {
             productId,
@@ -28,17 +31,28 @@ function Comments({ productId, gridArea }: Props) {
         }
     });
 
-    const [mutateComment, { loading, comments = [], reviewsInfo, pageInfo, fetchMore, like, called }] = useComments({
-        options: options
-    });
-
-    // useEffect(() => {
-    //     if(! loading) setComments(data);
-    // }, [data, loading])
+    const [getReviews, { loading, comments = [], reviewsInfo, pageInfo, like, called }] = useComments({ options });
 
     useEffect(() => {
-        fetchMore(options);
+        if(! initilaRedner && router.isReady) {
+            getReviews(options);   
+        }
     }, [options])
+
+    useEffect(() => {
+        if(router.isReady) {
+            const query = router.query;
+            console.log(query);
+            setOptions({
+                variables: {
+                    productId,
+                    order: query.resourceSortings as ReviewsOrder ?? ReviewsOrder.Popular,
+                    first: query?.resourcePerPage ? +query?.resourcePerPage : options.variables.first,
+                    page: query?.page ? +query?.page : options.variables.page,
+                }
+            });
+        }
+    }, [router.isReady])
 
     return (
         <SComments gridArea={gridArea}>

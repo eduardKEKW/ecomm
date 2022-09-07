@@ -2,7 +2,7 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Main from "components/buttons/Main";
 import { SPage, SPageItem } from "components/styled/Resource";
-import { setUrlParams } from "helpers/helpers";
+import { getRouterParams, setUrlParams } from "helpers/helpers";
 import { useRouter } from "next/router";
 import { useState, useMemo, useEffect } from "react";
 
@@ -51,10 +51,9 @@ export const usePagination = ({ totalPages, selectedPage }): PageInterface[] => 
 }
 
 const Pagination = ({ total = 1, perPage = 1, onPageChange, anchor, selectedPage: selectedPageProps, gridArea }: PaginationProps): JSX.Element => {
-    const router                            = useRouter();
     const [selectedPage, setSelectedPage]   = useState<number>(() => {
-        const urlQueryPage = router.query["page"];
-        return !! urlQueryPage ? +urlQueryPage : selectedPageProps
+        const params = getRouterParams();
+        return !! params["page"] ? +params["page"] : selectedPageProps
     });
     const [totalPages, setTotalPages]       = useState<number>(() => Math.ceil(total / perPage)); 
     const pages                             = usePagination(useMemo(() => ({ selectedPage, totalPages }), [selectedPage, totalPages]));
@@ -68,7 +67,7 @@ const Pagination = ({ total = 1, perPage = 1, onPageChange, anchor, selectedPage
         onPageChange(v)
         setUrlParams({
             key: "page",
-            value: selectedPage.toString()
+            value: v.toString()
         })
     }
     

@@ -230,6 +230,7 @@ export const getStaticProps: GetStaticProps = async (context)  => {
     return {
         props: {
             apolloCache: apolloClient.cache.extract(),
+            title: data?.category?.name
         }   
     }
 }

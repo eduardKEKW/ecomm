@@ -1,7 +1,7 @@
 import Select from "components/input/Select";
 import { SContent, SOptions, SResource } from "components/styled/Resource";
 import { PaginatorInfo } from "Graphql/generated/graphql";
-import { changeSelectedValue, setUrlParams } from "helpers/helpers";
+import { changeSelectedValue, getRouterParams, setUrlParams } from "helpers/helpers";
 import { NextRouter, useRouter } from "next/router";
 import { useState } from "react";
 import Loading from "./Loading";
@@ -136,12 +136,12 @@ const addValueToRouteQuery = ({ router, urlKey, urlValue }: {  router: NextRoute
 }
 
 const checkUrlQueryValue = ({ queryName, list, router }: { queryName: string, list: ListInterface[], router: NextRouter }): ListInterface[] => {
-    const queryValue = router.query[queryName];
+    const params = getRouterParams()
 
-    if(!! queryValue) {
+    if(!! params[queryName]) {
         return changeSelectedValue({
             list: list,
-            value: queryValue
+            value: params[queryName]
         })
     }
 

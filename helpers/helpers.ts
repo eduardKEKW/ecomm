@@ -197,10 +197,7 @@ const deepMerge = (target: IObject, ...sources: Array<IObject>): IObject => {
     if (!sources.length) {
         return target;
     }
-    // console.log('MERGE',{
-    //     target,
-    //     sources
-    // })
+
     const result: IObject = target;
 
     if (isObject(result)) {
@@ -221,8 +218,6 @@ const deepMerge = (target: IObject, ...sources: Array<IObject>): IObject => {
                         } else {
                             if (Array.isArray(result[key]) && Array.isArray(elm[key])) {
                                 result[key] = Array.from(new Set(result[key].concat(elm[key])));
-                                // console.log('DEEP');
-                                // console.log(result[key], elm[key]);
                             } else {
                                 result[key] = elm[key];
                             }
@@ -236,6 +231,12 @@ const deepMerge = (target: IObject, ...sources: Array<IObject>): IObject => {
 
     return result;
 };
+
+const getRouterParams = (): URLSearchParams => {
+    return new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop.toString()),
+    }); 
+}
 
 export {
     shortenString,
@@ -251,5 +252,6 @@ export {
     getProductThumbnail,
     getApiImage,
     setUrlParams,
-    deepMerge
+    deepMerge,
+    getRouterParams
 }

@@ -55,7 +55,7 @@ const Register: FC & { Layout: FC<DefaultLayoutProps>; }  = function ( ) {
     return (
         <Layout>
             <Container>
-                <Loading loading={loading}>
+                <Loading loading={loading || loginLoading}>
                     <>
                         <Image
                             src={logo}

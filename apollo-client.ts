@@ -1,5 +1,6 @@
 import { ApolloClient, defaultDataIdFromObject, gql, HttpLink, InMemoryCache, NormalizedCacheObject } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
+import { userLikesVar } from 'apollo/Reactives';
 import { Product, UserActivityDocument, UserActivityQuery, UserActivityQueryVariables } from 'Graphql/generated/graphql';
 import { getApiImage, getInitials } from 'helpers/helpers';
 import { LOCAL_ACCESS_TOKEN_NAME } from 'helpers/local';
@@ -18,18 +19,19 @@ const authLink = setContext((_, { headers }) => {
   // return the headers to the context so httpLink can read them
   if(_.operationName == 'user' && ! accessToken) {
     throw new Error('Unauthorized');
-  }
-  
+  } 
+
   return {
     headers: {
       ...headers,
-      Authorization: accessToken ? accessToken : '',
+      authorization: accessToken ? accessToken : ''
     }
   }
 });
 
 function createApolloClient() { 
   return new ApolloClient({
+    credentials: 'include', 
     ssrMode: typeof window === 'undefined',
     link: authLink.concat(new HttpLink({
       uri: process.env.NEXT_PUBLIC_BAGISTO_GRAPHQL,
@@ -142,7 +144,7 @@ function createApolloClient() {
 
                 const reviewId = readField('id');
                 
-                return !! userActivity ?  userActivity.commentLikes.some(({ reviewId: id }) => id == reviewId) : false;
+                return !! userLikesVar() ?  userLikesVar().some(({ reviewId: id }) => id == reviewId) : false;
               }
             }
           }

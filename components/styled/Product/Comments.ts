@@ -104,18 +104,22 @@ export const SBody = styled.div`
   flex-direction: column;
   gap: .3rem;
   height: 100%;
+
+  & > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
 `
 
 export const STitle = styled.div`
   font-weight: 400;
-  flex: 1;
+  margin-right: 5rem;
   font-size: .9rem;
   color: ${({ theme }) => theme.colors.black};
 `
 
 export const SRating = styled.div`
-  flex: 1;
-
   i {
     font-size: .8rem;
   }

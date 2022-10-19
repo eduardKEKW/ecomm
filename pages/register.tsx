@@ -3,7 +3,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ButtonMain from "components/buttons/Main";
 import Form, { IFormState } from "components/Form";
 import Input from "components/input/Input.main";
-import { Columns, Container, Layout, SFormError } from "components/styled/Layouts/Pages/Login";
+import {
+  Columns,
+  Container,
+  Layout,
+  SFormError,
+} from "components/styled/Layouts/Pages/Login";
 import Title from "components/Title";
 import { GetStaticProps } from "next";
 import Link from "next/link";
@@ -11,140 +16,172 @@ import { FC, useState } from "react";
 import { DefaultLayoutProps, PageHead } from "./_app";
 import Image from "next/image";
 import logo from "/public/logo6.webp";
-import { MeDocument, useCustomerLoginMutation, useCustomerRegisterMutation, useMeQuery } from "Graphql/generated/graphql";
+import {
+  MeDocument,
+  useCustomerLoginMutation,
+  useCustomerRegisterMutation,
+  useMeQuery,
+} from "Graphql/generated/graphql";
 import { useRouter } from "next/router";
 import { LOCAL_ACCESS_TOKEN_NAME } from "helpers/local";
 import Loading from "components/helpers/Loading";
 
 const formState: IFormState = {
-    firstName:  { value: '', validation: ['required'] },
-    lastName:   { value: '', validation: ['required'] },
-    email:      { value: '', validation: ['required'] },
-    password:   { value: '' , validation: ['required'] },
-    terms:      { value: false, validation: ['required'] },
-    passwordConfirmation: { value: '' , validation: ['required'] },
+  firstName: { value: "", validation: ["required"] },
+  lastName: { value: "", validation: ["required"] },
+  email: { value: "", validation: ["required"] },
+  password: { value: "", validation: ["required"] },
+  terms: { value: false, validation: ["required"] },
+  passwordConfirmation: { value: "", validation: ["required"] },
 };
 
-const Register: FC & { Layout: FC<DefaultLayoutProps>; }  = function ( ) {
-    const [loginFormState, setLoginFormState]                           = useState<{ email: string, password: string }>();
-    const router                                                        = useRouter();
-    const [loginMutation, { loading: loginLoading }]                    = useCustomerLoginMutation({
-        refetchQueries: [MeDocument],
-        onError: (err) => console.error(err),
-        onCompleted: (data) => {
-            if(data?.customerLogin?.success) {
-                localStorage.setItem(LOCAL_ACCESS_TOKEN_NAME, data.customerLogin.accessToken)
-                router.push("/");
-            }
-        },
-    });
-    const [registerMutation, { loading, error }]                        = useCustomerRegisterMutation({
-        refetchQueries: [MeDocument],
-        onError: (err) => console.error(err),
-        onCompleted: (data) => {
-            if(data?.customerRegister?.success) {
-                loginMutation({
-                    variables: {
-                        input: loginFormState
-                    }
-                })
-            }
-        },
-    });
+const Register: FC & { Layout: FC<DefaultLayoutProps> } = function () {
+  const [loginFormState, setLoginFormState] = useState<{
+    email: string;
+    password: string;
+  }>();
+  const router = useRouter();
+  const [loginMutation, { loading: loginLoading }] = useCustomerLoginMutation({
+    refetchQueries: [MeDocument],
+    onError: (err) => console.error(err),
+    onCompleted: (data) => {
+      if (data?.customerLogin?.success) {
+        localStorage.setItem(
+          LOCAL_ACCESS_TOKEN_NAME,
+          data.customerLogin.accessToken
+        );
+        router.push("/");
+      }
+    },
+  });
+  const [registerMutation, { loading, error }] = useCustomerRegisterMutation({
+    refetchQueries: [MeDocument],
+    onError: (err) => console.error(err),
+    onCompleted: (data) => {
+      if (data?.customerRegister?.success) {
+        loginMutation({
+          variables: {
+            input: loginFormState,
+          },
+        });
+      }
+    },
+  });
 
-    return (
-        <Layout>
-            <Container>
-                <Loading loading={loading || loginLoading}>
-                    <>
-                        <Image
-                            src={logo}
-                            alt="logo"
-                            width="150px"
-                            height="50px"
-                        />
+  return (
+    <Layout>
+      <Container>
+        <Loading loading={loading || loginLoading}>
+          <>
+            <Image src={logo} alt="logo" width="150px" height="50px" />
 
-                        <Title name="No Account? No Worries!" />
+            <Title name="No Account? No Worries!" />
 
-                        <Form initialState={formState} onSubmit={(state) => {
-                            registerMutation({
-                                variables: {
-                                    input: {
-                                        email: state.email.value,
-                                        firstName: state.firstName.value,
-                                        lastName: state.lastName.value,
-                                        password: state.password.value,
-                                        passwordConfirmation: state.passwordConfirmation.value
-                                    }
-                                }
-                            })
+            <Form
+              initialState={formState}
+              onSubmit={(state) => {
+                registerMutation({
+                  variables: {
+                    input: {
+                      email: state.email.value,
+                      firstName: state.firstName.value,
+                      lastName: state.lastName.value,
+                      password: state.password.value,
+                      passwordConfirmation: state.passwordConfirmation.value,
+                    },
+                  },
+                });
 
-                            setLoginFormState({
-                                email: state.email.value,
-                                password: state.password.value,
-                            })
-                        }} >
-                            <>
-                                <Input name="firstName" type="text" placeholder="Your First Name" />
+                setLoginFormState({
+                  email: state.email.value,
+                  password: state.password.value,
+                });
+              }}
+            >
+              <>
+                <Input
+                  name="firstName"
+                  type="text"
+                  placeholder="Your First Name"
+                />
 
-                                <Input name="lastName" type="text" placeholder="Your Last Name" />
+                <Input
+                  name="lastName"
+                  type="text"
+                  placeholder="Your Last Name"
+                />
 
-                                <Input name="email" type="email" placeholder="Your Email Address" />
-                                
-                                <Input name="password" type="password" placeholder="Password" />
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="Your Email Address"
+                />
 
-                                <Input name="passwordConfirmation" type="password" placeholder="Password" />
+                <Input name="password" type="password" placeholder="Password" />
 
-                                <Columns>
-                                    <Input name="terms" type="checkbox" />
-                                    <span>
-                                        I accept the <Link href="#">terms and conditions.</Link>
-                                    </span>
-                                </Columns>    
+                <Input
+                  name="passwordConfirmation"
+                  type="password"
+                  placeholder="Password"
+                />
 
-                                <ButtonMain 
-                                    id="subscribe"
-                                    type="submit"
-                                    style={{ width: "100%" }}
-                                >
-                                    <>
-                                        Register here <FontAwesomeIcon icon={faUser} />
-                                    </>
-                                </ButtonMain>
+                <Columns>
+                  <Input name="terms" type="checkbox" />
+                  <span>
+                    I accept the <Link href="#">terms and conditions.</Link>
+                  </span>
+                </Columns>
 
-                                <p>Don`t have an account ? <Link href="/register">Sign Up Here.</Link></p>
+                <ButtonMain
+                  id="subscribe"
+                  type="submit"
+                  style={{ width: "100%" }}
+                >
+                  <>
+                    Register here <FontAwesomeIcon icon={faUser} />
+                  </>
+                </ButtonMain>
 
-                                <SFormError show={!! error?.graphQLErrors}>
-                                    {
-                                        error?.graphQLErrors.map(({ extensions }) => {
-                                            return Object.values(extensions?.validation).map((errArr) => {
-                                                return errArr[0];
-                                            });
-                                        })
-                                    }
-                                </SFormError>
-                            </>
-                        </Form>
-                    </>
-                </Loading>
-            </Container>
-        </Layout>
-    )
-}
+                <p>
+                  Don`t have an account ?{" "}
+                  <Link href="/register">Sign Up Here.</Link>
+                </p>
+
+                <SFormError ormError show={!!error?.graphQLErrors}>
+                  <div>
+                    {error?.graphQLErrors.map(({ extensions }) => {
+                      return Object.values(extensions?.validation ?? {}).map(
+                        (errArr) => {
+                          return <span>{errArr[0]}</span>;
+                        }
+                      );
+                    })}
+                  </div>
+
+                  <span>{error?.message}</span>
+                </SFormError>
+              </>
+            </Form>
+          </>
+        </Loading>
+      </Container>
+    </Layout>
+  );
+};
 
 Register.Layout = ({ children, title }) => (
-    <>
-     <PageHead title={title} />
-     { children }
-    </>
+  <>
+    <PageHead title={title} />
+    {children}
+  </>
 );
 
 export default Register;
 
-export const getStaticProps: GetStaticProps  = async (context) => {
-    return {
-      props: {
-        title: 'New user'
-      },
-   };
-}
+export const getStaticProps: GetStaticProps = async (context) => {
+  return {
+    props: {
+      title: "New user",
+    },
+  };
+};
